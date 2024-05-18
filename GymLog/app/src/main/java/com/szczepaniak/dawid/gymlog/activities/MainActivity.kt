@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.RetrofitClient
 import com.szczepaniak.dawid.gymlog.adapters.MainViewPageAdapter
 import com.szczepaniak.dawid.gymlog.fragments.HomeFragment
 import com.szczepaniak.dawid.gymlog.fragments.ProfileFragment
@@ -32,6 +33,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        RetrofitClient.context = this
+
 
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabLayout)

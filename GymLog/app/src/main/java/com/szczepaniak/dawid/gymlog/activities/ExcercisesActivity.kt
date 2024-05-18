@@ -2,6 +2,7 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +17,12 @@ import com.szczepaniak.dawid.gymlog.models.Exercise
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.reflect.jvm.internal.impl.renderer.ClassifierNamePolicy.SHORT
 
 class ExcercisesActivity : AppCompatActivity() {
 
     private lateinit var exerciseRecyclerView: RecyclerView
     private lateinit var exercisesAdapter: ExercisesAdapter
+    private lateinit var searchView: SearchView
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,27 +37,30 @@ class ExcercisesActivity : AppCompatActivity() {
 
         exerciseRecyclerView = findViewById(R.id.exercises_recycler_view)
         exerciseRecyclerView.layoutManager = LinearLayoutManager(this)
+        searchView = findViewById(R.id.searchView)
+        searchView.queryHint = "Search excercises"
 
-//        val call = ApiClient.apiService.getExercises("chest")
-//
-//        call.enqueue(object : Callback<List<Exercise>> {
-//            override fun onResponse(call: Call<List<Exercise>>, response: Response<List<Exercise>>) {
-//                if (response.isSuccessful) {
-//                    val exercises = response.body()
-//                    exercisesAdapter = ExercisesAdapter(exercises!!, this)
-//                    exerciseRecyclerView.setAdapter(exercisesAdapter)
-//                } else {
-//                    Toast.makeText(this@ExcercisesActivity, "Błąd: ${response.code()}", Toast.LENGTH_SHORT).show()
-//                    println("Błąd: ${response.code()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<List<Exercise>>, t: Throwable) {
-//                Toast.makeText(this@ExcercisesActivity, "Network Error", Toast.LENGTH_SHORT).show()
-//            }
-//        })
+        val call = ApiClient.apiService.getExercises("chest")
 
-        val exercises = arrayOf(
+
+        call.enqueue(object : Callback<Array<Exercise>> {
+            override fun onResponse(call: Call<Array<Exercise>>, response: Response<Array<Exercise>>) {
+                if (response.isSuccessful) {
+                    val exercises = response.body()
+                    exercisesAdapter = ExercisesAdapter(exercises!!,this@ExcercisesActivity)
+                    exerciseRecyclerView.setAdapter(exercisesAdapter)
+                } else {
+                    Toast.makeText(this@ExcercisesActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+
+            override fun onFailure(call: Call<Array<Exercise>>, t: Throwable) {
+                Toast.makeText(this@ExcercisesActivity, "Network Error", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        /*val exercises = arrayOf(
             Exercise(
                 name = "Incline Hammer Curls",
                 type = "strength",
@@ -139,7 +143,6 @@ class ExcercisesActivity : AppCompatActivity() {
             )
         )
         exercisesAdapter = ExercisesAdapter(exercises, this)
-        exerciseRecyclerView.adapter = exercisesAdapter
-        exercisesAdapter.notifyDataSetChanged()
+        exerciseRecyclerView.adapter = exercisesAdapter*/
     }
 }
