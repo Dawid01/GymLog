@@ -1,15 +1,22 @@
 package com.szczepaniak.dawid.gymlog.adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.Singleton
+import com.szczepaniak.dawid.gymlog.activities.ExcercisesActivity
+import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
 class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
@@ -27,6 +34,24 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
         holder.tvMuscle.text = exercise.muscle.toString().replace("_", " ").capitalize()
         holder.tvDifficulty.text = exercise.difficulty.toString().uppercase()
         holder.tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
+
+        holder.info.setOnClickListener {
+            var intent: Intent = Intent(context, ExerciseInfoActivity::class.java)
+            intent.putExtra("name", exercise.name)
+            intent.putExtra("muscle", exercise.muscle)
+            intent.putExtra("difficulty", exercise.difficulty)
+            intent.putExtra("instructions", exercise.instructions)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, holder.card, "card_transition")
+//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                context as Activity,
+//                Pair(holder.icon as View, "icon_transition"),
+//                Pair(holder.tvName as View, "name_transition"),
+//                Pair(holder.card as View, "card_transition")
+//            )
+
+            context.startActivity(intent, options.toBundle())
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -38,6 +63,9 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
        val tvName: TextView = itemView.findViewById(R.id.name_text)
        val tvMuscle: TextView = itemView.findViewById(R.id.muscle_text)
        val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
+       val info: ImageView = itemView.findViewById(R.id.info_image)
+       val card: CardView = itemView.findViewById(R.id.card)
+
     }
 
     @SuppressLint("DiscouragedApi")
