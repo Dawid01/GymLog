@@ -45,4 +45,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("org.ktorm:ktorm-core:3.4.1")
+    implementation("org.xerial:sqlite-jdbc:3.34.0")
+
+
 }
