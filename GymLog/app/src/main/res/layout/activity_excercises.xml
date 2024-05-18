@@ -70,6 +70,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp"
         android:background="@drawable/search_background"
+        android:queryHint="Search exercise"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

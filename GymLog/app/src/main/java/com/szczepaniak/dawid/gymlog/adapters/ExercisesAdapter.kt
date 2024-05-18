@@ -2,6 +2,7 @@ package com.szczepaniak.dawid.gymlog.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,8 +24,9 @@ class ExercisesAdapter(private val exercises: Array<Exercise>, private val conte
         val exercise = exercises[position]
         holder.icon.setImageDrawable(context.getResources().getDrawable(getIconImage(exercise.muscle!!)))
         holder.tvName.text = exercise.name
-        holder.tvMuscle.text = exercise.muscle
-        holder.tvDifficulty.text = exercise.difficulty
+        holder.tvMuscle.text = exercise.muscle.toString().replace("_", " ").capitalize()
+        holder.tvDifficulty.text = exercise.difficulty.toString().uppercase()
+        holder.tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
     }
 
     override fun getItemCount(): Int {
@@ -41,5 +43,14 @@ class ExercisesAdapter(private val exercises: Array<Exercise>, private val conte
     @SuppressLint("DiscouragedApi")
     fun getIconImage(muscle: String) : Int{
         return context.resources.getIdentifier(muscle, "drawable", context.packageName)
+    }
+
+    fun getDifficultyColor(dificulty: String) : Int {
+        when(dificulty){
+            "beginner" -> return Color.GREEN
+            "intermediate" -> return Color.YELLOW
+            "expert" -> return Color.RED
+        }
+        return Color.WHITE
     }
 }

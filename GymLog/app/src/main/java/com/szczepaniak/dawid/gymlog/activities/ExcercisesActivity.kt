@@ -60,7 +60,7 @@ class ExcercisesActivity : AppCompatActivity() {
             Exercise(
                 name = "Incline Hammer Curls",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "triceps",
                 equipment = "dumbbell",
                 difficulty = "beginner",
                 instructions = "Curl"
@@ -68,7 +68,7 @@ class ExcercisesActivity : AppCompatActivity() {
             Exercise(
                 name = "Wide-grip barbell curl",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "lats",
                 equipment = "barbell",
                 difficulty = "beginner",
                 instructions = "Curl"
@@ -84,15 +84,15 @@ class ExcercisesActivity : AppCompatActivity() {
             Exercise(
                 name = "Hammer Curls",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "adductors",
                 equipment = "dumbbell",
-                difficulty = "intermediate",
+                difficulty = "expert",
                 instructions = "Curl"
             ),
             Exercise(
                 name = "EZ-Bar Curl",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "abdominals",
                 equipment = "e-z_curl_bar",
                 difficulty = "intermediate",
                 instructions = "Curl"
@@ -100,7 +100,7 @@ class ExcercisesActivity : AppCompatActivity() {
             Exercise(
                 name = "Zottman Curl",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "glutes",
                 equipment = "None",
                 difficulty = "intermediate",
                 instructions = "Curl"
@@ -108,7 +108,7 @@ class ExcercisesActivity : AppCompatActivity() {
             Exercise(
                 name = "Biceps curl to shoulder press",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "traps",
                 equipment = "dumbbell",
                 difficulty = "beginner",
                 instructions = "Press"
@@ -116,15 +116,15 @@ class ExcercisesActivity : AppCompatActivity() {
             Exercise(
                 name = "Barbell Curl",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "hamstrings",
                 equipment = "barbell",
-                difficulty = "intermediate",
+                difficulty = "expert",
                 instructions = "Curl"
             ),
             Exercise(
                 name = "Concentration curl",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "chest",
                 equipment = "dumbbell",
                 difficulty = "intermediate",
                 instructions = "Curl"
@@ -132,16 +132,14 @@ class ExcercisesActivity : AppCompatActivity() {
             Exercise(
                 name = "Flexor Incline Dumbbell Curls",
                 type = "strength",
-                muscle = "biceps",
+                muscle = "calves",
                 equipment = "dumbbell",
-                difficulty = "beginner",
+                difficulty = "expert",
                 instructions = "Curl"
             )
         )
-        exercisesAdapter = ExercisesAdapter(exercises, this@ExcercisesActivity)
+        exercisesAdapter = ExercisesAdapter(exercises, this)
         exerciseRecyclerView.adapter = exercisesAdapter
         exercisesAdapter.notifyDataSetChanged()
-
-        Toast.makeText(this@ExcercisesActivity, "Rozmiar ${exercisesAdapter.itemCount}", Toast.LENGTH_SHORT).show()
     }
 }
