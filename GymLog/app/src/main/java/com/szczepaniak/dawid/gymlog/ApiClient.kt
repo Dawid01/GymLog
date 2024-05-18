@@ -7,10 +7,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 object RetrofitClient{
-    private const val BASE_URL = "https://api.api-ninjas.com/v1/exercises"
+    private const val BASE_URL = "https://api.api-ninjas.com/v1/"
     val retrofit: Retrofit by lazy {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor { chain ->
@@ -37,6 +38,6 @@ object ApiClient {
 }
 
 interface ApiService {
-    @GET("posts/{id}")
-    fun getPostById(@Path("id") postId: Int): Call<Exercise>
+    @GET("exercises")
+    fun getExercises(@Query("muscle") muscle: String): Call<List<Exercise>>
 }

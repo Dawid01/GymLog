@@ -1,5 +1,6 @@
 package com.szczepaniak.dawid.gymlog.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +16,12 @@ class WorkoutAdapter(private val workouts: List<Workout>) : RecyclerView.Adapter
         return WorkoutViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: WorkoutViewHolder, position: Int) {
         val workout = workouts[position]
         holder.tvDate.text = workout.date.toString()
         holder.tvTime.text = "Time: ${workout.time} mins"
-        holder.tvVolume.text = "Volume: ${workout.volume} L"
+        holder.tvVolume.text = "Volume: ${workout.volume} kg"
     }
 
     override fun getItemCount(): Int {
