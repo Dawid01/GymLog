@@ -1,4 +1,4 @@
-package com.szczepaniak.dawid.gymlog
+package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.adapters.MainViewPageAdapter
 import com.szczepaniak.dawid.gymlog.fragments.HomeFragment
 import com.szczepaniak.dawid.gymlog.fragments.ProfileFragment
@@ -36,9 +37,18 @@ class MainActivity : AppCompatActivity() {
         tabLayout = findViewById(R.id.tabLayout)
         pageAdapter = MainViewPageAdapter(this)
 
-        pageAdapter.addFragment(HomeFragment(), "Home", R.drawable.home_icon, R.drawable.home_icon_fill)
-        pageAdapter.addFragment(WorkoutFragment(), "Workout", R.drawable.workout_icon, R.drawable.workout_icon_fill)
-        pageAdapter.addFragment(ProfileFragment(), "Profile", R.drawable.profile_icon, R.drawable.profile_icon_fill)
+        pageAdapter.addFragment(HomeFragment(), "Home",
+            R.drawable.home_icon,
+            R.drawable.home_icon_fill
+        )
+        pageAdapter.addFragment(WorkoutFragment(), "Workout",
+            R.drawable.workout_icon,
+            R.drawable.workout_icon_fill
+        )
+        pageAdapter.addFragment(ProfileFragment(), "Profile",
+            R.drawable.profile_icon,
+            R.drawable.profile_icon_fill
+        )
 
         viewPager.setAdapter(pageAdapter)
 
