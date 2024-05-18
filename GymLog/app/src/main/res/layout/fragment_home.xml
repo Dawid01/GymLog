@@ -14,7 +14,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -22,7 +22,7 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="50dp"
+                android:paddingTop="10dp"
                 android:paddingBottom="15dp"
                 android:text="WORKOUTS HISTORY"
                 android:textAlignment="center"
@@ -35,11 +35,46 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/calendar_background" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/empyt_history_view"
+                android:layout_width="match_parent"
+                android:layout_height="250dp">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/routine_icon2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.56"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.29000002"
+                    app:tint="?android:attr/textColorHint" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Nothing here yet \n Time to start training!"
+                    android:textAlignment="center"
+                    android:textColor="?android:attr/textColorHint"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView"
+                    app:layout_constraintVertical_bias="0.19" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/history_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="15dp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
