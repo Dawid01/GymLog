@@ -23,6 +23,10 @@ class ExcercisesActivity : AppCompatActivity() {
     private lateinit var exerciseRecyclerView: RecyclerView
     private lateinit var exercisesAdapter: ExercisesAdapter
     private lateinit var searchView: SearchView
+    private var exercises: MutableList<Exercise> = mutableListOf()
+    private var page: Int = 0
+    private var muscle: String = ""
+    private var lastMuscle: String = ""
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,15 +44,39 @@ class ExcercisesActivity : AppCompatActivity() {
         searchView = findViewById(R.id.searchView)
         searchView.queryHint = "Search excercises"
 
-        val call = ApiClient.apiService.getExercises("chest")
+        exercisesAdapter = ExercisesAdapter(exercises,this@ExcercisesActivity)
+        exerciseRecyclerView.setAdapter(exercisesAdapter)
+        loadExercises(muscle, page)
+
+        exerciseRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!recyclerView.canScrollVertically(1)) {
+                    loadExercises(muscle, ++page)
+                }
+            }
+        })
+
+
+    }
+
+    private fun loadExercises(muscle: String, page:Int){
+
+        if(lastMuscle != muscle) {
+            exercises.clear()
+        }
+        lastMuscle = muscle
+        val call = ApiClient.apiService.getExercises(muscle, page * 10)
 
 
         call.enqueue(object : Callback<Array<Exercise>> {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<Array<Exercise>>, response: Response<Array<Exercise>>) {
                 if (response.isSuccessful) {
-                    val exercises = response.body()
-                    exercisesAdapter = ExercisesAdapter(exercises!!,this@ExcercisesActivity)
-                    exerciseRecyclerView.setAdapter(exercisesAdapter)
+                    val newExercises = response.body()?.toMutableList() ?: mutableListOf()
+                    exercises.addAll(newExercises)
+                    exercisesAdapter.notifyDataSetChanged()
+
                 } else {
                     Toast.makeText(this@ExcercisesActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
 
@@ -59,90 +87,5 @@ class ExcercisesActivity : AppCompatActivity() {
                 Toast.makeText(this@ExcercisesActivity, "Network Error", Toast.LENGTH_SHORT).show()
             }
         })
-
-        /*val exercises = arrayOf(
-            Exercise(
-                name = "Incline Hammer Curls",
-                type = "strength",
-                muscle = "triceps",
-                equipment = "dumbbell",
-                difficulty = "beginner",
-                instructions = "Curl"
-            ),
-            Exercise(
-                name = "Wide-grip barbell curl",
-                type = "strength",
-                muscle = "lats",
-                equipment = "barbell",
-                difficulty = "beginner",
-                instructions = "Curl"
-            ),
-            Exercise(
-                name = "EZ-bar spider curl",
-                type = "strength",
-                muscle = "biceps",
-                equipment = "barbell",
-                difficulty = "intermediate",
-                instructions = "Curl"
-            ),
-            Exercise(
-                name = "Hammer Curls",
-                type = "strength",
-                muscle = "adductors",
-                equipment = "dumbbell",
-                difficulty = "expert",
-                instructions = "Curl"
-            ),
-            Exercise(
-                name = "EZ-Bar Curl",
-                type = "strength",
-                muscle = "abdominals",
-                equipment = "e-z_curl_bar",
-                difficulty = "intermediate",
-                instructions = "Curl"
-            ),
-            Exercise(
-                name = "Zottman Curl",
-                type = "strength",
-                muscle = "glutes",
-                equipment = "None",
-                difficulty = "intermediate",
-                instructions = "Curl"
-            ),
-            Exercise(
-                name = "Biceps curl to shoulder press",
-                type = "strength",
-                muscle = "traps",
-                equipment = "dumbbell",
-                difficulty = "beginner",
-                instructions = "Press"
-            ),
-            Exercise(
-                name = "Barbell Curl",
-                type = "strength",
-                muscle = "hamstrings",
-                equipment = "barbell",
-                difficulty = "expert",
-                instructions = "Curl"
-            ),
-            Exercise(
-                name = "Concentration curl",
-                type = "strength",
-                muscle = "chest",
-                equipment = "dumbbell",
-                difficulty = "intermediate",
-                instructions = "Curl"
-            ),
-            Exercise(
-                name = "Flexor Incline Dumbbell Curls",
-                type = "strength",
-                muscle = "calves",
-                equipment = "dumbbell",
-                difficulty = "expert",
-                instructions = "Curl"
-            )
-        )
-        exercisesAdapter = ExercisesAdapter(exercises, this)
-        exerciseRecyclerView.adapter = exercisesAdapter*/
     }
 }

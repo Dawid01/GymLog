@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
-class ExercisesAdapter(private val exercises: Array<Exercise>, private val context: Context) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
+class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.exercise_item, parent, false)
