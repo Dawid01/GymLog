@@ -11,7 +11,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="?attr/colorSurfaceBright"
+        android:background="@drawable/tablayout_background"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +30,7 @@
             android:id="@+id/workout_tab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:icon="@drawable/workout_icon"
+            android:icon="@drawable/workout_icon_fill"
             android:text="Workout" />
 
         <com.google.android.material.tabs.TabItem

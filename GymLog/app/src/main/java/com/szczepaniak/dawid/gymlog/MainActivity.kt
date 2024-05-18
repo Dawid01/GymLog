@@ -1,10 +1,6 @@
 package com.szczepaniak.dawid.gymlog
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -40,9 +36,9 @@ class MainActivity : AppCompatActivity() {
         tabLayout = findViewById(R.id.tabLayout)
         pageAdapter = MainViewPageAdapter(this)
 
-        pageAdapter.addFragment(HomeFragment(), "Home", R.drawable.home_icon)
-        pageAdapter.addFragment(WorkoutFragment(), "Workout", R.drawable.workout_icon)
-        pageAdapter.addFragment(ProfileFragment(), "Profile", R.drawable.profile_icon)
+        pageAdapter.addFragment(HomeFragment(), "Home", R.drawable.home_icon, R.drawable.home_icon_fill)
+        pageAdapter.addFragment(WorkoutFragment(), "Workout", R.drawable.workout_icon, R.drawable.workout_icon_fill)
+        pageAdapter.addFragment(ProfileFragment(), "Profile", R.drawable.profile_icon, R.drawable.profile_icon_fill)
 
         viewPager.setAdapter(pageAdapter)
 
@@ -50,6 +46,22 @@ class MainActivity : AppCompatActivity() {
             tab.text = pageAdapter.getPageTitle(position)
             tab.icon = getResources().getDrawable(pageAdapter.getPageIcon(position))
         }.attach()
+        tabLayout.getTabAt(0)?.icon = getResources().getDrawable(pageAdapter.getPageFillIcon(0))
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.icon = getResources().getDrawable(pageAdapter.getPageFillIcon(tab?.position!!))
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                tab?.icon = getResources().getDrawable(pageAdapter.getPageIcon(tab?.position!!))
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
 
     }
 
