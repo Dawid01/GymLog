@@ -6,16 +6,20 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.adapters.ExercisesAdapter
@@ -29,6 +33,10 @@ class CreateRoutineActivity : AppCompatActivity() {
     private val REQUEST_SELECT_CODE = 123
     private lateinit var context: Context
 
+    private lateinit var titleLayout: TextInputLayout
+    private lateinit var titleText: TextInputEditText
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -45,16 +53,40 @@ class CreateRoutineActivity : AppCompatActivity() {
 
         val addButton: Button = findViewById(R.id.add_exercise_button)
         addButton.setOnClickListener{
-            val intent= Intent(this, ExcercisesActivity::class.java)
+            val intent = Intent(this, ExcercisesActivity::class.java)
             intent.putExtra("select", true)
             startActivityForResult(intent, REQUEST_SELECT_CODE)
         }
 
+        titleLayout = findViewById(R.id.routine_title_layout)
+        titleText = findViewById(R.id.routine_title_text)
 
         val cancel: TextView = findViewById(R.id.cancel_text)
         cancel.setOnClickListener{
             finish()
         }
+
+        val save: TextView = findViewById(R.id.save_text)
+        save.setOnClickListener{
+            if(titleText.text.isNullOrEmpty()){
+                titleLayout.error = "This field is required"
+                titleLayout.isErrorEnabled = true
+            }
+        }
+
+        titleText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!s.isNullOrEmpty()) {
+                    titleLayout.error = null
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
 
         excercisesAdapter = ExercisesAdapter(exercises, this, false, null, object : ExercisesAdapter.OnItemClickListener {
             @SuppressLint("NotifyDataSetChanged")
@@ -88,7 +120,7 @@ class CreateRoutineActivity : AppCompatActivity() {
             val selectedItems = Singleton.getSelectedExercises()
             if (selectedItems.isNotEmpty()) {
                 selectedItems.forEach { selectedExercise ->
-                    if (!exercises.equals(selectedExercise)) {
+                    if (!exercises.any { it.equals(selectedExercise) }) {
                         exercises.add(selectedExercise)
                     }
                 }
