@@ -14,8 +14,6 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
-import com.szczepaniak.dawid.gymlog.Singleton
-import com.szczepaniak.dawid.gymlog.activities.ExcercisesActivity
 import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
@@ -41,13 +39,18 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
             intent.putExtra("muscle", exercise.muscle)
             intent.putExtra("difficulty", exercise.difficulty)
             intent.putExtra("instructions", exercise.instructions)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, holder.card, "card_transition")
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                context as Activity,
-//                Pair(holder.icon as View, "icon_transition"),
-//                Pair(holder.tvName as View, "name_transition"),
-//                Pair(holder.card as View, "card_transition")
-//            )
+            //val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, holder.card, "card_transition")
+            val p1 = androidx.core.util.Pair<View, String>(holder.icon, holder.icon.transitionName)
+            val p2 = androidx.core.util.Pair<View, String>(holder.tvName, holder.tvName.transitionName)
+            val p3 = androidx.core.util.Pair<View, String>(holder.card, holder.card.transitionName)
+            val p4 = androidx.core.util.Pair<View, String>(holder.tvDifficulty, holder.tvDifficulty.transitionName)
+            val p5 = androidx.core.util.Pair<View, String>(holder.tvMuscle, holder.tvMuscle.transitionName)
+            val p6 = androidx.core.util.Pair<View, String>(holder.vLine, holder.vLine.transitionName)
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                context as Activity,
+                p1, p2, p3
+            )
 
             context.startActivity(intent, options.toBundle())
         }
@@ -65,6 +68,7 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
        val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
        val info: ImageView = itemView.findViewById(R.id.info_image)
        val card: CardView = itemView.findViewById(R.id.card)
+       val vLine: ImageView = itemView.findViewById(R.id.imageView3)
 
     }
 

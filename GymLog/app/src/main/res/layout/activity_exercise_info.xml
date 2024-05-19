@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="400dp"
     android:layout_marginLeft="10dp"
-    android:layout_marginTop="100dp"
+    android:layout_marginTop="200dp"
     android:layout_marginRight="10dp"
-    android:layout_marginBottom="100dp"
+    android:layout_marginBottom="150dp"
     android:transitionName="card_transition"
     app:cardCornerRadius="10dp"
     tools:context=".activities.ExerciseInfoActivity">
@@ -38,6 +38,7 @@
             android:layout_width="2dp"
             android:layout_height="0dp"
             android:layout_marginStart="5dp"
+            android:transitionName="vline_transition"
             android:background="?android:attr/windowBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,6 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Muscle"
+                android:transitionName="muscle_transition"
                 android:textSize="18sp" />
 
             <TextView
@@ -72,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:text="Difficulty "
+                android:transitionName="difficulty_transition"
                 android:textAlignment="viewEnd"
                 android:textSize="12sp" />
 
@@ -106,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:text="&quot;Position the frame at the starting point, and load with the appropriate weight. Standing in the center of the frame, begin by gripping the handles and driving through your heels to lift the frame. Ensure your chest and head are up and your back is straight. Immediately begin walking briskly with quick, controlled steps. Keep your chest up and head forward, and make sure you continue breathing. Bring the frame to the ground after you have reached the end point."
                 android:textAlignment="viewStart"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
