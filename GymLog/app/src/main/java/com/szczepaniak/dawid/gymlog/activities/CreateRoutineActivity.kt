@@ -25,7 +25,7 @@ class CreateRoutineActivity : AppCompatActivity() {
 
     private lateinit var excercisesRecyclerView: RecyclerView
     private lateinit var excercisesAdapter: ExercisesAdapter
-    private var exercises = listOf<Exercise>()
+    private var exercises: MutableList<Exercise> = mutableListOf()
     private val REQUEST_SELECT_CODE = 123
     private lateinit var context: Context
 
@@ -39,7 +39,7 @@ class CreateRoutineActivity : AppCompatActivity() {
             insets
         }
         context = this
-        excercisesRecyclerView = findViewById(R.id.exertcises_recycler_view)
+        excercisesRecyclerView = findViewById(R.id.create_routine_recycler_view)
         excercisesRecyclerView.layoutManager = LinearLayoutManager(this)
         excercisesRecyclerView.visibility = View.VISIBLE
 
@@ -56,44 +56,47 @@ class CreateRoutineActivity : AppCompatActivity() {
             finish()
         }
 
+        excercisesAdapter = ExercisesAdapter(exercises, this, false, null, object : ExercisesAdapter.OnItemClickListener {
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onItemClick(position: Int) {
+                val clickedExercise = exercises[position]
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle(clickedExercise.name.toString().replace("_", " ").uppercase())
+                builder.setMessage("Do you want to delete this exercise?")
+
+                builder.setPositiveButton("Yes") { dialog, which ->
+                    exercises.removeAt(position)
+                    excercisesAdapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+                builder.setNegativeButton("No") { dialog, which ->
+                    dialog.dismiss()
+                }
+
+                builder.show()
+            }
+        })
+        excercisesRecyclerView.adapter = excercisesAdapter
     }
 
     @SuppressLint("NotifyDataSetChanged")
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_SELECT_CODE && resultCode  == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_SELECT_CODE && resultCode == Activity.RESULT_OK) {
             val selectedItems = Singleton.getSelectedExercises()
-            if(selectedItems.isNotEmpty()) {
+            if (selectedItems.isNotEmpty()) {
                 selectedItems.forEach { selectedExercise ->
                     if (!exercises.equals(selectedExercise)) {
-                        exercises += selectedExercise
+                        exercises.add(selectedExercise)
                     }
                 }
-                excercisesAdapter = ExercisesAdapter(exercises, this, false, null, object : ExercisesAdapter.OnItemClickListener {
-                    override fun onItemClick(position: Int) {
-                        val clickedExercise = exercises[position]
-                        val builder = AlertDialog.Builder(context)
-                        builder.setTitle(clickedExercise.name.toString().replace("_", " ").uppercase())
-                        builder.setMessage("Do you want to delete this exercise?")
-
-                        builder.setPositiveButton("Yes") { dialog, which ->
-                            exercises -= clickedExercise
-                            excercisesAdapter.notifyDataSetChanged()
-                            dialog.dismiss()
-                        }
-
-                        builder.setNegativeButton("No") { dialog, which ->
-                            dialog.dismiss()
-                        }
-
-                        builder.show()
-                    }
-                })
-                excercisesRecyclerView.adapter = excercisesAdapter
+                excercisesAdapter.notifyDataSetChanged()
                 Singleton.clearSelectedExercises()
             }
         }
     }
+
 
 }
