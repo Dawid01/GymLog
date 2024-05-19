@@ -49,7 +49,7 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
 
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 context as Activity,
-                p1, p2, p3
+                p1, p2, p3,
             )
 
             context.startActivity(intent, options.toBundle())

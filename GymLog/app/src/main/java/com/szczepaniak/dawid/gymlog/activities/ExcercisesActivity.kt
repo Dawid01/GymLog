@@ -43,6 +43,7 @@ class ExcercisesActivity : AppCompatActivity() {
         exerciseRecyclerView.layoutManager = LinearLayoutManager(this)
         searchView = findViewById(R.id.searchView)
         searchView.queryHint = "Search excercises"
+        searchView.requestFocus()
 
         exercisesAdapter = ExercisesAdapter(exercises,this@ExcercisesActivity)
         exerciseRecyclerView.setAdapter(exercisesAdapter)
@@ -57,16 +58,32 @@ class ExcercisesActivity : AppCompatActivity() {
             }
         })
 
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                if(newText == ""){
+                    loadExercises(muscle, page, true)
+                }
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                page = 0
+                loadExercises(muscle, page, true)
+                return false
+            }
+        })
+
 
     }
 
-    private fun loadExercises(muscle: String, page:Int){
+    private fun loadExercises(muscle: String, page:Int, clearOld: Boolean = false){
 
-        if(lastMuscle != muscle) {
+        if(lastMuscle != muscle || clearOld) {
             exercises.clear()
         }
         lastMuscle = muscle
-        val call = ApiClient.apiService.getExercises(muscle, page * 10)
+        val call = ApiClient.apiService.getExercises(muscle, searchView.query.toString(),page * 10)
 
 
         call.enqueue(object : Callback<Array<Exercise>> {

@@ -44,5 +44,5 @@ object ApiClient {
 
 interface ApiService {
     @GET("exercises")
-    fun getExercises(@Query("muscle") muscle: String, @Query("offset") offset: Int = 0 ): Call<Array<Exercise>>
+    fun getExercises(@Query("muscle") muscle: String, @Query("name") name: String = "", @Query("offset") offset: Int = 0 ): Call<Array<Exercise>>
 }
