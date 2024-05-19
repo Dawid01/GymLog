@@ -33,12 +33,12 @@ class ExerciseInfoActivity : AppCompatActivity() {
             insets
         }
 
-        var icon: ImageView = findViewById(R.id.icon)
-        var tvName: TextView = findViewById(R.id.name_text)
-        var tvMuscle: TextView = findViewById(R.id.muscle_text)
-        var tvDifficulty: TextView = findViewById(R.id.difficulty_text)
-        var tutorialButton: Button = findViewById(R.id.tutorial_button)
-        var backButton: Button = findViewById(R.id.back_button)
+        val icon: ImageView = findViewById(R.id.icon)
+        val tvName: TextView = findViewById(R.id.name_text)
+        val tvMuscle: TextView = findViewById(R.id.muscle_text)
+        val tvDifficulty: TextView = findViewById(R.id.difficulty_text)
+        val tutorialButton: Button = findViewById(R.id.tutorial_button)
+        val backButton: Button = findViewById(R.id.back_button)
 
 
         icon.setImageDrawable(getResources().getDrawable(getIconImage(intent.getStringExtra("muscle")!!)))
@@ -48,7 +48,7 @@ class ExerciseInfoActivity : AppCompatActivity() {
         tvDifficulty.setTextColor(getDifficultyColor(intent.getStringExtra("difficulty")!!))
 
         tutorialButton.setOnClickListener {
-            var youtubeUrl = "https://www.youtube.com/results?search_query=${intent.getStringExtra("name")}"
+            val youtubeUrl = "https://www.youtube.com/results?search_query=${intent.getStringExtra("name")}"
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl))
             intent.setPackage("com.google.android.youtube")
             try {
@@ -79,14 +79,5 @@ class ExerciseInfoActivity : AppCompatActivity() {
             "expert" -> return Color.RED
         }
         return Color.WHITE
-    }
-
-    private fun isYouTubeInstalled(): Boolean {
-        return try {
-            packageManager.getPackageInfo("com.google.android.youtube", 0)
-            true
-        } catch (e: PackageManager.NameNotFoundException) {
-            false
-        }
     }
 }

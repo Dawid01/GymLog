@@ -2,6 +2,7 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Button
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.ApiClient
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.SheetDialogs.MusclesSheetFragment
 import com.szczepaniak.dawid.gymlog.adapters.ExercisesAdapter
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import retrofit2.Call
@@ -73,6 +75,12 @@ class ExcercisesActivity : AppCompatActivity() {
                 return false
             }
         })
+
+        val musclesButton: Button = findViewById(R.id.muscles_button)
+        musclesButton.setOnClickListener {
+            val musclesSheet = MusclesSheetFragment()
+            musclesSheet.show(supportFragmentManager, musclesSheet.tag)
+        }
 
 
     }

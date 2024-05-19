@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.szczepaniak.dawid.gymlog.activities.ExcercisesActivity
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.SheetDialogs.MusclesSheetFragment
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -46,11 +48,13 @@ class WorkoutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myButton: Button = view.findViewById(R.id.exercises_list_button)
+        val exercisesButton: Button = view.findViewById(R.id.exercises_list_button)
 
-        myButton.setOnClickListener {
-            var intent: Intent = Intent(activity, ExcercisesActivity::class.java)
+        exercisesButton.setOnClickListener {
+            val intent= Intent(activity, ExcercisesActivity::class.java)
             startActivity(intent)
         }
+
+
     }
 }
