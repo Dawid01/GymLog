@@ -28,6 +28,7 @@ class ExcercisesActivity : AppCompatActivity() {
     private lateinit var notFoundView: View
     private lateinit var exercisesAdapter: ExercisesAdapter
     private lateinit var searchView: SearchView
+    private lateinit var addSelected: Button
     private var exercises: MutableList<Exercise> = mutableListOf()
     private var page: Int = 0
     private var muscle: String = ""
@@ -49,12 +50,14 @@ class ExcercisesActivity : AppCompatActivity() {
         exerciseRecyclerView.layoutManager = LinearLayoutManager(this)
         searchView = findViewById(R.id.searchView)
         searchView.queryHint = "Search excercises"
-//        searchView.requestFocus()
-//        searchView.setOnClickListener {
-//           searchView.requestFocus()
-//        }
+        addSelected = findViewById(R.id.add_selected_button)
 
-        exercisesAdapter = ExercisesAdapter(exercises,this@ExcercisesActivity)
+        exercisesAdapter = ExercisesAdapter(exercises,this@ExcercisesActivity, object : ExercisesAdapter.OnSelectOrUnselectItem{
+            override fun onSelectedChange(selected: HashSet<Exercise>) {
+                addSelected.visibility = if(selected.size > 0)  View.VISIBLE else View.GONE
+                addSelected.text = "Add selected (${selected.size})"
+            }
+        })
         exerciseRecyclerView.setAdapter(exercisesAdapter)
         loadExercises(muscle, page)
 
@@ -104,7 +107,6 @@ class ExcercisesActivity : AppCompatActivity() {
        cancel.setOnClickListener{
             finish()
        }
-
 
     }
 

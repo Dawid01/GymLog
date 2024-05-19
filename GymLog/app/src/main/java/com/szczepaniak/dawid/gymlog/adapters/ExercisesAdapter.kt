@@ -17,7 +17,9 @@ import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
-class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
+class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context, private val listener: OnSelectOrUnselectItem) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
+
+    private val selectedExercises = HashSet<Exercise>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.exercise_item, parent, false)
@@ -27,14 +29,14 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
         val exercise = exercises[position]
-        holder.icon.setImageDrawable(context.getResources().getDrawable(getIconImage(exercise.muscle!!)))
+        holder.icon.setImageDrawable(context.resources.getDrawable(getIconImage(exercise.muscle!!)))
         holder.tvName.text = exercise.name
         holder.tvMuscle.text = exercise.muscle.toString().replace("_", " ").capitalize()
         holder.tvDifficulty.text = exercise.difficulty.toString().uppercase()
         holder.tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
 
         holder.info.setOnClickListener {
-            var intent = Intent(context, ExerciseInfoActivity::class.java)
+            val intent = Intent(context, ExerciseInfoActivity::class.java)
             intent.putExtra("name", exercise.name)
             intent.putExtra("muscle", exercise.muscle)
             intent.putExtra("type", exercise.type)
@@ -47,12 +49,26 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
 
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 context as Activity,
-                p1, p2, p3,
+                p1, p2, p3
             )
 
             context.startActivity(intent, options.toBundle())
         }
 
+        val isSelected = selectedExercises.contains(exercise)
+        holder.selected.visibility = if (isSelected) View.VISIBLE else View.GONE
+
+        holder.card.setOnClickListener {
+            if (isSelected) {
+                selectedExercises.remove(exercise)
+                holder.selected.visibility = View.GONE
+                listener.onSelectedChange(selectedExercises)
+            } else {
+                selectedExercises.add(exercise)
+                holder.selected.visibility = View.VISIBLE
+                listener.onSelectedChange(selectedExercises)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -60,26 +76,30 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
     }
 
     class ExerciseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-       val icon: ImageView = itemView.findViewById(R.id.icon)
-       val tvName: TextView = itemView.findViewById(R.id.name_text)
-       val tvMuscle: TextView = itemView.findViewById(R.id.muscles_list_text)
-       val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
-       val info: ImageView = itemView.findViewById(R.id.info_image)
-       val card: CardView = itemView.findViewById(R.id.card)
-
+        val icon: ImageView = itemView.findViewById(R.id.icon)
+        val tvName: TextView = itemView.findViewById(R.id.name_text)
+        val tvMuscle: TextView = itemView.findViewById(R.id.muscles_list_text)
+        val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
+        val info: ImageView = itemView.findViewById(R.id.info_image)
+        val card: CardView = itemView.findViewById(R.id.card)
+        val selected: ImageView = itemView.findViewById(R.id.selected_image)
     }
 
     @SuppressLint("DiscouragedApi")
-    fun getIconImage(muscle: String) : Int{
+    fun getIconImage(muscle: String): Int {
         return context.resources.getIdentifier(muscle, "drawable", context.packageName)
     }
 
-    fun getDifficultyColor(dificulty: String) : Int {
-        when(dificulty){
-            "beginner" -> return Color.GREEN
-            "intermediate" -> return Color.YELLOW
-            "expert" -> return Color.RED
+    fun getDifficultyColor(difficulty: String): Int {
+        return when (difficulty) {
+            "beginner" -> Color.GREEN
+            "intermediate" -> Color.YELLOW
+            "expert" -> Color.RED
+            else -> Color.WHITE
         }
-        return Color.WHITE
+    }
+
+    interface OnSelectOrUnselectItem {
+        fun onSelectedChange(selected:  HashSet<Exercise>)
     }
 }
