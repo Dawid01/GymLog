@@ -1,6 +1,7 @@
 package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.ApiClient
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.SheetDialogs.MusclesSheetFragment
+import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.adapters.ExercisesAdapter
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import retrofit2.Call
@@ -34,6 +36,7 @@ class ExcercisesActivity : AppCompatActivity() {
     private var page: Int = 0
     private var muscle: String = ""
     private var lastMuscle: String = ""
+    private var selectedExercises: MutableList<Exercise> = mutableListOf()
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,10 +60,20 @@ class ExcercisesActivity : AppCompatActivity() {
         val title: TextView = findViewById(R.id.excercises_title)
         if(canSelect){
             title.text = "Select excercises"
+            title.textSize = 20f
+
+            addSelected.setOnClickListener {
+                Singleton.setSelectedExercise(selectedExercises)
+                val resultIntent = Intent()
+                resultIntent.putExtra("selectedItems", "test")
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }
         }
         exercisesAdapter = ExercisesAdapter(exercises,this@ExcercisesActivity, canSelect, object : ExercisesAdapter.OnSelectOrUnselectItem{
             override fun onSelectedChange(selected: HashSet<Exercise>) {
                 if(canSelect) {
+                    selectedExercises = selected.toMutableList()
                     addSelected.visibility = if (selected.size > 0) View.VISIBLE else View.GONE
                     addSelected.text = "Add selected (${selected.size})"
                 }

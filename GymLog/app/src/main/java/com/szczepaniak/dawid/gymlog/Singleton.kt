@@ -3,14 +3,17 @@ package com.szczepaniak.dawid.gymlog
 import android.content.Context
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
-class Singleton(applicationContext: Context) {
-    private var instance: Singleton? = null
-    public lateinit var exercise: Exercise
+object Singleton {
+    private var selectedExercises: MutableList<Exercise> = mutableListOf()
 
-    public fun getInstance(context: Context): Singleton{
-        if (instance == null){
-            instance = Singleton(context.applicationContext)
-        }
-        return instance!!
+    fun getSelectedExercises(): List<Exercise> {
+        return selectedExercises
+    }
+
+    fun setSelectedExercise(exercises: List<Exercise>) {
+        selectedExercises = exercises.toMutableList()
+    }
+    fun clearSelectedExercises() {
+        selectedExercises.clear()
     }
 }
