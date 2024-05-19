@@ -3,12 +3,14 @@ package com.szczepaniak.dawid.gymlog.activities
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,7 +22,7 @@ class ExerciseInfoActivity : AppCompatActivity() {
 
 
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint("UseCompatLoadingForDrawables", "QueryPermissionsNeeded")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,18 +48,20 @@ class ExerciseInfoActivity : AppCompatActivity() {
         tvDifficulty.setTextColor(getDifficultyColor(intent.getStringExtra("difficulty")!!))
 
         tutorialButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=" + intent.getStringExtra("name").toString().replace(" ", "+")))
-            intent.setComponent(
-                ComponentName(
-                    "com.google.android.youtube",
-                    "com.google.android.youtube.PlayerActivity"
-                )
-            )
-            startActivity(intent);
+            var youtubeUrl = "https://www.youtube.com/results?search_query=${intent.getStringExtra("name")}"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl))
+            intent.setPackage("com.google.android.youtube")
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                Toast.makeText(this, "YouTube app is not installed", Toast.LENGTH_SHORT).show()
+                val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl))
+                startActivity(webIntent)
+            }
         }
 
         backButton.setOnClickListener {
-            finish()
+            finishAfterTransition()
         }
 
 
@@ -75,5 +79,14 @@ class ExerciseInfoActivity : AppCompatActivity() {
             "expert" -> return Color.RED
         }
         return Color.WHITE
+    }
+
+    private fun isYouTubeInstalled(): Boolean {
+        return try {
+            packageManager.getPackageInfo("com.google.android.youtube", 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
     }
 }
