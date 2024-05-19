@@ -55,10 +55,11 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
             context.startActivity(intent, options.toBundle())
         }
 
-        val isSelected = selectedExercises.contains(exercise)
+        var isSelected = checkIsExerciseSelected(exercise)
         holder.selected.visibility = if (isSelected) View.VISIBLE else View.GONE
 
         holder.card.setOnClickListener {
+            isSelected = checkIsExerciseSelected(exercise)
             if (isSelected) {
                 selectedExercises.remove(exercise)
                 holder.selected.visibility = View.GONE
@@ -102,4 +103,14 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
     interface OnSelectOrUnselectItem {
         fun onSelectedChange(selected:  HashSet<Exercise>)
     }
+
+    fun checkIsExerciseSelected(exercise: Exercise) : Boolean{
+        for(selected in selectedExercises){
+            if(exercise.equals(selected)){
+                return true
+            }
+        }
+        return false
+    }
+
 }
