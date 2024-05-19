@@ -2,11 +2,14 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -24,6 +27,7 @@ class CreateRoutineActivity : AppCompatActivity() {
     private lateinit var excercisesAdapter: ExercisesAdapter
     private var exercises = listOf<Exercise>()
     private val REQUEST_SELECT_CODE = 123
+    private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +38,7 @@ class CreateRoutineActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        context = this
         excercisesRecyclerView = findViewById(R.id.exertcises_recycler_view)
         excercisesRecyclerView.layoutManager = LinearLayoutManager(this)
         excercisesRecyclerView.visibility = View.VISIBLE
@@ -66,9 +70,24 @@ class CreateRoutineActivity : AppCompatActivity() {
                         exercises += selectedExercise
                     }
                 }
-                //excercisesAdapter.notifyDataSetChanged()
-                excercisesAdapter = ExercisesAdapter(exercises, this, false, object : ExercisesAdapter.OnSelectOrUnselectItem {
-                    override fun onSelectedChange(selected: HashSet<Exercise>) {
+                excercisesAdapter = ExercisesAdapter(exercises, this, false, null, object : ExercisesAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        val clickedExercise = exercises[position]
+                        val builder = AlertDialog.Builder(context)
+                        builder.setTitle(clickedExercise.name.toString().replace("_", " ").uppercase())
+                        builder.setMessage("Do you want to delete this exercise?")
+
+                        builder.setPositiveButton("Yes") { dialog, which ->
+                            exercises -= clickedExercise
+                            excercisesAdapter.notifyDataSetChanged()
+                            dialog.dismiss()
+                        }
+
+                        builder.setNegativeButton("No") { dialog, which ->
+                            dialog.dismiss()
+                        }
+
+                        builder.show()
                     }
                 })
                 excercisesRecyclerView.adapter = excercisesAdapter

@@ -17,7 +17,7 @@ import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
-class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context, private val canSelect: Boolean, private val listener: OnSelectOrUnselectItem) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
+class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context, private val canSelect: Boolean, private val listener: OnSelectOrUnselectItem? = null, private val itemClickListener: OnItemClickListener? = null) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
 
     private val selectedExercises = HashSet<Exercise>()
 
@@ -58,20 +58,25 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
         var isSelected = checkIsExerciseSelected(exercise)
         holder.selected.visibility = if (isSelected) View.VISIBLE else View.GONE
 
-        if(canSelect) {
-            holder.card.setOnClickListener {
+
+
+        holder.itemView.setOnClickListener {
+            if(canSelect) {
                 isSelected = checkIsExerciseSelected(exercise)
                 if (isSelected) {
                     removeSelectedExercise(exercise)
                     holder.selected.visibility = View.GONE
-                    listener.onSelectedChange(selectedExercises)
+                    listener?.onSelectedChange(selectedExercises)
                 } else {
                     selectedExercises.add(exercise)
                     holder.selected.visibility = View.VISIBLE
-                    listener.onSelectedChange(selectedExercises)
+                    listener?.onSelectedChange(selectedExercises)
                 }
             }
+            itemClickListener?.onItemClick(position)
         }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -102,10 +107,6 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
         }
     }
 
-    interface OnSelectOrUnselectItem {
-        fun onSelectedChange(selected:  HashSet<Exercise>)
-    }
-
     fun checkIsExerciseSelected(exercise: Exercise) : Boolean{
         for(selected in selectedExercises){
             if(exercise.equals(selected)){
@@ -121,6 +122,14 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
                 selectedExercises.remove(selected)
             }
         }
+    }
+
+
+    interface OnSelectOrUnselectItem {
+        fun onSelectedChange(selected:  HashSet<Exercise>)
+    }
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
     }
 
 }
