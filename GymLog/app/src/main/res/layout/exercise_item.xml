@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/icon"
@@ -23,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/selected_image"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/abdominals" />
 
@@ -34,7 +35,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:text="Name"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:transitionName="name_transition"
             app:autoSizeMaxTextSize="20sp"
@@ -54,9 +55,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="Muscle"
-            android:transitionName="muscle_transition"
             android:textColor="?android:attr/textColorHint"
             android:textSize="18sp"
+            android:transitionName="muscle_transition"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -105,6 +106,19 @@
             android:layout_marginStart="90dp"
             android:background="?android:attr/windowBackground"
             android:transitionName="icon_transition"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/selected_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/selected_image"
+            android:layout_width="10dp"
+            android:layout_height="100dp"
+            android:background="?android:attr/textColorLink"
+            android:transitionName="icon_transition"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
