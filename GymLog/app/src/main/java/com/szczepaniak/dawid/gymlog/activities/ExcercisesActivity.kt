@@ -44,8 +44,8 @@ class ExcercisesActivity : AppCompatActivity() {
             insets
         }
 
-        exerciseRecyclerView = findViewById(R.id.exercises_recycler_view)
-        notFoundView = findViewById(R.id.empyt_exercises_view)
+        exerciseRecyclerView = findViewById(R.id.exertcises_recycler_view)
+        notFoundView = findViewById(R.id.empyt_routines_view)
         exerciseRecyclerView.layoutManager = LinearLayoutManager(this)
         searchView = findViewById(R.id.searchView)
         searchView.queryHint = "Search excercises"
@@ -84,7 +84,7 @@ class ExcercisesActivity : AppCompatActivity() {
             }
         })
 
-        val musclesButton: Button = findViewById(R.id.muscles_button)
+        val musclesButton: Button = findViewById(R.id.add_exercise_button)
         musclesButton.setOnClickListener {
             val musclesSheet = MusclesSheetFragment()
             musclesSheet.setOnDataReturnedListener { data ->

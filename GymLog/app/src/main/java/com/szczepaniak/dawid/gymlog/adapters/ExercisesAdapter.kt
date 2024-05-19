@@ -34,20 +34,16 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
         holder.tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
 
         holder.info.setOnClickListener {
-            var intent: Intent = Intent(context, ExerciseInfoActivity::class.java)
+            var intent = Intent(context, ExerciseInfoActivity::class.java)
             intent.putExtra("name", exercise.name)
             intent.putExtra("muscle", exercise.muscle)
             intent.putExtra("type", exercise.type)
             intent.putExtra("equipment", exercise.equipment)
             intent.putExtra("difficulty", exercise.difficulty)
             intent.putExtra("instructions", exercise.instructions)
-            //val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, holder.card, "card_transition")
             val p1 = androidx.core.util.Pair<View, String>(holder.icon, holder.icon.transitionName)
             val p2 = androidx.core.util.Pair<View, String>(holder.tvName, holder.tvName.transitionName)
             val p3 = androidx.core.util.Pair<View, String>(holder.card, holder.card.transitionName)
-            val p4 = androidx.core.util.Pair<View, String>(holder.tvDifficulty, holder.tvDifficulty.transitionName)
-            val p5 = androidx.core.util.Pair<View, String>(holder.tvMuscle, holder.tvMuscle.transitionName)
-            val p6 = androidx.core.util.Pair<View, String>(holder.vLine, holder.vLine.transitionName)
 
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 context as Activity,
@@ -66,11 +62,10 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
     class ExerciseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
        val icon: ImageView = itemView.findViewById(R.id.icon)
        val tvName: TextView = itemView.findViewById(R.id.name_text)
-       val tvMuscle: TextView = itemView.findViewById(R.id.muscle_text)
+       val tvMuscle: TextView = itemView.findViewById(R.id.muscles_list_text)
        val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
        val info: ImageView = itemView.findViewById(R.id.info_image)
        val card: CardView = itemView.findViewById(R.id.card)
-       val vLine: ImageView = itemView.findViewById(R.id.imageView3)
 
     }
 

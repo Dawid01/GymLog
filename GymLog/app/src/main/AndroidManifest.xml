@@ -15,6 +15,9 @@
         android:theme="@style/Theme.GymLog"
         tools:targetApi="31">
         <activity
+            android:name=".activities.CreateRoutineActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ExerciseInfoActivity"
             android:exported="false" />
         <activity

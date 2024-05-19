@@ -11,6 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.szczepaniak.dawid.gymlog.activities.ExcercisesActivity
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.SheetDialogs.MusclesSheetFragment
+import com.szczepaniak.dawid.gymlog.activities.CreateRoutineActivity
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -49,9 +50,15 @@ class WorkoutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val exercisesButton: Button = view.findViewById(R.id.exercises_list_button)
+        val newRoutineButton: Button = view.findViewById(R.id.new_routine_button)
 
         exercisesButton.setOnClickListener {
             val intent= Intent(activity, ExcercisesActivity::class.java)
+            startActivity(intent)
+        }
+
+        newRoutineButton.setOnClickListener {
+            val intent= Intent(activity, CreateRoutineActivity::class.java)
             startActivity(intent)
         }
 

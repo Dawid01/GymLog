@@ -1,9 +1,7 @@
 package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -36,7 +34,7 @@ class ExerciseInfoActivity : AppCompatActivity() {
 
         val icon: ImageView = findViewById(R.id.icon)
         val tvName: TextView = findViewById(R.id.name_text)
-        val tvMuscle: TextView = findViewById(R.id.muscle_text)
+        val tvMuscle: TextView = findViewById(R.id.muscles_list_text)
         val tvType: TextView = findViewById(R.id.type_text)
         val tvEquipment: TextView = findViewById(R.id.equipment_text)
         val tvDifficulty: TextView = findViewById(R.id.difficulty_text)

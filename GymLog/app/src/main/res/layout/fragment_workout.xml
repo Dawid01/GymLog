@@ -100,7 +100,7 @@
                 android:textSize="16sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/empyt_exercises_view"
+                android:id="@+id/empyt_routines_view"
                 android:layout_width="match_parent"
                 android:layout_height="350dp">
 
