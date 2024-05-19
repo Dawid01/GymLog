@@ -17,7 +17,7 @@ import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
-class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context, private val listener: OnSelectOrUnselectItem) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
+class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context, private val canSelect: Boolean, private val listener: OnSelectOrUnselectItem) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
 
     private val selectedExercises = HashSet<Exercise>()
 
@@ -58,16 +58,18 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
         var isSelected = checkIsExerciseSelected(exercise)
         holder.selected.visibility = if (isSelected) View.VISIBLE else View.GONE
 
-        holder.card.setOnClickListener {
-            isSelected = checkIsExerciseSelected(exercise)
-            if (isSelected) {
-                selectedExercises.remove(exercise)
-                holder.selected.visibility = View.GONE
-                listener.onSelectedChange(selectedExercises)
-            } else {
-                selectedExercises.add(exercise)
-                holder.selected.visibility = View.VISIBLE
-                listener.onSelectedChange(selectedExercises)
+        if(canSelect) {
+            holder.card.setOnClickListener {
+                isSelected = checkIsExerciseSelected(exercise)
+                if (isSelected) {
+                    removeSelectedExercise(exercise)
+                    holder.selected.visibility = View.GONE
+                    listener.onSelectedChange(selectedExercises)
+                } else {
+                    selectedExercises.add(exercise)
+                    holder.selected.visibility = View.VISIBLE
+                    listener.onSelectedChange(selectedExercises)
+                }
             }
         }
     }
@@ -111,6 +113,14 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
             }
         }
         return false
+    }
+
+    fun removeSelectedExercise(exercise: Exercise){
+        for(selected in selectedExercises){
+            if(exercise.equals(selected)){
+                selectedExercises.remove(selected)
+            }
+        }
     }
 
 }

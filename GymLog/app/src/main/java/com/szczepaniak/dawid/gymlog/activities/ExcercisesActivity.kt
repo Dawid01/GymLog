@@ -1,6 +1,7 @@
 package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -34,7 +35,7 @@ class ExcercisesActivity : AppCompatActivity() {
     private var muscle: String = ""
     private var lastMuscle: String = ""
 
-    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -52,10 +53,17 @@ class ExcercisesActivity : AppCompatActivity() {
         searchView.queryHint = "Search excercises"
         addSelected = findViewById(R.id.add_selected_button)
 
-        exercisesAdapter = ExercisesAdapter(exercises,this@ExcercisesActivity, object : ExercisesAdapter.OnSelectOrUnselectItem{
+        val canSelect: Boolean = intent.getBooleanExtra("select", false)
+        val title: TextView = findViewById(R.id.excercises_title)
+        if(canSelect){
+            title.text = "Select excercises"
+        }
+        exercisesAdapter = ExercisesAdapter(exercises,this@ExcercisesActivity, canSelect, object : ExercisesAdapter.OnSelectOrUnselectItem{
             override fun onSelectedChange(selected: HashSet<Exercise>) {
-                addSelected.visibility = if(selected.size > 0)  View.VISIBLE else View.GONE
-                addSelected.text = "Add selected (${selected.size})"
+                if(canSelect) {
+                    addSelected.visibility = if (selected.size > 0) View.VISIBLE else View.GONE
+                    addSelected.text = "Add selected (${selected.size})"
+                }
             }
         })
         exerciseRecyclerView.setAdapter(exercisesAdapter)

@@ -25,6 +25,7 @@ class CreateRoutineActivity : AppCompatActivity() {
         val addButton: Button = findViewById(R.id.add_exercise_button)
         addButton.setOnClickListener{
             val intent= Intent(this, ExcercisesActivity::class.java)
+            intent.putExtra("select", true)
             startActivity(intent)
         }
 
