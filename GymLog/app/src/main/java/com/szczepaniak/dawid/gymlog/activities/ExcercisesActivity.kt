@@ -2,6 +2,7 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.SearchView
 import android.widget.Toast
@@ -23,6 +24,7 @@ import retrofit2.Response
 class ExcercisesActivity : AppCompatActivity() {
 
     private lateinit var exerciseRecyclerView: RecyclerView
+    private lateinit var notFoundView: View
     private lateinit var exercisesAdapter: ExercisesAdapter
     private lateinit var searchView: SearchView
     private var exercises: MutableList<Exercise> = mutableListOf()
@@ -30,7 +32,7 @@ class ExcercisesActivity : AppCompatActivity() {
     private var muscle: String = ""
     private var lastMuscle: String = ""
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,6 +44,7 @@ class ExcercisesActivity : AppCompatActivity() {
         }
 
         exerciseRecyclerView = findViewById(R.id.exercises_recycler_view)
+        notFoundView = findViewById(R.id.empyt_exercises_view)
         exerciseRecyclerView.layoutManager = LinearLayoutManager(this)
         searchView = findViewById(R.id.searchView)
         searchView.queryHint = "Search excercises"
@@ -59,6 +62,7 @@ class ExcercisesActivity : AppCompatActivity() {
                 }
             }
         })
+
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
@@ -79,11 +83,22 @@ class ExcercisesActivity : AppCompatActivity() {
         val musclesButton: Button = findViewById(R.id.muscles_button)
         musclesButton.setOnClickListener {
             val musclesSheet = MusclesSheetFragment()
+            musclesSheet.setOnDataReturnedListener { data ->
+                muscle = data.toString()
+                if(muscle != "") {
+                    musclesButton.text = muscle.replace("_", " ").uppercase()
+                }else{
+                    musclesButton.text = "All Muscles"
+                }
+                page = 0
+                loadExercises(muscle, page, true)
+            }
             musclesSheet.show(supportFragmentManager, musclesSheet.tag)
         }
 
 
     }
+
 
     private fun loadExercises(muscle: String, page:Int, clearOld: Boolean = false){
 
@@ -101,6 +116,12 @@ class ExcercisesActivity : AppCompatActivity() {
                     val newExercises = response.body()?.toMutableList() ?: mutableListOf()
                     exercises.addAll(newExercises)
                     exercisesAdapter.notifyDataSetChanged()
+
+                    if(exercises.isEmpty()){
+                        notFoundView.visibility = View.VISIBLE
+                    }else{
+                        notFoundView.visibility = View.GONE
+                    }
 
                 } else {
                     Toast.makeText(this@ExcercisesActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()

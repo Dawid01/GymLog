@@ -36,7 +36,7 @@
                 android:background="@drawable/calendar_background" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/empyt_history_view"
+                android:id="@+id/empyt_exercises_view"
                 android:layout_width="match_parent"
                 android:layout_height="250dp">
 
