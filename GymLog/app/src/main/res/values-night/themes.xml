@@ -5,7 +5,7 @@
 <!--        <item name="colorPrimaryVariant">@color/colorPrimaryVariantDark</item>-->
 <!--        <item name="colorOnPrimary">@color/colorOnPrimaryDark</item>-->
 <!--        <item name="colorAccent">@color/colorAccentDark</item>-->
-
+        <item name="colorButtonNormal">@color/cardview_dark_background</item>
     </style>
     <style name="Theme.GymLog" parent="Base.Theme.GymLog" />
 </resources>

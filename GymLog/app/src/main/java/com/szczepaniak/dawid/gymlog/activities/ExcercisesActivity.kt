@@ -104,6 +104,7 @@ class ExcercisesActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String): Boolean {
                 page = 0
                 loadExercises(muscle, page, true)
+                searchView.clearFocus()
                 return false
             }
         })

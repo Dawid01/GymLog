@@ -101,7 +101,7 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
     fun getDifficultyColor(difficulty: String): Int {
         return when (difficulty) {
             "beginner" -> Color.GREEN
-            "intermediate" -> Color.YELLOW
+            "intermediate" -> Color.parseColor("#FFA500")
             "expert" -> Color.RED
             else -> Color.WHITE
         }

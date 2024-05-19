@@ -4,9 +4,9 @@
     <corners
         android:bottomRightRadius="16dp"
         android:bottomLeftRadius="16dp" />
-    <solid android:color="?attr/colorSurfaceBright" />
+    <solid android:color="?attr/colorButtonNormal" />
     <stroke
         android:width="2dp"
-        android:color="?attr/colorSurfaceBright" />
+        android:color="?attr/colorButtonNormal" />
 
 </shape>
