@@ -49,7 +49,10 @@ class ExcercisesActivity : AppCompatActivity() {
         exerciseRecyclerView.layoutManager = LinearLayoutManager(this)
         searchView = findViewById(R.id.searchView)
         searchView.queryHint = "Search excercises"
-        searchView.requestFocus()
+//        searchView.requestFocus()
+//        searchView.setOnClickListener {
+//           searchView.requestFocus()
+//        }
 
         exercisesAdapter = ExercisesAdapter(exercises,this@ExcercisesActivity)
         exerciseRecyclerView.setAdapter(exercisesAdapter)

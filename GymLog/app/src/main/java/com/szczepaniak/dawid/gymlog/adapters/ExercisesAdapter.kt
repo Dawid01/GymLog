@@ -37,6 +37,8 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
             var intent: Intent = Intent(context, ExerciseInfoActivity::class.java)
             intent.putExtra("name", exercise.name)
             intent.putExtra("muscle", exercise.muscle)
+            intent.putExtra("type", exercise.type)
+            intent.putExtra("equipment", exercise.equipment)
             intent.putExtra("difficulty", exercise.difficulty)
             intent.putExtra("instructions", exercise.instructions)
             //val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity, holder.card, "card_transition")

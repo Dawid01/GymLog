@@ -1,6 +1,6 @@
 package com.szczepaniak.dawid.gymlog.models
 
-data class Exercise(
+ class Exercise(
     val id: Int,
     val name: String? = null,
     val type: String? = null,

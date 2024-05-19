@@ -68,23 +68,80 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/icon">
 
+                <!-- Muscle -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Muscle:"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"/>
+
                 <TextView
                     android:id="@+id/muscle_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Muscle"
-                    android:textSize="18sp"
-                    android:transitionName="muscle_transition" />
+                    android:layout_marginBottom="8dp"
+                    android:text="Muscle value" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <!-- Type -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Type:"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:id="@+id/type_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Type value" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <!-- Equipment -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Equipment:"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"/>
+
+                <TextView
+                    android:id="@+id/equipment_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Equipment value" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <!-- Difficulty -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Difficulty:"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"/>
 
                 <TextView
                     android:id="@+id/difficulty_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="Difficulty "
-                    android:textAlignment="viewEnd"
-                    android:textSize="12sp"
-                    android:transitionName="difficulty_transition" />
+                    android:layout_marginBottom="8dp"
+                    android:text="Difficulty value" />
 
             </LinearLayout>
 
@@ -102,8 +159,9 @@
                 <TextView
                     android:id="@+id/name_text"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:text="Name"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -111,10 +169,23 @@
                     app:autoSizeMaxTextSize="20sp"
                     app:autoSizeMinTextSize="16sp" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Instruction:"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/instructions_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="255dp"
+                    android:scrollbars="vertical"
                     android:text="&quot;Position the frame at the starting point, and load with the appropriate weight. Standing in the center of the frame, begin by gripping the handles and driving through your heels to lift the frame. Ensure your chest and head are up and your back is straight. Immediately begin walking briskly with quick, controlled steps. Keep your chest up and head forward, and make sure you continue breathing. Bring the frame to the ground after you have reached the end point."
                     android:textAlignment="viewStart"
                     android:textSize="14sp" />

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.szczepaniak.dawid.gymlog.R
+import java.util.Locale
 
 
 class ExerciseInfoActivity : AppCompatActivity() {
@@ -36,16 +37,25 @@ class ExerciseInfoActivity : AppCompatActivity() {
         val icon: ImageView = findViewById(R.id.icon)
         val tvName: TextView = findViewById(R.id.name_text)
         val tvMuscle: TextView = findViewById(R.id.muscle_text)
+        val tvType: TextView = findViewById(R.id.type_text)
+        val tvEquipment: TextView = findViewById(R.id.equipment_text)
         val tvDifficulty: TextView = findViewById(R.id.difficulty_text)
+        val tvInstruction: TextView = findViewById(R.id.instructions_text)
         val tutorialButton: Button = findViewById(R.id.tutorial_button)
         val backButton: Button = findViewById(R.id.back_button)
 
 
         icon.setImageDrawable(getResources().getDrawable(getIconImage(intent.getStringExtra("muscle")!!)))
         tvName.text = intent.getStringExtra("name")
-        tvMuscle.text = intent.getStringExtra("muscle").toString().replace("_", " ").capitalize()
+        tvMuscle.text = intent.getStringExtra("muscle").toString().replace("_", " ").capitalize(
+            Locale.ROOT)
+        tvType.text = intent.getStringExtra("type").toString().replace("_", " ").capitalize(
+            Locale.ROOT)
+        tvEquipment.text = intent.getStringExtra("equipment").toString().replace("_", " ").capitalize(
+            Locale.ROOT)
         tvDifficulty.text = intent.getStringExtra("difficulty").toString().uppercase()
         tvDifficulty.setTextColor(getDifficultyColor(intent.getStringExtra("difficulty")!!))
+        tvInstruction.text = intent.getStringExtra("instructions").toString().capitalize(Locale.ROOT)
 
         tutorialButton.setOnClickListener {
             val youtubeUrl = "https://www.youtube.com/results?search_query=${intent.getStringExtra("name")}"
