@@ -42,31 +42,38 @@ class RoutinesAdapter(private val routines: List<Routine>, private val context: 
 
         var musclesSet: MutableSet<String> = mutableSetOf()
 
-        var exercisesStr = ""
-        for (exercise in routine.exercises){
-            exercisesStr += "${exercise.name}, "
-            musclesSet.add(exercise.muscle.toString())
-        }
-        val maxLength = 150
-        var truncatedText = if (exercisesStr.length > maxLength) {
-            exercisesStr.substring(0, maxLength - 3) + "..."
-        } else {
-            exercisesStr.substring(0, exercisesStr.length - 1)
-        }
+        if(routine.exercises.isNotEmpty()) {
+            var exercisesStr = ""
+            for (exercise in routine.exercises) {
+                exercisesStr += "${exercise.name}, "
+                musclesSet.add(exercise.muscle.toString())
+            }
+            val maxLength = 150
+            var truncatedText = if (exercisesStr.length > maxLength) {
+                exercisesStr.substring(0, maxLength - 3) + "..."
+            } else {
+                exercisesStr.substring(0, exercisesStr.length - 1)
+            }
 
-        if (truncatedText.endsWith(",") || truncatedText.endsWith(" ") || truncatedText.endsWith("-")) {
-            truncatedText = truncatedText.substring(0, truncatedText.length - 1)
-        }
+            if (truncatedText.endsWith(",") || truncatedText.endsWith(" ") || truncatedText.endsWith(
+                    "-"
+                )
+            ) {
+                truncatedText = truncatedText.substring(0, truncatedText.length - 1)
+            }
 
-        holder.tvExercises.text = truncatedText
-        val layoutParams = ViewGroup.LayoutParams(70, 70)
+            holder.tvExercises.text = truncatedText
+            val layoutParams = ViewGroup.LayoutParams(70, 70)
 
-        for (muscle in musclesSet){
+            for (muscle in musclesSet) {
 
-            val imageView = ImageView(context)
-            imageView.setImageResource(getIconImage(muscle))
-            imageView.layoutParams = layoutParams
-            holder.musclesLayout.addView(imageView)
+                val imageView = ImageView(context)
+                imageView.setImageResource(getIconImage(muscle))
+                imageView.layoutParams = layoutParams
+                holder.musclesLayout.addView(imageView)
+            }
+        }else{
+            holder.tvExercises.text = "Empty list of exercises!"
         }
     }
 
