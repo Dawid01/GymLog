@@ -17,6 +17,7 @@ import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
+
 class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context, private val canSelect: Boolean, private val listener: OnSelectOrUnselectItem? = null, private val itemClickListener: OnItemClickListener? = null) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
 
     private val selectedExercises = HashSet<Exercise>()
@@ -116,10 +117,12 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
         return false
     }
 
-    fun removeSelectedExercise(exercise: Exercise){
-        for(selected in selectedExercises){
-            if(exercise.equals(selected)){
-                selectedExercises.remove(selected)
+    private fun removeSelectedExercise(exercise: Exercise) {
+        val iterator = selectedExercises.iterator()
+        while (iterator.hasNext()) {
+            val selected = iterator.next()
+            if (exercise.equals(selected)) {
+                iterator.remove()
             }
         }
     }

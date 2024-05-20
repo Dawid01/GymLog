@@ -1,6 +1,7 @@
 package com.szczepaniak.dawid.gymlog.adapters
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,23 @@ class RoutinesAdapter(private val routines: List<Routine>, private val context: 
         val routine = routines[position]
         holder.tvTitle.text = routine.name
         initializeItem(holder, routine)
+
+        holder.settings.setOnClickListener{
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle(routine.name)
+            builder.setMessage("Do you want to delete this routine?")
+
+            builder.setPositiveButton("Yes") { dialog, which ->
+                //TODO delete routine
+                dialog.dismiss()
+            }
+
+            builder.setNegativeButton("No") { dialog, which ->
+                dialog.dismiss()
+            }
+
+            builder.show()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -35,6 +53,7 @@ class RoutinesAdapter(private val routines: List<Routine>, private val context: 
         val tvTitle: TextView = itemView.findViewById(R.id.name_text)
         val tvExercises: TextView = itemView.findViewById(R.id.exercises_list_text)
         val musclesLayout: LinearLayout = itemView.findViewById(R.id.muscles_icons_layout)
+        val settings: ImageView = itemView.findViewById(R.id.info_image)
 
     }
 
@@ -48,7 +67,7 @@ class RoutinesAdapter(private val routines: List<Routine>, private val context: 
                 exercisesStr += "${exercise.name}, "
                 musclesSet.add(exercise.muscle.toString())
             }
-            val maxLength = 150
+            val maxLength = 100
             var truncatedText = if (exercisesStr.length > maxLength) {
                 exercisesStr.substring(0, maxLength - 3) + "..."
             } else {

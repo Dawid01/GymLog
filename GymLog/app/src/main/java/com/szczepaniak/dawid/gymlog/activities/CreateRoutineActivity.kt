@@ -119,6 +119,7 @@ class CreateRoutineActivity : AppCompatActivity() {
 
                 builder.setPositiveButton("Yes") { dialog, which ->
                     exercises.removeAt(position)
+                   //excercisesAdapter.notifyItemRemoved(position)
                     excercisesAdapter.notifyDataSetChanged()
                     dialog.dismiss()
                 }
