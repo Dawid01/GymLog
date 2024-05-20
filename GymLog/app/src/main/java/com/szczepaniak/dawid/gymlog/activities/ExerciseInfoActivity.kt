@@ -34,7 +34,7 @@ class ExerciseInfoActivity : AppCompatActivity() {
 
         val icon: ImageView = findViewById(R.id.icon)
         val tvName: TextView = findViewById(R.id.name_text)
-        val tvMuscle: TextView = findViewById(R.id.muscles_list_text)
+        val tvMuscle: TextView = findViewById(R.id.exercises_list_text)
         val tvType: TextView = findViewById(R.id.type_text)
         val tvEquipment: TextView = findViewById(R.id.equipment_text)
         val tvDifficulty: TextView = findViewById(R.id.difficulty_text)

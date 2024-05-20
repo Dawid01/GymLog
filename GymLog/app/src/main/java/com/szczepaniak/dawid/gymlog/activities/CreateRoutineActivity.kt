@@ -84,9 +84,12 @@ class CreateRoutineActivity : AppCompatActivity() {
                 titleLayout.error = "This field is required"
                 titleLayout.isErrorEnabled = true
             }else{
-                var routine = Routine("titleText.text", exercises)
+                var routine = Routine(titleText.text.toString(), exercises)
                 lifecycleScope.launch {
                     saveRoutine(routine)
+                    val resultIntent = Intent()
+                    resultIntent.putExtra("test", "test")
+                    setResult(Activity.RESULT_OK, resultIntent)
                     finish()
                 }
             }

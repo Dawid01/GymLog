@@ -1,6 +1,7 @@
 package com.szczepaniak.dawid.gymlog.fragments
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.AppDatabase
 import com.szczepaniak.dawid.gymlog.activities.ExcercisesActivity
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.activities.CreateRoutineActivity
 import com.szczepaniak.dawid.gymlog.adapters.RoutinesAdapter
 import com.szczepaniak.dawid.gymlog.models.Exercise
@@ -29,8 +31,16 @@ class WorkoutFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
+    private val REQUEST_UPDATE_ROUTINES_CODE = 111
 
     private var routines: MutableList<Routine> = mutableListOf()
+
+    private lateinit var exercisesButton: Button
+    private lateinit var  newRoutineButton: Button
+    private lateinit var  tvRoutinesCount: TextView
+    private lateinit var  routinesRecyclerView: RecyclerView
+    private lateinit var  emptyRoutinesView: View
+    private lateinit var routinesAdapter: RoutinesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +72,12 @@ class WorkoutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val exercisesButton: Button = view.findViewById(R.id.exercises_list_button)
-        val newRoutineButton: Button = view.findViewById(R.id.new_routine_button)
-        var tvRoutinesCount: TextView = view.findViewById(R.id.routines_list_text)
-        val routinesRecyclerView: RecyclerView = view.findViewById(R.id.routines_recycler_view)
-        var routinesAdapter = RoutinesAdapter(routines)
+        exercisesButton = view.findViewById(R.id.exercises_list_button)
+        newRoutineButton = view.findViewById(R.id.new_routine_button)
+        tvRoutinesCount = view.findViewById(R.id.routines_list_text)
+        routinesRecyclerView = view.findViewById(R.id.routines_recycler_view)
+        emptyRoutinesView = view.findViewById(R.id.empyt_routines_view)
+        routinesAdapter = RoutinesAdapter(routines, requireContext())
         routinesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         routinesRecyclerView.adapter = routinesAdapter
 
@@ -77,10 +88,25 @@ class WorkoutFragment : Fragment() {
 
         newRoutineButton.setOnClickListener {
             val intent= Intent(activity, CreateRoutineActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_UPDATE_ROUTINES_CODE)
         }
 
+        loadRoutines();
 
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_UPDATE_ROUTINES_CODE && resultCode == Activity.RESULT_OK) {
+                loadRoutines()
+            }
+        }
+
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
+    fun loadRoutines(){
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             context?.let {
@@ -92,7 +118,10 @@ class WorkoutFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     routines.clear()
                     routines.addAll(routinesList)
+                    routines.reverse()
+                    emptyRoutinesView.visibility = if(routinesList.isEmpty()) View.VISIBLE else View.GONE
                     routinesAdapter.notifyDataSetChanged()
+                    routinesRecyclerView.invalidate()
                     tvRoutinesCount.text = "My Routines ($routinesCount)"
                 }
             }

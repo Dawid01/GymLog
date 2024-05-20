@@ -103,12 +103,12 @@
         android:id="@+id/empyt_routines_view"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_exercise_button"
-        app:layout_constraintVertical_bias="0.36">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.39">
 
         <ImageView
             android:id="@+id/imageView"

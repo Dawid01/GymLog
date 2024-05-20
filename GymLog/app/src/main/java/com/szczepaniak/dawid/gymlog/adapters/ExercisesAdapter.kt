@@ -86,7 +86,7 @@ class ExercisesAdapter(private val exercises: List<Exercise>, private val contex
     class ExerciseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.icon)
         val tvName: TextView = itemView.findViewById(R.id.name_text)
-        val tvMuscle: TextView = itemView.findViewById(R.id.muscles_list_text)
+        val tvMuscle: TextView = itemView.findViewById(R.id.exercises_list_text)
         val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
         val info: ImageView = itemView.findViewById(R.id.info_image)
         val card: CardView = itemView.findViewById(R.id.card)

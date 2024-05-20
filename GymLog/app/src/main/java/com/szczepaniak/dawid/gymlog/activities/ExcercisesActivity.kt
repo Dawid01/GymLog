@@ -65,7 +65,7 @@ class ExcercisesActivity : AppCompatActivity() {
             addSelected.setOnClickListener {
                 Singleton.setSelectedExercise(selectedExercises)
                 val resultIntent = Intent()
-                resultIntent.putExtra("selectedItems", "test")
+                resultIntent.putExtra("test", "test")
                 setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }

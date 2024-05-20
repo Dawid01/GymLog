@@ -7,141 +7,156 @@
     android:padding="10dp"
     tools:context=".fragments.WorkoutFragment">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/empyt_routines_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="350dp"
+            android:layout_marginBottom="70dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nestedScrollView"
+            app:layout_constraintVertical_bias="1.0">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/routine_icon2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.56"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.29000002"
+                app:tint="?android:attr/textColorHint" />
 
             <TextView
-                android:id="@+id/quick_start_text"
-                android:layout_width="match_parent"
+                android:id="@+id/textView3"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Quick Start"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:text="Nothing here yet \n time to create your first routine!"
+                android:textAlignment="center"
+                android:textColor="?android:attr/textColorHint"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintVertical_bias="0.19" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/quick_start_button"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_gravity="center_vertical"
-                android:backgroundTint="@null"
-                android:gravity="left"
-                android:paddingLeft="15dp"
-                android:text=" Start Empty Workout"
-                android:textSize="24sp"
-                app:cornerRadius="5dp"
-                app:icon="@drawable/add"
-                app:iconSize="24sp" />
-
-            <TextView
-                android:id="@+id/routines_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="15dp"
-                android:text="Routines"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="clip_horizontal"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/new_routine_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:backgroundTint="@null"
-                    android:gravity="left|center_vertical"
-                    android:paddingLeft="15dp"
-                    android:text="New Routine"
-                    android:textSize="16sp"
-                    app:cornerRadius="5dp"
-                    app:icon="@drawable/routine_icon"
-                    app:iconSize="24sp" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/exercises_list_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="55dp"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="5dp"
-                    android:backgroundTint="@null"
-                    android:gravity="left|center_vertical"
-                    android:paddingLeft="15dp"
-                    android:text="Exercises"
-                    android:textSize="16sp"
-                    app:cornerRadius="5dp"
-                    app:icon="@drawable/excercise_icon"
-                    app:iconSize="24sp" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/routines_list_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="15dp"
-                android:text="My Routines (0)"
-                android:textColor="?android:attr/textColorHint"
-                android:textSize="16sp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/empyt_routines_view"
-                android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@drawable/routine_icon2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.56"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.29000002"
-                    app:tint="?android:attr/textColorHint" />
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="300dp"
+                    android:id="@+id/quick_start_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nothing here yet \n time to create your first routine!"
-                    android:textAlignment="center"
+                    android:layout_marginBottom="15dp"
+                    android:text="Quick Start"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/quick_start_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_gravity="center_vertical"
+                    android:backgroundTint="@null"
+                    android:gravity="left"
+                    android:paddingLeft="15dp"
+                    android:text=" Start Empty Workout"
+                    android:textSize="24sp"
+                    app:cornerRadius="5dp"
+                    app:icon="@drawable/add"
+                    app:iconSize="24sp" />
+
+                <TextView
+                    android:id="@+id/routines_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="Routines"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="clip_horizontal"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/new_routine_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="55dp"
+                        android:backgroundTint="@null"
+                        android:gravity="left|center_vertical"
+                        android:paddingLeft="15dp"
+                        android:text="New Routine"
+                        android:textSize="16sp"
+                        app:cornerRadius="5dp"
+                        app:icon="@drawable/routine_icon"
+                        app:iconSize="24sp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/exercises_list_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="55dp"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="5dp"
+                        android:backgroundTint="@null"
+                        android:gravity="left|center_vertical"
+                        android:paddingLeft="15dp"
+                        android:text="Exercises"
+                        android:textSize="16sp"
+                        app:cornerRadius="5dp"
+                        app:icon="@drawable/excercise_icon"
+                        app:iconSize="24sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/routines_list_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="My Routines (0)"
                     android:textColor="?android:attr/textColorHint"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView"
-                    app:layout_constraintVertical_bias="0.19" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:textSize="16sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/routines_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/routines_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
