@@ -15,15 +15,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isEmpty
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.szczepaniak.dawid.gymlog.AppDatabase
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.adapters.ExercisesAdapter
+import com.szczepaniak.dawid.gymlog.doa.RoutineDao
 import com.szczepaniak.dawid.gymlog.models.Exercise
+import com.szczepaniak.dawid.gymlog.models.Routine
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CreateRoutineActivity : AppCompatActivity() {
 
@@ -35,6 +41,8 @@ class CreateRoutineActivity : AppCompatActivity() {
 
     private lateinit var titleLayout: TextInputLayout
     private lateinit var titleText: TextInputEditText
+
+    private lateinit var routineDao: RoutineDao
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,11 +74,21 @@ class CreateRoutineActivity : AppCompatActivity() {
             finish()
         }
 
+
+        val db = AppDatabase.getInstance(this)
+        routineDao = db.routineDao()
+
         val save: TextView = findViewById(R.id.save_text)
         save.setOnClickListener{
             if(titleText.text.isNullOrEmpty()){
                 titleLayout.error = "This field is required"
                 titleLayout.isErrorEnabled = true
+            }else{
+                var routine = Routine("titleText.text", exercises)
+                lifecycleScope.launch {
+                    saveRoutine(routine)
+                    finish()
+                }
             }
         }
 
@@ -130,5 +148,10 @@ class CreateRoutineActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun saveRoutine(routine: Routine) {
+        withContext(Dispatchers.IO) {
+            routineDao.insert(routine)
+        }
+    }
 
 }

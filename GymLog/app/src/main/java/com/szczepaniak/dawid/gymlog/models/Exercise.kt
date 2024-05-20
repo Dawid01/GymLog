@@ -1,7 +1,11 @@
 package com.szczepaniak.dawid.gymlog.models
 
- class Exercise(
-    val id: Int,
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class Exercise(
+    @PrimaryKey val id: Int,
     val name: String? = null,
     val type: String? = null,
     val muscle: String? = null,
@@ -23,4 +27,15 @@ package com.szczepaniak.dawid.gymlog.models
 
        return true
     }
- }
+
+   override fun hashCode(): Int {
+      var result = id
+      result = 31 * result + (name?.hashCode() ?: 0)
+      result = 31 * result + (type?.hashCode() ?: 0)
+      result = 31 * result + (muscle?.hashCode() ?: 0)
+      result = 31 * result + (equipment?.hashCode() ?: 0)
+      result = 31 * result + (difficulty?.hashCode() ?: 0)
+      result = 31 * result + (instructions?.hashCode() ?: 0)
+      return result
+   }
+}
