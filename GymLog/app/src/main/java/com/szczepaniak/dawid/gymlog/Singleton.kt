@@ -7,6 +7,8 @@ import com.szczepaniak.dawid.gymlog.models.Routine
 object Singleton {
     private var selectedExercises: MutableList<Exercise> = mutableListOf()
     private lateinit var newRoutine: Routine
+    private lateinit var editRoutine: Routine
+
     fun getSelectedExercises(): List<Exercise> {
         return selectedExercises
     }
@@ -25,4 +27,14 @@ object Singleton {
     fun setNewRoutine(routine: Routine){
         newRoutine = routine
     }
+
+    fun getEditRoutine() : Routine{
+        return editRoutine
+    }
+
+    fun setEditRoutine(routine: Routine){
+        editRoutine = routine
+    }
+
+
 }

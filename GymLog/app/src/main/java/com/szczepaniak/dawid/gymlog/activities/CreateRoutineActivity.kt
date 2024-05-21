@@ -30,6 +30,7 @@ import com.szczepaniak.dawid.gymlog.models.Routine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.properties.Delegates
 
 class CreateRoutineActivity : AppCompatActivity() {
 
@@ -41,8 +42,11 @@ class CreateRoutineActivity : AppCompatActivity() {
 
     private lateinit var titleLayout: TextInputLayout
     private lateinit var titleText: TextInputEditText
+    private lateinit var deleteButton: Button
 
     private lateinit var routineDao: RoutineDao
+    private var isEditMode by Delegates.notNull<Boolean>()
+    private lateinit var editRoutine: Routine
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +58,14 @@ class CreateRoutineActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        isEditMode = intent.getBooleanExtra("editMode", false)
+        deleteButton = findViewById(R.id.delete_button)
+        deleteButton.visibility = if(isEditMode) View.VISIBLE else View.GONE
+        if(isEditMode){
+            editRoutine = Singleton.getEditRoutine()
+        }
+
         context = this
         excercisesRecyclerView = findViewById(R.id.create_routine_recycler_view)
         excercisesRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -68,6 +80,34 @@ class CreateRoutineActivity : AppCompatActivity() {
 
         titleLayout = findViewById(R.id.routine_title_layout)
         titleText = findViewById(R.id.routine_title_text)
+
+        if(isEditMode){
+            titleText.setText(editRoutine.name)
+            val title:TextView = findViewById(R.id.create_routine_title)
+            title.text = "Edit Routine"
+            exercises = editRoutine.exercises.toMutableList()
+
+            deleteButton.setOnClickListener{
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle(editRoutine.name)
+                builder.setMessage("Do you want to delete this routine?")
+
+                builder.setPositiveButton("Yes") { dialog, which ->
+                    //TODO delete routine
+//                    routines.removeAt(position)
+//                    routinesAdapter.notifyItemRemoved(position)
+//                    routinesAdapter.notifyItemRangeChanged(position, routines.size)
+//                    changeEmptyRoutinesViewVisibility()
+                    dialog.dismiss()
+                }
+
+                builder.setNegativeButton("No") { dialog, which ->
+                    dialog.dismiss()
+                }
+
+                builder.show()
+            }
+        }
 
         val cancel: TextView = findViewById(R.id.cancel_text)
         cancel.setOnClickListener{

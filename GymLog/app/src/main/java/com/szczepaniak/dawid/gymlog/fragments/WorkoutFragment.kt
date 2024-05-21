@@ -2,6 +2,7 @@ package com.szczepaniak.dawid.gymlog.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -19,7 +20,6 @@ import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.activities.CreateRoutineActivity
 import com.szczepaniak.dawid.gymlog.adapters.RoutinesAdapter
-import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.Routine
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -77,7 +77,37 @@ class WorkoutFragment : Fragment() {
         tvRoutinesCount = view.findViewById(R.id.routines_list_text)
         routinesRecyclerView = view.findViewById(R.id.routines_recycler_view)
         emptyRoutinesView = view.findViewById(R.id.empyt_routines_view)
-        routinesAdapter = RoutinesAdapter(routines, requireContext())
+        routinesAdapter = RoutinesAdapter(routines, requireContext(), object : RoutinesAdapter.OnItemSettingsClickListener{
+            override fun onItemSettingsClick(position: Int) {
+//                val builder = AlertDialog.Builder(context)
+//                val routine = routines[position]
+//                builder.setTitle(routine.name)
+//                builder.setMessage("Do you want to delete this routine?")
+//
+//                builder.setPositiveButton("Yes") { dialog, which ->
+//                    //TODO delete routine
+//                    routines.removeAt(position)
+//                    routinesAdapter.notifyItemRemoved(position)
+//                    routinesAdapter.notifyItemRangeChanged(position, routines.size)
+//                    changeEmptyRoutinesViewVisibility()
+//                    dialog.dismiss()
+//                }
+//                builder.setPositiveButton("Edit"){ dialog, which ->
+//                    dialog.dismiss()
+//                }
+//
+//                builder.setNegativeButton("No") { dialog, which ->
+//                    dialog.dismiss()
+//                }
+//
+//                builder.show()
+                val intent = Intent(activity, CreateRoutineActivity::class.java)
+                intent.putExtra("editMode", true)
+                Singleton.setEditRoutine(routines[position])
+                startActivity(intent)
+            }
+
+        })
         routinesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         routinesRecyclerView.adapter = routinesAdapter
 

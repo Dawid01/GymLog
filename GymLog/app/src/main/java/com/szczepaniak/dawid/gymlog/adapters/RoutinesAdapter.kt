@@ -12,9 +12,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.models.Routine
-import com.szczepaniak.dawid.gymlog.models.Workout
 
-class RoutinesAdapter(private val routines: MutableList<Routine>, private val context: Context) : RecyclerView.Adapter<RoutinesAdapter.RoutineViewHolder>() {
+class RoutinesAdapter(private val routines: MutableList<Routine>, private val context: Context, private val onItemSettingsClickListener: OnItemSettingsClickListener? = null) : RecyclerView.Adapter<RoutinesAdapter.RoutineViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoutineViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.routine_item, parent, false)
@@ -28,23 +27,7 @@ class RoutinesAdapter(private val routines: MutableList<Routine>, private val co
         initializeItem(holder, routine)
 
         holder.settings.setOnClickListener{
-            val builder = AlertDialog.Builder(context)
-            builder.setTitle(routine.name)
-            builder.setMessage("Do you want to delete this routine?")
-
-            builder.setPositiveButton("Yes") { dialog, which ->
-                //TODO delete routine
-                routines.removeAt(position)
-                notifyItemRemoved(position)
-                notifyItemRangeChanged(position, routines.size);
-                dialog.dismiss()
-            }
-
-            builder.setNegativeButton("No") { dialog, which ->
-                dialog.dismiss()
-            }
-
-            builder.show()
+            onItemSettingsClickListener?.onItemSettingsClick(position)
         }
     }
 
@@ -61,7 +44,6 @@ class RoutinesAdapter(private val routines: MutableList<Routine>, private val co
     }
 
     private fun initializeItem(holder: RoutineViewHolder, routine: Routine){
-
 
         if(routine.exercises.isNotEmpty()) {
             var exercisesStr = ""
@@ -100,4 +82,9 @@ class RoutinesAdapter(private val routines: MutableList<Routine>, private val co
     fun getIconImage(muscle: String): Int {
         return context.resources.getIdentifier(muscle, "drawable", context.packageName)
     }
+
+    interface OnItemSettingsClickListener {
+        fun onItemSettingsClick(position: Int)
+    }
+
 }
