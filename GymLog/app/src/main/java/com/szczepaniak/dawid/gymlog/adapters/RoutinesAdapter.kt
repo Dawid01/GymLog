@@ -14,7 +14,7 @@ import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.models.Routine
 import com.szczepaniak.dawid.gymlog.models.Workout
 
-class RoutinesAdapter(private val routines: List<Routine>, private val context: Context) : RecyclerView.Adapter<RoutinesAdapter.RoutineViewHolder>() {
+class RoutinesAdapter(private val routines: MutableList<Routine>, private val context: Context) : RecyclerView.Adapter<RoutinesAdapter.RoutineViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoutineViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.routine_item, parent, false)
@@ -34,6 +34,9 @@ class RoutinesAdapter(private val routines: List<Routine>, private val context: 
 
             builder.setPositiveButton("Yes") { dialog, which ->
                 //TODO delete routine
+                routines.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, routines.size);
                 dialog.dismiss()
             }
 
@@ -80,7 +83,7 @@ class RoutinesAdapter(private val routines: List<Routine>, private val context: 
             }
 
             holder.tvExercises.text = truncatedText
-            val layoutParams = ViewGroup.LayoutParams(80, 80)
+            val layoutParams = ViewGroup.LayoutParams(100, 100)
 
             for (muscle in routine.muscles) {
                 val imageView = ImageView(context)

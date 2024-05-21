@@ -18,7 +18,7 @@ import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 
 
-class ExercisesAdapter(private val exercises: List<Exercise>, private val context: Context, private val canSelect: Boolean, private val listener: OnSelectOrUnselectItem? = null, private val itemClickListener: OnItemClickListener? = null) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
+class ExercisesAdapter(private val exercises: MutableList<Exercise>, private val context: Context, private val canSelect: Boolean, private val listener: OnSelectOrUnselectItem? = null, private val itemClickListener: OnItemClickListener? = null) : RecyclerView.Adapter<ExercisesAdapter.ExerciseViewHolder>() {
 
     private val selectedExercises = HashSet<Exercise>()
 
