@@ -10,7 +10,8 @@ import com.szczepaniak.dawid.gymlog.Converters
 data class Routine (
     @PrimaryKey(autoGenerate = true) val id: Int,
     val name: String,
-    val exercises: List<Exercise>
+    val exercises: List<Exercise>,
+    val muscles: List<String>
 ){
-    constructor(name: String, exercises: List<Exercise>) : this(0, name, exercises)
+    constructor(name: String, exercises: List<Exercise>, muscles: List<String>) : this(0, name, exercises, muscles)
 }

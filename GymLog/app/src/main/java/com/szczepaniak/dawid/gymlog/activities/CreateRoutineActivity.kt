@@ -84,9 +84,14 @@ class CreateRoutineActivity : AppCompatActivity() {
                 titleLayout.error = "This field is required"
                 titleLayout.isErrorEnabled = true
             }else{
-                var routine = Routine(titleText.text.toString(), exercises)
+                var musclesSet: MutableSet<String> = mutableSetOf()
+                for(exercise in exercises){
+                    musclesSet.add(exercise.muscle.toString())
+                }
+                var routine = Routine(titleText.text.toString(), exercises, musclesSet.toList())
                 lifecycleScope.launch {
                     saveRoutine(routine)
+                    Singleton.setNewRoutine(routine)
                     val resultIntent = Intent()
                     resultIntent.putExtra("test", "test")
                     setResult(Activity.RESULT_OK, resultIntent)

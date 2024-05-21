@@ -101,9 +101,11 @@ class WorkoutFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_UPDATE_ROUTINES_CODE && resultCode == Activity.RESULT_OK) {
-                loadRoutines()
-            }
+            //loadRoutines()
+            routines.add(0, Singleton.getNewRoutine())
+            routinesAdapter.notifyDataSetChanged()
         }
+    }
 
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     fun loadRoutines(){

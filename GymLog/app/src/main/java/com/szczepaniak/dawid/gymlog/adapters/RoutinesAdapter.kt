@@ -59,13 +59,11 @@ class RoutinesAdapter(private val routines: List<Routine>, private val context: 
 
     private fun initializeItem(holder: RoutineViewHolder, routine: Routine){
 
-        var musclesSet: MutableSet<String> = mutableSetOf()
 
         if(routine.exercises.isNotEmpty()) {
             var exercisesStr = ""
             for (exercise in routine.exercises) {
                 exercisesStr += "${exercise.name}, "
-                musclesSet.add(exercise.muscle.toString())
             }
             val maxLength = 100
             var truncatedText = if (exercisesStr.length > maxLength) {
@@ -82,10 +80,9 @@ class RoutinesAdapter(private val routines: List<Routine>, private val context: 
             }
 
             holder.tvExercises.text = truncatedText
-            val layoutParams = ViewGroup.LayoutParams(70, 70)
+            val layoutParams = ViewGroup.LayoutParams(80, 80)
 
-            for (muscle in musclesSet) {
-
+            for (muscle in routine.muscles) {
                 val imageView = ImageView(context)
                 imageView.setImageResource(getIconImage(muscle))
                 imageView.layoutParams = layoutParams
