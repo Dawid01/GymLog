@@ -103,6 +103,7 @@ class WorkoutFragment : Fragment() {
         if (requestCode == REQUEST_UPDATE_ROUTINES_CODE && resultCode == Activity.RESULT_OK) {
             //loadRoutines()
             routines.add(0, Singleton.getNewRoutine())
+            changeEmptyRoutinesViewVisibility()
             routinesAdapter.notifyDataSetChanged()
         }
     }
@@ -128,5 +129,10 @@ class WorkoutFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun changeEmptyRoutinesViewVisibility(){
+        tvRoutinesCount.text = "My Routines (${routines.size})"
+        emptyRoutinesView.visibility = if(routines.isEmpty()) View.VISIBLE else View.GONE
     }
 }

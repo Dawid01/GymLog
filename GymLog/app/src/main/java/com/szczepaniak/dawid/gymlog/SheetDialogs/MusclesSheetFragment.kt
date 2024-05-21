@@ -37,7 +37,8 @@ class MusclesSheetFragment() : BottomSheetDialogFragment() {
         "neck",
         "quadriceps",
         "traps",
-        "triceps"
+        "triceps",
+        "shoulders"
     )
 
     override fun onCreateView(

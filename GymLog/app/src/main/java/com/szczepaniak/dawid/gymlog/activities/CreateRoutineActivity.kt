@@ -88,7 +88,7 @@ class CreateRoutineActivity : AppCompatActivity() {
                 for(exercise in exercises){
                     musclesSet.add(exercise.muscle.toString())
                 }
-                var routine = Routine(titleText.text.toString(), exercises, musclesSet.toList())
+                var routine = Routine(titleText.text.toString(), exercises, musclesSet.toList().sorted())
                 lifecycleScope.launch {
                     saveRoutine(routine)
                     Singleton.setNewRoutine(routine)
