@@ -104,7 +104,8 @@ class WorkoutFragment : Fragment() {
             //loadRoutines()
             routines.add(0, Singleton.getNewRoutine())
             changeEmptyRoutinesViewVisibility()
-            routinesAdapter.notifyDataSetChanged()
+            //routinesAdapter.notifyDataSetChanged()
+            routinesAdapter.notifyItemInserted(0)
         }
     }
 
