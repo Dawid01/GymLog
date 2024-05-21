@@ -2,7 +2,6 @@ package com.szczepaniak.dawid.gymlog.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -31,7 +30,8 @@ class WorkoutFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
-    private val REQUEST_UPDATE_ROUTINES_CODE = 111
+    private val REQUEST_CREATE_ROUTINES_CODE = 111
+    private val REQUEST_EDIT_ROUTINES_CODE = 222
 
     private var routines: MutableList<Routine> = mutableListOf()
 
@@ -104,7 +104,7 @@ class WorkoutFragment : Fragment() {
                 val intent = Intent(activity, CreateRoutineActivity::class.java)
                 intent.putExtra("editMode", true)
                 Singleton.setEditRoutine(routines[position])
-                startActivity(intent)
+                startActivityForResult(intent, REQUEST_EDIT_ROUTINES_CODE)
             }
 
         })
@@ -112,13 +112,13 @@ class WorkoutFragment : Fragment() {
         routinesRecyclerView.adapter = routinesAdapter
 
         exercisesButton.setOnClickListener {
-            val intent= Intent(activity, ExcercisesActivity::class.java)
+            val intent = Intent(activity, ExcercisesActivity::class.java)
             startActivity(intent)
         }
 
         newRoutineButton.setOnClickListener {
-            val intent= Intent(activity, CreateRoutineActivity::class.java)
-            startActivityForResult(intent, REQUEST_UPDATE_ROUTINES_CODE)
+            val intent = Intent(activity, CreateRoutineActivity::class.java)
+            startActivityForResult(intent, REQUEST_CREATE_ROUTINES_CODE)
         }
 
         loadRoutines();
@@ -130,12 +130,20 @@ class WorkoutFragment : Fragment() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_UPDATE_ROUTINES_CODE && resultCode == Activity.RESULT_OK) {
-            //loadRoutines()
-            routines.add(0, Singleton.getNewRoutine())
-            changeEmptyRoutinesViewVisibility()
-            //routinesAdapter.notifyDataSetChanged()
-            routinesAdapter.notifyItemInserted(0)
+
+        if(resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CREATE_ROUTINES_CODE -> {
+                    routines.add(0, Singleton.getNewRoutine())
+                    changeEmptyRoutinesViewVisibility()
+                    routinesAdapter.notifyItemInserted(0)
+                }
+
+                REQUEST_EDIT_ROUTINES_CODE -> {
+                    loadRoutines()
+                }
+
+            }
         }
     }
 
