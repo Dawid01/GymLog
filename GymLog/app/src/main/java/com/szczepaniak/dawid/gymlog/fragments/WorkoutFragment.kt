@@ -140,7 +140,20 @@ class WorkoutFragment : Fragment() {
                 }
 
                 REQUEST_EDIT_ROUTINES_CODE -> {
-                    loadRoutines()
+
+                    //loadRoutines()
+                    if (data != null) {
+                        val index = routines.indexOf(Singleton.getEditRoutine())
+                        if(data.getStringExtra("mode").equals("delete")) {
+                            routines.removeAt(index)
+                            changeEmptyRoutinesViewVisibility()
+                            routinesAdapter.notifyItemRemoved(index)
+                            routinesAdapter.notifyItemRangeChanged(index, routines.size)
+                        }else{
+                            routines[index] = Singleton.getEditRoutine()
+                            routinesAdapter.notifyItemChanged(index)
+                        }
+                    }
                 }
 
             }

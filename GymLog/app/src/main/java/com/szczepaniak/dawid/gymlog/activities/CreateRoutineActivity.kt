@@ -11,6 +11,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -93,12 +94,28 @@ class CreateRoutineActivity : AppCompatActivity() {
                 builder.setMessage("Do you want to delete this routine?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
-                    //TODO delete routine
-//                    routines.removeAt(position)
-//                    routinesAdapter.notifyItemRemoved(position)
-//                    routinesAdapter.notifyItemRangeChanged(position, routines.size)
-//                    changeEmptyRoutinesViewVisibility()
-                    dialog.dismiss()
+
+                    context.let { ctx ->
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val db = AppDatabase.getInstance(ctx)
+                            val routineDao = db.routineDao()
+
+                            val rowsDeleted = routineDao.deleteById(Singleton.getEditRoutine().id)
+
+                            withContext(Dispatchers.Main) {
+                                if(rowsDeleted > 0) {
+                                    dialog.dismiss()
+                                    val resultIntent = Intent()
+                                    resultIntent.putExtra("mode", "delete")
+                                    setResult(Activity.RESULT_OK, resultIntent)
+                                    finish()
+                                    dialog.dismiss()
+                                }else{
+                                    Toast.makeText(ctx, "Failed to delete the routine. Please try again.", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
                 }
 
                 builder.setNegativeButton("No") { dialog, which ->
@@ -120,22 +137,47 @@ class CreateRoutineActivity : AppCompatActivity() {
 
         val save: TextView = findViewById(R.id.save_text)
         save.setOnClickListener{
-            if(titleText.text.isNullOrEmpty()){
-                titleLayout.error = "This field is required"
-                titleLayout.isErrorEnabled = true
-            }else{
-                var musclesSet: MutableSet<String> = mutableSetOf()
-                for(exercise in exercises){
-                    musclesSet.add(exercise.muscle.toString())
+            if(!isEditMode) {
+                if (titleText.text.isNullOrEmpty()) {
+                    titleLayout.error = "This field is required"
+                    titleLayout.isErrorEnabled = true
+                } else {
+                    var musclesSet: MutableSet<String> = mutableSetOf()
+                    for (exercise in exercises) {
+                        musclesSet.add(exercise.muscle.toString())
+                    }
+                    var routine =
+                        Routine(titleText.text.toString(), exercises, musclesSet.toList().sorted())
+                    lifecycleScope.launch {
+                        saveRoutine(routine)
+                        Singleton.setNewRoutine(routine)
+                        val resultIntent = Intent()
+                        setResult(Activity.RESULT_OK, resultIntent)
+                        finish()
+                    }
                 }
-                var routine = Routine(titleText.text.toString(), exercises, musclesSet.toList().sorted())
+            }else{
                 lifecycleScope.launch {
-                    saveRoutine(routine)
-                    Singleton.setNewRoutine(routine)
-                    val resultIntent = Intent()
-                    resultIntent.putExtra("test", "test")
-                    setResult(Activity.RESULT_OK, resultIntent)
-                    finish()
+
+                    if (titleText.text.isNullOrEmpty()) {
+                        titleLayout.error = "This field is required"
+                        titleLayout.isErrorEnabled = true
+                    }else {
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("mode", "edit")
+                        editRoutine.name = titleText.text.toString()
+                        editRoutine.exercises = exercises
+                        var musclesSet: MutableSet<String> = mutableSetOf()
+                        for (exercise in exercises) {
+                            musclesSet.add(exercise.muscle.toString())
+                        }
+                        editRoutine.muscles = musclesSet.toList()
+                        editRoutine(editRoutine)
+                        Singleton.setEditRoutine(editRoutine)
+                        setResult(Activity.RESULT_OK, resultIntent)
+                        finish()
+                    }
+
                 }
             }
         }
@@ -163,6 +205,7 @@ class CreateRoutineActivity : AppCompatActivity() {
                 builder.setMessage("Do you want to delete this exercise?")
 
                 builder.setPositiveButton("Yes") { dialog, which ->
+
                     exercises.removeAt(position)
                     excercisesAdapter.notifyItemRemoved(position)
                     excercisesAdapter.notifyItemRangeChanged(position, exercises.size)
@@ -201,6 +244,12 @@ class CreateRoutineActivity : AppCompatActivity() {
     private suspend fun saveRoutine(routine: Routine) {
         withContext(Dispatchers.IO) {
             routineDao.insert(routine)
+        }
+    }
+
+    private suspend fun editRoutine(routine: Routine) {
+        withContext(Dispatchers.IO) {
+            routineDao.updateById(routine.id, routine.name, routine.exercises, routine.muscles)
         }
     }
 
