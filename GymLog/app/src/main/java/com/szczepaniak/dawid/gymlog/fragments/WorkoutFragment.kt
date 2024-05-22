@@ -79,28 +79,6 @@ class WorkoutFragment : Fragment() {
         emptyRoutinesView = view.findViewById(R.id.empyt_routines_view)
         routinesAdapter = RoutinesAdapter(routines, requireContext(), object : RoutinesAdapter.OnItemSettingsClickListener{
             override fun onItemSettingsClick(position: Int) {
-//                val builder = AlertDialog.Builder(context)
-//                val routine = routines[position]
-//                builder.setTitle(routine.name)
-//                builder.setMessage("Do you want to delete this routine?")
-//
-//                builder.setPositiveButton("Yes") { dialog, which ->
-//                    //TODO delete routine
-//                    routines.removeAt(position)
-//                    routinesAdapter.notifyItemRemoved(position)
-//                    routinesAdapter.notifyItemRangeChanged(position, routines.size)
-//                    changeEmptyRoutinesViewVisibility()
-//                    dialog.dismiss()
-//                }
-//                builder.setPositiveButton("Edit"){ dialog, which ->
-//                    dialog.dismiss()
-//                }
-//
-//                builder.setNegativeButton("No") { dialog, which ->
-//                    dialog.dismiss()
-//                }
-//
-//                builder.show()
                 val intent = Intent(activity, CreateRoutineActivity::class.java)
                 intent.putExtra("editMode", true)
                 Singleton.setEditRoutine(routines[position])
@@ -137,6 +115,7 @@ class WorkoutFragment : Fragment() {
                     routines.add(0, Singleton.getNewRoutine())
                     changeEmptyRoutinesViewVisibility()
                     routinesAdapter.notifyItemInserted(0)
+                    routinesAdapter.notifyItemRangeChanged(0, routines.size)
                 }
 
                 REQUEST_EDIT_ROUTINES_CODE -> {
@@ -152,6 +131,7 @@ class WorkoutFragment : Fragment() {
                         }else{
                             routines[index] = Singleton.getEditRoutine()
                             routinesAdapter.notifyItemChanged(index)
+                            //routinesAdapter.notifyItemRangeChanged(index, routines.size)
                         }
                     }
                 }
