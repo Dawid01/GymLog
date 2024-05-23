@@ -30,11 +30,18 @@
                 android:textSize="26sp"
                 android:textStyle="bold" />
 
-            <CalendarView
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                 android:id="@+id/calendar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/calendar_background" />
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:background="@drawable/calendar_background"
+                app:mcv_arrowColor="?android:attr/textColorLinkInverse"
+                app:mcv_dateTextAppearance="?android:textColorPrimary"
+                app:mcv_selectionColor="?android:attr/textColorLinkInverse"
+                app:mcv_selectionMode="none"
+                app:mcv_showOtherDates="defaults"
+                app:mcv_titleAnimationOrientation="horizontal"
+                app:mcv_weekDayTextAppearance="?android:textColorSecondary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/empyt_routines_view"

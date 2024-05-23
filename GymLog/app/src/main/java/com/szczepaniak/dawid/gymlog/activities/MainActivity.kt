@@ -2,6 +2,7 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.CalendarView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -78,5 +79,4 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
-
 }

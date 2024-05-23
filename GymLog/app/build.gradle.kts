@@ -35,7 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
 }
+
+
 
 dependencies {
 
@@ -95,6 +98,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("com.github.prolificinteractive:material-calendarview:2.0.0")
 
 
 

@@ -2,6 +2,7 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -135,6 +136,12 @@ class ExcercisesActivity : AppCompatActivity() {
 
     private fun loadExercises(muscle: String, page:Int, clearOld: Boolean = false){
 
+        val mProgressDialog = ProgressDialog(this)
+        mProgressDialog.setTitle("Loading...")
+        mProgressDialog.setMessage("Trying to find exercises")
+        mProgressDialog.show()
+
+        exerciseRecyclerView.scrollToPosition(0)
         if(lastMuscle != muscle || clearOld) {
             exercises.clear()
         }
@@ -155,15 +162,19 @@ class ExcercisesActivity : AppCompatActivity() {
                     }else{
                         notFoundView.visibility = View.GONE
                     }
+                    mProgressDialog.dismiss()
 
                 } else {
                     Toast.makeText(this@ExcercisesActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
-
+                    notFoundView.visibility = View.VISIBLE
+                    mProgressDialog.dismiss()
                 }
             }
 
             override fun onFailure(call: Call<Array<Exercise>>, t: Throwable) {
                 Toast.makeText(this@ExcercisesActivity, "Network Error", Toast.LENGTH_SHORT).show()
+                notFoundView.visibility = View.VISIBLE
+                mProgressDialog.dismiss()
             }
         })
     }
