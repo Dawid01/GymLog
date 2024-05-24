@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -33,6 +34,7 @@ class ExcercisesActivity : AppCompatActivity() {
     private lateinit var exercisesAdapter: ExercisesAdapter
     private lateinit var searchView: SearchView
     private lateinit var addSelected: Button
+    private lateinit var progressBar: ProgressBar
     private var exercises: MutableList<Exercise> = mutableListOf()
     private var page: Int = 0
     private var muscle: String = ""
@@ -56,6 +58,7 @@ class ExcercisesActivity : AppCompatActivity() {
         searchView = findViewById(R.id.searchView)
         searchView.queryHint = "Search excercises"
         addSelected = findViewById(R.id.add_selected_button)
+        progressBar = findViewById(R.id.progress_bar)
 
         val canSelect: Boolean = intent.getBooleanExtra("select", false)
         val title: TextView = findViewById(R.id.excercises_title)
@@ -87,7 +90,7 @@ class ExcercisesActivity : AppCompatActivity() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!recyclerView.canScrollVertically(1)) {
-                    loadExercises(muscle, ++page)
+                    loadExercises(muscle, ++page, false, true)
                 }
             }
         })
@@ -134,14 +137,18 @@ class ExcercisesActivity : AppCompatActivity() {
     }
 
 
-    private fun loadExercises(muscle: String, page:Int, clearOld: Boolean = false){
+    private fun loadExercises(muscle: String, page:Int, clearOld: Boolean = false, loadMore: Boolean = false){
 
         val mProgressDialog = ProgressDialog(this)
-        mProgressDialog.setTitle("Loading...")
-        mProgressDialog.setMessage("Trying to find exercises")
-        mProgressDialog.show()
+        if(!loadMore) {
+            mProgressDialog.setTitle("Loading...")
+            mProgressDialog.setMessage("Trying to find exercises")
+            mProgressDialog.show()
+            exerciseRecyclerView.scrollToPosition(0)
+        }else{
+            progressBar.visibility = View.VISIBLE
+        }
 
-        exerciseRecyclerView.scrollToPosition(0)
         if(lastMuscle != muscle || clearOld) {
             exercises.clear()
         }
@@ -163,11 +170,13 @@ class ExcercisesActivity : AppCompatActivity() {
                         notFoundView.visibility = View.GONE
                     }
                     mProgressDialog.dismiss()
+                    progressBar.visibility = View.GONE
 
                 } else {
                     Toast.makeText(this@ExcercisesActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                     notFoundView.visibility = View.VISIBLE
                     mProgressDialog.dismiss()
+                    progressBar.visibility = View.GONE
                 }
             }
 
@@ -175,6 +184,7 @@ class ExcercisesActivity : AppCompatActivity() {
                 Toast.makeText(this@ExcercisesActivity, "Network Error", Toast.LENGTH_SHORT).show()
                 notFoundView.visibility = View.VISIBLE
                 mProgressDialog.dismiss()
+                progressBar.visibility = View.GONE
             }
         })
     }
