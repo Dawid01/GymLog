@@ -8,6 +8,7 @@ object Singleton {
     private var selectedExercises: MutableList<Exercise> = mutableListOf()
     private lateinit var newRoutine: Routine
     private lateinit var editRoutine: Routine
+    private lateinit var selectedRoutine: Routine
 
     fun getSelectedExercises(): List<Exercise> {
         return selectedExercises
@@ -34,6 +35,14 @@ object Singleton {
 
     fun setEditRoutine(routine: Routine){
         editRoutine = routine
+    }
+
+    fun getSelectedRoutine() : Routine {
+        return selectedRoutine
+    }
+
+    fun setSelectedRoutine(routine: Routine){
+        selectedRoutine = routine
     }
 
 

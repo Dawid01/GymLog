@@ -3,14 +3,18 @@ package com.szczepaniak.dawid.gymlog.adapters
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.Singleton
+import com.szczepaniak.dawid.gymlog.activities.WorkoutActivity
 import com.szczepaniak.dawid.gymlog.models.Routine
 
 class RoutinesAdapter(private val routines: MutableList<Routine>, private val context: Context, private val onItemSettingsClickListener: OnItemSettingsClickListener? = null) : RecyclerView.Adapter<RoutinesAdapter.RoutineViewHolder>() {
@@ -40,6 +44,7 @@ class RoutinesAdapter(private val routines: MutableList<Routine>, private val co
         val tvExercises: TextView = itemView.findViewById(R.id.exercises_list_text)
         val musclesLayout: LinearLayout = itemView.findViewById(R.id.muscles_icons_layout)
         val settings: ImageView = itemView.findViewById(R.id.info_image)
+        val startRoutineButton: Button = itemView.findViewById(R.id.start_routine_button)
 
     }
 
@@ -75,6 +80,13 @@ class RoutinesAdapter(private val routines: MutableList<Routine>, private val co
             }
         }else{
             holder.tvExercises.text = "Empty list of exercises!"
+        }
+
+        holder.startRoutineButton.setOnClickListener {
+            Singleton.setSelectedRoutine(routine)
+            val intent = Intent(context, WorkoutActivity::class.java)
+            intent.putExtra("selected", true)
+            context.startActivity(intent)
         }
     }
 

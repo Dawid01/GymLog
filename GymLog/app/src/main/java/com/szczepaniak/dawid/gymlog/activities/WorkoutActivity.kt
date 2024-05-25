@@ -1,30 +1,31 @@
 package com.szczepaniak.dawid.gymlog.activities
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.os.IBinder
-import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.TimerService
+import com.szczepaniak.dawid.gymlog.models.Routine
 
 class WorkoutActivity : AppCompatActivity() {
 
+
+    private lateinit var routine: Routine
+    private lateinit var tvRoutineTitle: TextView
 
     private var timerService: TimerService? = null
     private var isBound = false
     private lateinit var timeTextView: TextView
     private lateinit var prefs: SharedPreferences
     private val handler = Handler()
+
 //    private val updateUITask = object : Runnable {
 //        override fun run() {
 //            val elapsedTime = prefs.getLong("elapsedTime", 0)
@@ -45,6 +46,7 @@ class WorkoutActivity : AppCompatActivity() {
 //        }
 //    }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -54,6 +56,17 @@ class WorkoutActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val isSelected = intent.getBooleanExtra("selected", false)
+
+        tvRoutineTitle = findViewById(R.id.routine_title)
+        if(isSelected){
+            routine = Singleton.getSelectedRoutine()
+            tvRoutineTitle.text = routine.name
+        }else{
+            tvRoutineTitle.text = "Quick Workout"
+        }
+
 //        timeTextView = findViewById(R.id.timer_textview)
 //        prefs = getSharedPreferences("TrainingPrefs", MODE_PRIVATE)
 //
@@ -81,10 +94,13 @@ class WorkoutActivity : AppCompatActivity() {
 //        }
 //    }
 
+
     private fun formatTime(millis: Long): String {
         val seconds = (millis / 1000) % 60
         val minutes = (millis / 1000 / 60) % 60
         val hours = (millis / 1000 / 60 / 60)
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
+
+
 }
