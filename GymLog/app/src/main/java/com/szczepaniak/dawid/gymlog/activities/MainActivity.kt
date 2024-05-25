@@ -1,15 +1,20 @@
 package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.CalendarView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.RetrofitClient
 import com.szczepaniak.dawid.gymlog.adapters.MainViewPageAdapter
@@ -36,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         RetrofitClient.context = this
+        setUsername()
 
 
         viewPager = findViewById(R.id.view_pager)
@@ -78,5 +84,44 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    @SuppressLint("CutPasteId")
+    fun setUsername(){
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        val username = sharedPref.getString("user_name", "")
+        if (username != null) {
+            if(username.isEmpty()){
+
+                val dialogView = LayoutInflater.from(this).inflate(R.layout.username_dialog, null)
+                val textInputLayout = dialogView.findViewById<TextInputLayout>(R.id.layoutTextName)
+                val editTextName = dialogView.findViewById<TextInputEditText>(R.id.editTextName)
+
+                val dialog = AlertDialog.Builder(this)
+                    .setTitle("Enter Your Name")
+                    .setView(dialogView)
+                    .setCancelable(false)
+                    .setPositiveButton("OK") { dialogInterface, _ ->
+                    }
+                    .create()
+
+                dialog.show()
+
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    val name = editTextName.text.toString().trim()
+                    if (name.isEmpty()) {
+                        textInputLayout.error = "Name cannot be empty"
+                    } else {
+                        textInputLayout.error = null
+                        val editor = sharedPref.edit()
+                        editor.putString("user_name", name)
+                        editor.apply()
+                        dialog.dismiss()
+                        recreate()
+                    }
+                }
+
+            }
+        }
     }
 }
