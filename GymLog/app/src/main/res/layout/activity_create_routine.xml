@@ -115,7 +115,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_exercise_button">
+        app:layout_constraintTop_toBottomOf="@+id/add_exercise_button"
+        tools:ignore="NotSibling">
 
         <ImageView
             android:id="@+id/imageView"
