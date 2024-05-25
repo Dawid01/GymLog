@@ -34,7 +34,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView5"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?attr/colorSurfaceInverse"

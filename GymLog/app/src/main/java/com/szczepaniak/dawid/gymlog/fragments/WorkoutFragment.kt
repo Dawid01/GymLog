@@ -18,6 +18,7 @@ import com.szczepaniak.dawid.gymlog.activities.ExcercisesActivity
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.activities.CreateRoutineActivity
+import com.szczepaniak.dawid.gymlog.activities.WorkoutActivity
 import com.szczepaniak.dawid.gymlog.adapters.RoutinesAdapter
 import com.szczepaniak.dawid.gymlog.models.Routine
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +42,7 @@ class WorkoutFragment : Fragment() {
     private lateinit var  routinesRecyclerView: RecyclerView
     private lateinit var  emptyRoutinesView: View
     private lateinit var routinesAdapter: RoutinesAdapter
+    private lateinit var startEmptyWorkoutButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +70,7 @@ class WorkoutFragment : Fragment() {
             }
     }
 
-    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged", "CutPasteId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -99,7 +101,11 @@ class WorkoutFragment : Fragment() {
             startActivityForResult(intent, REQUEST_CREATE_ROUTINES_CODE)
         }
 
-        loadRoutines();
+        loadRoutines()
+        startEmptyWorkoutButton = view.findViewById(R.id.quick_start_button)
+        startEmptyWorkoutButton.setOnClickListener{
+            startActivity(Intent(context, WorkoutActivity::class.java))
+        }
 
     }
 

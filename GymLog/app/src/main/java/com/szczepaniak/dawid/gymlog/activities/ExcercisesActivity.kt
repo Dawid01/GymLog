@@ -147,6 +147,7 @@ class ExcercisesActivity : AppCompatActivity() {
             exerciseRecyclerView.scrollToPosition(0)
         }else{
             progressBar.visibility = View.VISIBLE
+            exerciseRecyclerView.scrollToPosition(exercisesAdapter.itemCount - 1)
         }
 
         if(lastMuscle != muscle || clearOld) {
