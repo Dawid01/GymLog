@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
@@ -27,7 +28,8 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val context
 
         holder.tvSet.text = "${position + 1}"
         holder.tvPrevious.text = "-"
-        holder.tvReps.text = "0"
+        holder.tvReps.setText("")
+        holder.tvReps.setHint("0")
         if((position + 1) % 2 == 0){
             holder.background.setBackgroundColor(com.google.android.material.R.attr.colorSurface)
         }
@@ -37,7 +39,7 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val context
 
         val tvSet: TextView = itemView.findViewById(R.id.set_value)
         val tvPrevious: TextView = itemView.findViewById(R.id.previous_value)
-        val tvReps: TextView = itemView.findViewById(R.id.reps_value)
+        val tvReps: EditText = itemView.findViewById(R.id.reps_value)
         val background: View = itemView.findViewById(R.id.item_background)
 
     }
