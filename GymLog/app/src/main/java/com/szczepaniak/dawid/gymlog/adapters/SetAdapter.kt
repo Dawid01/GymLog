@@ -28,20 +28,23 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnl
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SetViewHolder, position: Int) {
 
+        val exerciseSet = sets[position]
         holder.tvSet.text = "${position + 1}"
         holder.tvPrevious.text = "-"
         holder.tvReps.setText("")
         holder.tvReps.setHint("0")
         holder.tvWeight.setText("")
         holder.tvWeight.setHint("0")
+        holder.checkBox.isChecked = exerciseSet.checked
         if((position + 1) % 2 == 0){
             holder.background.setBackgroundColor(com.google.android.material.R.attr.colorSurface)
         }
 
-        holder.checkBox.setOnCheckedChangeListener{ _, _ ->
+        holder.checkBox.setOnCheckedChangeListener{ _, value ->
             listener?.onValueChange()
-
+            sets[position].checked = value
         }
+
         holder.tvReps.addTextChangedListener {
             listener?.onValueChange()
         }

@@ -59,7 +59,7 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
             context.startActivity(intent, options.toBundle())
         }
         var sets: MutableList<ExerciseSet> = mutableListOf()
-        sets.add(ExerciseSet(0, 0))
+        sets.add(ExerciseSet(0, false, 0))
         val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
         val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ItemListener{
             override fun onValueChange() {
@@ -73,8 +73,9 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
                     .setPositiveButton("Yes") { dialog, id ->
                         if(sets.size > 1) {
                             sets.removeAt(position)
-                            adapter.notifyItemRemoved(position)
-                            adapter.notifyItemRangeChanged(position, sets.size)
+                            //adapter.notifyItemRemoved(position)
+                            //adapter.notifyItemRangeChanged(position, sets.size)
+                            adapter.notifyDataSetChanged()
                         }else{
                             Toast.makeText(context, "You can't delete last set", Toast.LENGTH_SHORT).show()
                         }
@@ -94,7 +95,7 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         holder.setRecyclerView.adapter = setAdapter
         holder.addSetButton.setOnClickListener {
             if(sets.size < 5) {
-                sets.add(ExerciseSet(sets.size, 0))
+                sets.add(ExerciseSet(sets.size, false,0))
                 setAdapter.notifyItemInserted(sets.size)
             }else{
                 Toast.makeText(context, "Max 5 sets", Toast.LENGTH_SHORT).show()
