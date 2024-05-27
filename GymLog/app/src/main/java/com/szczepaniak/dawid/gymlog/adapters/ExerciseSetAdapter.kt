@@ -2,6 +2,7 @@ package com.szczepaniak.dawid.gymlog.adapters
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,8 +61,31 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         var sets: MutableList<ExerciseSet> = mutableListOf()
         sets.add(ExerciseSet(0, 0))
         val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
-        val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ValueChange{
+        val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ItemListener{
             override fun onValueChange() {
+
+            }
+
+            override fun onItemLongClick(position: Int, adapter: SetAdapter) {
+
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage("Delete?")
+                    .setPositiveButton("Yes") { dialog, id ->
+                        if(sets.size > 1) {
+                            sets.removeAt(position)
+                            adapter.notifyItemRemoved(position)
+                            adapter.notifyItemRangeChanged(position, sets.size)
+                        }else{
+                            Toast.makeText(context, "You can't delete last set", Toast.LENGTH_SHORT).show()
+                        }
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        dialog.dismiss()
+                    }
+
+                val alert = builder.create()
+                alert.show()
 
             }
 
@@ -68,8 +93,12 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         holder.setRecyclerView.layoutManager = LinearLayoutManager(context)
         holder.setRecyclerView.adapter = setAdapter
         holder.addSetButton.setOnClickListener {
-            sets.add(ExerciseSet(sets.size, 0))
-            setAdapter.notifyItemInserted(sets.size)
+            if(sets.size < 5) {
+                sets.add(ExerciseSet(sets.size, 0))
+                setAdapter.notifyItemInserted(sets.size)
+            }else{
+                Toast.makeText(context, "Max 5 sets", Toast.LENGTH_SHORT).show()
+            }
         }
 
         holder.wieightColumn.visibility = if(bodyOnly) View.GONE else View.VISIBLE

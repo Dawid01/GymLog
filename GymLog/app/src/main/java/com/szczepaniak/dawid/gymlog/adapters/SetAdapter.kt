@@ -11,10 +11,9 @@ import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
-import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 
-class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnly: Boolean, private val context: Context, private val valueChange: ValueChange? = null): RecyclerView.Adapter<SetAdapter.SetViewHolder>() {
+class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnly: Boolean, private val context: Context, private val listener: ItemListener? = null): RecyclerView.Adapter<SetAdapter.SetViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SetViewHolder {
@@ -40,11 +39,11 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnl
         }
 
         holder.checkBox.setOnCheckedChangeListener{ _, _ ->
-            valueChange?.onValueChange()
+            listener?.onValueChange()
 
         }
         holder.tvReps.addTextChangedListener {
-            valueChange?.onValueChange()
+            listener?.onValueChange()
         }
 
         if(bodyOnly){
@@ -53,9 +52,15 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnl
         }else{
 
             holder.tvWeight.addTextChangedListener {
-                valueChange?.onValueChange()
+                listener?.onValueChange()
             }
         }
+        holder.itemView.setOnLongClickListener {
+            listener?.onValueChange()
+            listener?.onItemLongClick(position, this)
+            true
+        }
+
 
     }
 
@@ -70,8 +75,10 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnl
 
     }
 
-    interface ValueChange {
+    interface ItemListener {
         fun onValueChange()
+        fun onItemLongClick(position: Int, adapter: SetAdapter)
+
     }
 
 }
