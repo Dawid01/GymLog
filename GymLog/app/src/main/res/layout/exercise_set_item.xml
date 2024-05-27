@@ -36,7 +36,7 @@
         android:layout_weight="1"
         android:background="@android:color/transparent"
         android:gravity="center_vertical|center_horizontal"
-        android:inputType="number"
+        android:inputType="number|numberDecimal"
         android:text="20"
         android:textSize="20sp"
         android:textStyle="bold"

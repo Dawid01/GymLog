@@ -5,5 +5,6 @@ import java.sql.Date
 data class ExerciseSet(
     val id: Int,
     var checked: Boolean,
-    val rep: Int
+    var rep: Int,
+    var volume: Float
 )

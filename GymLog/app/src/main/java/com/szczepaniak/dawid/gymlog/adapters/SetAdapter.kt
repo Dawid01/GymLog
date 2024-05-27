@@ -31,9 +31,9 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnl
         val exerciseSet = sets[position]
         holder.tvSet.text = "${position + 1}"
         holder.tvPrevious.text = "-"
-        holder.tvReps.setText("")
+        holder.tvReps.setText(if(exerciseSet.rep > 0) exerciseSet.rep.toString() else "")
         holder.tvReps.setHint("0")
-        holder.tvWeight.setText("")
+        holder.tvWeight.setText(if(exerciseSet.volume > 0) exerciseSet.volume.toString() else "")
         holder.tvWeight.setHint("0")
         holder.checkBox.isChecked = exerciseSet.checked
         if((position + 1) % 2 == 0){
@@ -45,8 +45,9 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnl
             sets[position].checked = value
         }
 
-        holder.tvReps.addTextChangedListener {
+        holder.tvReps.addTextChangedListener {value ->
             listener?.onValueChange()
+            exerciseSet.rep = value.toString().toInt()
         }
 
         if(bodyOnly){
@@ -54,8 +55,9 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnl
 
         }else{
 
-            holder.tvWeight.addTextChangedListener {
+            holder.tvWeight.addTextChangedListener { value ->
                 listener?.onValueChange()
+                exerciseSet.volume = value.toString().toFloat()
             }
         }
         holder.itemView.setOnLongClickListener {

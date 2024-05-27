@@ -22,7 +22,7 @@ import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 
-class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private val context: Context) : RecyclerView.Adapter<ExerciseSetAdapter.ExerciseSetViewHolder>() {
+class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private val context: Context, private val valueChangeListener: ValueChangeListener? = null) : RecyclerView.Adapter<ExerciseSetAdapter.ExerciseSetViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseSetViewHolder {
@@ -59,13 +59,14 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
             context.startActivity(intent, options.toBundle())
         }
         var sets: MutableList<ExerciseSet> = mutableListOf()
-        sets.add(ExerciseSet(0, false, 0))
+        sets.add(ExerciseSet(0, false, 0, 0f))
         val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
         val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ItemListener{
             override fun onValueChange() {
-
+                valueChangeListener?.onValueChange()
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onItemLongClick(position: Int, adapter: SetAdapter) {
 
                 val builder = AlertDialog.Builder(context)
@@ -73,8 +74,6 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
                     .setPositiveButton("Yes") { dialog, id ->
                         if(sets.size > 1) {
                             sets.removeAt(position)
-                            //adapter.notifyItemRemoved(position)
-                            //adapter.notifyItemRangeChanged(position, sets.size)
                             adapter.notifyDataSetChanged()
                         }else{
                             Toast.makeText(context, "You can't delete last set", Toast.LENGTH_SHORT).show()
@@ -95,7 +94,7 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         holder.setRecyclerView.adapter = setAdapter
         holder.addSetButton.setOnClickListener {
             if(sets.size < 5) {
-                sets.add(ExerciseSet(sets.size, false,0))
+                sets.add(ExerciseSet(sets.size, false,0, 0f))
                 setAdapter.notifyItemInserted(sets.size)
             }else{
                 Toast.makeText(context, "Max 5 sets", Toast.LENGTH_SHORT).show()
@@ -137,4 +136,7 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         }
     }
 
+    interface ValueChangeListener {
+        fun onValueChange()
+    }
 }

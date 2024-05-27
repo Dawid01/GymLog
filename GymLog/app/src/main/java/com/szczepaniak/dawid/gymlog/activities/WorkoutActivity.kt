@@ -21,7 +21,6 @@ import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.TimerService
 import com.szczepaniak.dawid.gymlog.adapters.ExerciseSetAdapter
-import com.szczepaniak.dawid.gymlog.adapters.ExercisesAdapter
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.Routine
 
@@ -32,7 +31,7 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var tvRoutineTitle: TextView
     private lateinit var exerciseSetRecyclerView: RecyclerView
     private lateinit var exerciseSetAdapter: ExerciseSetAdapter
-    private var exercise: MutableList<Exercise> = mutableListOf()
+    private var exercises: MutableList<Exercise> = mutableListOf()
 
     private var timerService: TimerService? = null
     private var isBound = false
@@ -80,12 +79,17 @@ class WorkoutActivity : AppCompatActivity() {
         if(isSelected){
             routine = Singleton.getSelectedRoutine()
             tvRoutineTitle.text = routine.name
-            exercise = routine.exercises.toMutableList()
+            exercises = routine.exercises.toMutableList()
         }else{
             tvRoutineTitle.text = "Quick Workout"
         }
 
-        exerciseSetAdapter = ExerciseSetAdapter(exercise, this)
+        exerciseSetAdapter = ExerciseSetAdapter(exercises, this, object : ExerciseSetAdapter.ValueChangeListener{
+            override fun onValueChange() {
+                calculateInfoValues()
+            }
+
+        })
         exerciseSetRecyclerView.adapter = exerciseSetAdapter
 
         timeTextView = findViewById(R.id.durration_text)
@@ -134,6 +138,15 @@ class WorkoutActivity : AppCompatActivity() {
         return sb.toString()
     }
 
+    fun calculateInfoValues(){
 
+        var setsCount = 0
+        var volume = 0
+
+//        for(exercise in exercises){
+//
+//            for(set in exercises.)
+//        }
+    }
 
 }
