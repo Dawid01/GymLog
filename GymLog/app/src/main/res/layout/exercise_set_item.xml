@@ -30,6 +30,19 @@
         tools:ignore="RtlCompat" />
 
     <EditText
+        android:id="@+id/weight_value"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:gravity="center_vertical|center_horizontal"
+        android:inputType="number"
+        android:text="20"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:ignore="RtlCompat" />
+
+    <EditText
         android:id="@+id/reps_value"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

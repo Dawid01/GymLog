@@ -5,13 +5,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 
-class SetAdapter(private val sets: MutableList<ExerciseSet>, private val context: Context): RecyclerView.Adapter<SetAdapter.SetViewHolder>() {
+class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnly: Boolean, private val context: Context, private val valueChange: ValueChange? = null): RecyclerView.Adapter<SetAdapter.SetViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SetViewHolder {
@@ -30,9 +33,30 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val context
         holder.tvPrevious.text = "-"
         holder.tvReps.setText("")
         holder.tvReps.setHint("0")
+        holder.tvWeight.setText("")
+        holder.tvWeight.setHint("0")
         if((position + 1) % 2 == 0){
             holder.background.setBackgroundColor(com.google.android.material.R.attr.colorSurface)
         }
+
+        holder.checkBox.setOnCheckedChangeListener{ _, _ ->
+            valueChange?.onValueChange()
+
+        }
+        holder.tvReps.addTextChangedListener {
+            valueChange?.onValueChange()
+        }
+
+        if(bodyOnly){
+            holder.tvWeight.visibility = View.GONE
+
+        }else{
+
+            holder.tvWeight.addTextChangedListener {
+                valueChange?.onValueChange()
+            }
+        }
+
     }
 
     class SetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,8 +64,14 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val context
         val tvSet: TextView = itemView.findViewById(R.id.set_value)
         val tvPrevious: TextView = itemView.findViewById(R.id.previous_value)
         val tvReps: EditText = itemView.findViewById(R.id.reps_value)
+        val tvWeight: EditText = itemView.findViewById(R.id.weight_value)
         val background: View = itemView.findViewById(R.id.item_background)
+        val checkBox: CheckBox = itemView.findViewById(R.id.is_checked_value)
 
+    }
+
+    interface ValueChange {
+        fun onValueChange()
     }
 
 }

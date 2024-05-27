@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -57,15 +58,23 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         }
         var sets: MutableList<ExerciseSet> = mutableListOf()
         sets.add(ExerciseSet(0, 0))
-        sets.add(ExerciseSet(0, 0))
-        sets.add(ExerciseSet(0, 0))
-        sets.add(ExerciseSet(0, 0))
-        sets.add(ExerciseSet(0, 0))
+        val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
+        val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ValueChange{
+            override fun onValueChange() {
 
-        val setAdapter = SetAdapter(sets, context)
+            }
+
+        })
         holder.setRecyclerView.layoutManager = LinearLayoutManager(context)
         holder.setRecyclerView.adapter = setAdapter
+        holder.addSetButton.setOnClickListener {
+            sets.add(ExerciseSet(sets.size, 0))
+            setAdapter.notifyItemInserted(sets.size)
+        }
+
+        holder.wieightColumn.visibility = if(bodyOnly) View.GONE else View.VISIBLE
     }
+
 
     override fun getItemCount(): Int {
         return exercises.size
@@ -80,6 +89,8 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         val card: CardView = itemView.findViewById(R.id.card)
         val selected: ImageView = itemView.findViewById(R.id.selected_image)
         val setRecyclerView: RecyclerView = itemView.findViewById(R.id.set_recycler_view)
+        val addSetButton: Button = itemView.findViewById(R.id.add_set_button)
+        val wieightColumn: View = itemView.findViewById(R.id.weight_column)
     }
 
     @SuppressLint("DiscouragedApi")
