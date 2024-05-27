@@ -12,10 +12,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
+import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 
 class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private val context: Context) : RecyclerView.Adapter<ExerciseSetAdapter.ExerciseSetViewHolder>() {
 
@@ -53,8 +55,11 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
 
             context.startActivity(intent, options.toBundle())
         }
-
-
+        var sets: MutableList<ExerciseSet> = mutableListOf()
+        sets.add(ExerciseSet(0, 0))
+        val setAdapter = SetAdapter(sets, context)
+        holder.setRecyclerView.layoutManager = LinearLayoutManager(context)
+        holder.setRecyclerView.adapter = setAdapter
     }
 
     override fun getItemCount(): Int {
@@ -69,6 +74,7 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         val info: ImageView = itemView.findViewById(R.id.info_image)
         val card: CardView = itemView.findViewById(R.id.card)
         val selected: ImageView = itemView.findViewById(R.id.selected_image)
+        val setRecyclerView: RecyclerView = itemView.findViewById(R.id.set_recycler_view)
     }
 
     @SuppressLint("DiscouragedApi")
