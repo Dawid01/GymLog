@@ -28,6 +28,9 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val context
         holder.tvSet.text = "${position + 1}"
         holder.tvPrevious.text = "-"
         holder.tvReps.text = "0"
+        if((position + 1) % 2 == 0){
+            holder.background.setBackgroundColor(com.google.android.material.R.attr.colorSurface)
+        }
     }
 
     class SetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,6 +38,7 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val context
         val tvSet: TextView = itemView.findViewById(R.id.set_value)
         val tvPrevious: TextView = itemView.findViewById(R.id.previous_value)
         val tvReps: TextView = itemView.findViewById(R.id.reps_value)
+        val background: View = itemView.findViewById(R.id.item_background)
 
     }
 

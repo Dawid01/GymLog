@@ -57,6 +57,11 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         }
         var sets: MutableList<ExerciseSet> = mutableListOf()
         sets.add(ExerciseSet(0, 0))
+        sets.add(ExerciseSet(0, 0))
+        sets.add(ExerciseSet(0, 0))
+        sets.add(ExerciseSet(0, 0))
+        sets.add(ExerciseSet(0, 0))
+
         val setAdapter = SetAdapter(sets, context)
         holder.setRecyclerView.layoutManager = LinearLayoutManager(context)
         holder.setRecyclerView.adapter = setAdapter
