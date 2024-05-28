@@ -13,8 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 
-class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnly: Boolean, private val context: Context, private val listener: ItemListener? = null): RecyclerView.Adapter<SetAdapter.SetViewHolder>() {
-
+class SetAdapter(
+    private val sets: MutableList<ExerciseSet>,
+    private val bodyOnly: Boolean,
+    private val context: Context,
+    private val listener: ItemListener? = null
+) : RecyclerView.Adapter<SetAdapter.SetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SetViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.exercise_set_item, parent, false)
@@ -22,68 +26,74 @@ class SetAdapter(private val sets: MutableList<ExerciseSet>, private val bodyOnl
     }
 
     override fun getItemCount(): Int {
-       return sets.size
+        return sets.size
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SetViewHolder, position: Int) {
-
         val exerciseSet = sets[position]
         holder.tvSet.text = "${position + 1}"
         holder.tvPrevious.text = "-"
-        holder.tvReps.setText(if(exerciseSet.rep > 0) exerciseSet.rep.toString() else "")
+
+        val repsText = if (exerciseSet.rep > 0) exerciseSet.rep.toString() else ""
+        holder.tvReps.setText(repsText)
         holder.tvReps.setHint("0")
-        holder.tvWeight.setText(if(exerciseSet.volume > 0) exerciseSet.volume.toString() else "")
+
+        val weightText = if (exerciseSet.volume > 0) exerciseSet.volume.toString() else ""
+        holder.tvWeight.setText(weightText)
         holder.tvWeight.setHint("0")
+
         holder.checkBox.isChecked = exerciseSet.checked
-        if((position + 1) % 2 == 0){
-            holder.background.setBackgroundColor(com.google.android.material.R.attr.colorSurface)
-        }
 
-        holder.checkBox.setOnCheckedChangeListener{ _, value ->
+//        if ((position + 1) % 2 == 0) {
+//            holder.background.setBackgroundColor(context.getColor(com.google.android.material.R.color.cardview_dark_background))
+//        }
+
+        holder.checkBox.setOnCheckedChangeListener { _, value ->
+            exerciseSet.checked = value
             listener?.onValueChange()
-            sets[position].checked = value
         }
 
-        holder.tvReps.addTextChangedListener {value ->
+        holder.tvReps.addTextChangedListener { value ->
+            if (!value.isNullOrEmpty()) {
+                exerciseSet.rep = value.toString().toInt()
+            } else {
+                exerciseSet.rep = 0
+            }
             listener?.onValueChange()
-            exerciseSet.rep = value.toString().toInt()
         }
 
-        if(bodyOnly){
+        if (bodyOnly) {
             holder.tvWeight.visibility = View.GONE
-
-        }else{
-
+        } else {
             holder.tvWeight.addTextChangedListener { value ->
+                if (!value.isNullOrEmpty()) {
+                    exerciseSet.volume = value.toString().toFloat()
+                } else {
+                    exerciseSet.volume = 0f
+                }
                 listener?.onValueChange()
-                exerciseSet.volume = value.toString().toFloat()
             }
         }
+
         holder.itemView.setOnLongClickListener {
             listener?.onValueChange()
             listener?.onItemLongClick(position, this)
             true
         }
-
-
     }
 
     class SetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val tvSet: TextView = itemView.findViewById(R.id.set_value)
         val tvPrevious: TextView = itemView.findViewById(R.id.previous_value)
         val tvReps: EditText = itemView.findViewById(R.id.reps_value)
         val tvWeight: EditText = itemView.findViewById(R.id.weight_value)
         val background: View = itemView.findViewById(R.id.item_background)
         val checkBox: CheckBox = itemView.findViewById(R.id.is_checked_value)
-
     }
 
     interface ItemListener {
         fun onValueChange()
         fun onItemLongClick(position: Int, adapter: SetAdapter)
-
     }
-
 }

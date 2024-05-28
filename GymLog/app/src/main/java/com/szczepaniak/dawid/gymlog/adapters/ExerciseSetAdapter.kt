@@ -72,9 +72,11 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("Delete?")
                     .setPositiveButton("Yes") { dialog, id ->
-                        if(sets.size > 1) {
+                        if (sets.size > 1 && position >= 0 && position < sets.size) {
                             sets.removeAt(position)
-                            adapter.notifyDataSetChanged()
+                            adapter.notifyItemRemoved(position)
+                            adapter.notifyItemRangeChanged(position, sets.size)
+                            //adapter.notifyDataSetChanged()
                         }else{
                             Toast.makeText(context, "You can't delete last set", Toast.LENGTH_SHORT).show()
                         }
@@ -95,7 +97,7 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
         holder.addSetButton.setOnClickListener {
             if(sets.size < 5) {
                 sets.add(ExerciseSet(sets.size, false,0, 0f))
-                setAdapter.notifyItemInserted(sets.size)
+                setAdapter.notifyItemInserted(sets.size - 1)
             }else{
                 Toast.makeText(context, "Max 5 sets", Toast.LENGTH_SHORT).show()
             }
