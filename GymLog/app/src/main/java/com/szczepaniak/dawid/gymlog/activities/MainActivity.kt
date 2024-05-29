@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.CalendarView
+import android.widget.DatePicker
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +23,7 @@ import com.szczepaniak.dawid.gymlog.adapters.MainViewPageAdapter
 import com.szczepaniak.dawid.gymlog.fragments.HomeFragment
 import com.szczepaniak.dawid.gymlog.fragments.ProfileFragment
 import com.szczepaniak.dawid.gymlog.fragments.WorkoutFragment
+import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         RetrofitClient.context = this
-        setUsername()
+        setUserInfo()
 
 
         viewPager = findViewById(R.id.view_pager)
@@ -87,18 +90,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("CutPasteId")
-    fun setUsername(){
+    fun setUserInfo(){
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
         val username = sharedPref.getString("user_name", "")
         if (username != null) {
             if(username.isEmpty()){
 
-                val dialogView = LayoutInflater.from(this).inflate(R.layout.username_dialog, null)
-                val textInputLayout = dialogView.findViewById<TextInputLayout>(R.id.layoutTextName)
-                val editTextName = dialogView.findViewById<TextInputEditText>(R.id.editTextName)
+                val dialogView = LayoutInflater.from(this).inflate(R.layout.user_info_dialog, null)
+                val nameInputLayout = dialogView.findViewById<TextInputLayout>(R.id.layout_text_name)
+                val editTextName = dialogView.findViewById<TextInputEditText>(R.id.edit_text_name)
+                val heightInputLayout = dialogView.findViewById<TextInputLayout>(R.id.layout_text_height)
+                val editTextHeight = dialogView.findViewById<TextInputEditText>(R.id.edit_text_height)
+                val weightInputLayout = dialogView.findViewById<TextInputLayout>(R.id.layout_text_weight)
+                val editTextWeight = dialogView.findViewById<TextInputEditText>(R.id.edit_text_weight)
+                val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
+                val genderGroup: RadioGroup = dialogView.findViewById(R.id.gender_group)
 
                 val dialog = AlertDialog.Builder(this)
-                    .setTitle("Enter Your Name")
+                    .setTitle("Enter Your Details")
                     .setView(dialogView)
                     .setCancelable(false)
                     .setPositiveButton("OK") { dialogInterface, _ ->
@@ -109,12 +118,46 @@ class MainActivity : AppCompatActivity() {
 
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                     val name = editTextName.text.toString().trim()
+                    val height = editTextHeight.text.toString().trim()
+                    val weight = editTextWeight.text.toString().trim()
+
+                    val day = datePicker.dayOfMonth
+                    val month = datePicker.month
+                    val year = datePicker.year
+                    val calendar = Calendar.getInstance()
+                    calendar.set(year, month, day)
+                    val selectedDate = calendar.time
+
+                    val gender = genderGroup.getCheckedRadioButtonId()
+
+                    var canSave = true
                     if (name.isEmpty()) {
-                        textInputLayout.error = "Name cannot be empty"
-                    } else {
-                        textInputLayout.error = null
+                        heightInputLayout.isErrorEnabled = false
+                        weightInputLayout.isErrorEnabled = false
+                        nameInputLayout.error = "Name cannot be empty"
+                        canSave = false
+                    }else
+                    if (height.isEmpty()) {
+                        nameInputLayout.isErrorEnabled = false
+                        heightInputLayout.isErrorEnabled = false
+                        heightInputLayout.error = "Height cannot be empty"
+                        canSave = false
+                    }else
+                    if (weight.isEmpty()) {
+                        nameInputLayout.isErrorEnabled = false
+                        heightInputLayout.isErrorEnabled = false
+                        weightInputLayout.error = "Weight cannot be empty"
+                        canSave = false
+                    }
+
+                    if(canSave){
+                        nameInputLayout.error = null
                         val editor = sharedPref.edit()
                         editor.putString("user_name", name)
+                        editor.putString("user_height", height)
+                        editor.putString("user_weight", weight)
+                        editor.putString("date_of_birth", selectedDate.toString())
+                        editor.putInt("gender", gender)
                         editor.apply()
                         dialog.dismiss()
                         recreate()

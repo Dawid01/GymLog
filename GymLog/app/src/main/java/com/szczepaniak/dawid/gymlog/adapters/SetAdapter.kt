@@ -46,7 +46,7 @@ class SetAdapter(
         holder.checkBox.isChecked = exerciseSet.checked
 
 //        if ((position + 1) % 2 == 0) {
-//            holder.background.setBackgroundColor(context.getColor(com.google.android.material.R.color.cardview_dark_background))
+//            holder.background.setBackgroundColor(com.google.android.material.R.attr.colorSurfaceBright)
 //        }
 
         holder.checkBox.setOnCheckedChangeListener { _, value ->

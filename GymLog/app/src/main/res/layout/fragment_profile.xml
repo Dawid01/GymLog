@@ -105,7 +105,6 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="175dp"
@@ -118,8 +117,85 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp">
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="4"
+                    android:alignmentMode="alignMargins"
+                    android:columnOrderPreserved="false"
+                    android:useDefaultMargins="true"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <!-- Gender -->
+                    <TextView
+                        android:id="@+id/textViewGenderLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gender:"
+                        android:textAppearance="?android:textAppearanceMedium"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView
+                        android:id="@+id/textViewGender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:text="Male"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <!-- Height -->
+                    <TextView
+                        android:id="@+id/textViewHeightLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Height:"
+                        android:textAppearance="?android:textAppearanceMedium"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView
+                        android:id="@+id/textViewHeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:text="180 cm"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <!-- Weight -->
+                    <TextView
+                        android:id="@+id/textViewWeightLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Weight:"
+                        android:textAppearance="?android:textAppearanceMedium"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView
+                        android:id="@+id/textViewWeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_marginTop="8dp"
+                        android:text="75 kg"
+                        android:textAppearance="?android:textAppearanceMedium" />
+
+                    <!-- Additional Info -->
+                    <!-- Additional information, if needed -->
+
+                </GridLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
