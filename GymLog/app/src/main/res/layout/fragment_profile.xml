@@ -109,6 +109,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="175dp"
             android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="?attr/colorSurfaceContainer"
             app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,85 +118,193 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:layout_height="match_parent"
+                android:padding="10dp">
 
-                <GridLayout
-                    android:layout_width="match_parent"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_age"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:columnCount="2"
-                    android:rowCount="4"
-                    android:alignmentMode="alignMargins"
-                    android:columnOrderPreserved="false"
-                    android:useDefaultMargins="true"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <!-- Gender -->
-                    <TextView
-                        android:id="@+id/textViewGenderLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Gender:"
-                        android:textAppearance="?android:textAppearanceMedium"
-                        android:textColor="@android:color/darker_gray"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-                    <TextView
-                        android:id="@+id/textViewGender"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_marginTop="8dp"
-                        android:text="Male"
-                        android:textAppearance="?android:textAppearanceMedium" />
+                        <TextView
+                            android:id="@+id/label_age"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Age"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-                    <!-- Height -->
-                    <TextView
-                        android:id="@+id/textViewHeightLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Height:"
-                        android:textAppearance="?android:textAppearanceMedium"
-                        android:textColor="@android:color/darker_gray"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"/>
+                        <TextView
+                            android:id="@+id/value_age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="23"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/textViewHeight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_marginTop="8dp"
-                        android:text="180 cm"
-                        android:textAppearance="?android:textAppearanceMedium" />
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_gender"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_age">
 
-                    <!-- Weight -->
-                    <TextView
-                        android:id="@+id/textViewWeightLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Weight:"
-                        android:textAppearance="?android:textAppearanceMedium"
-                        android:textColor="@android:color/darker_gray"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-                    <TextView
-                        android:id="@+id/textViewWeight"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_column="1"
-                        android:layout_marginTop="8dp"
-                        android:text="75 kg"
-                        android:textAppearance="?android:textAppearanceMedium" />
+                        <TextView
+                            android:id="@+id/label_gender"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Gender"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-                    <!-- Additional Info -->
-                    <!-- Additional information, if needed -->
+                        <TextView
+                            android:id="@+id/value_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Male ♂️"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-                </GridLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_weight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_gender">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/label_weight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Weight"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/value_weight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="80 kg"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_height"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_weight">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/label_height"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Height"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/value_height"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="187 cm"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_bmi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:cardCornerRadius="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_height">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/label_bmi"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="BMI"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/value_bmi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="22"
+                            android:textColor="@android:color/holo_green_light"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
