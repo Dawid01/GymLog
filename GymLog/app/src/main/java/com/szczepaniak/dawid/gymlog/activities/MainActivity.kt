@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity() {
                 val editTextWeight = dialogView.findViewById<TextInputEditText>(R.id.edit_text_weight)
                 val datePicker = dialogView.findViewById<DatePicker>(R.id.datePicker)
                 val genderGroup: RadioGroup = dialogView.findViewById(R.id.gender_group)
+                val maleRadioButton: RadioButton = dialogView.findViewById(R.id.male_radio)
 
                 val dialog = AlertDialog.Builder(this)
                     .setTitle("Enter Your Details")
@@ -128,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                     calendar.set(year, month, day)
                     val selectedDate = calendar.time
 
-                    val gender = genderGroup.getCheckedRadioButtonId()
+                    val gender = if(maleRadioButton.isChecked) 1 else 0
 
                     var canSave = true
                     if (name.isEmpty()) {
@@ -154,8 +155,8 @@ class MainActivity : AppCompatActivity() {
                         nameInputLayout.error = null
                         val editor = sharedPref.edit()
                         editor.putString("user_name", name)
-                        editor.putString("user_height", height)
-                        editor.putString("user_weight", weight)
+                        editor.putFloat("user_height", height.toFloat())
+                        editor.putFloat("user_weight", weight.toFloat())
                         editor.putString("date_of_birth", selectedDate.toString())
                         editor.putInt("gender", gender)
                         editor.apply()
