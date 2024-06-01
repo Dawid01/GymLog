@@ -8,7 +8,7 @@ import com.szczepaniak.dawid.gymlog.Converters
 @Entity
 @TypeConverters(Converters::class)
 data class Routine (
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Long,
     var name: String,
     var exercises: List<Exercise>,
     var muscles: List<String>

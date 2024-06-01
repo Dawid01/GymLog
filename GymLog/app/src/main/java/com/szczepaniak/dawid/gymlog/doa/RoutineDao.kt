@@ -14,17 +14,21 @@ interface RoutineDao {
     @Query("SELECT * FROM routine")
     fun getAll(): List<Routine>
 
+    @Query("SELECT * FROM routine WHERE id = :id")
+    suspend fun getById(id: Long): Routine?
+
     @Query("SELECT * FROM routine WHERE id IN (:routineIds)")
     fun loadAllByIds(routineIds: IntArray): List<Routine>
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(routine: Routine)
+    suspend fun insert(routine: Routine): Long
     @Insert
     fun insertAll(vararg routines: Routine)
 
     @Query("DELETE FROM routine WHERE id = :routineId")
-    suspend fun deleteById(routineId: Int): Int
+    suspend fun deleteById(routineId: Long): Int
 
     @Query("UPDATE routine SET name = :name, exercises = :exercises, muscles = :muscles WHERE id = :id")
-    suspend fun updateById(id: Int, name: String, exercises: List<Exercise>, muscles: List<String>): Int
+    suspend fun updateById(id: Long, name: String, exercises: List<Exercise>, muscles: List<String>): Int
 }

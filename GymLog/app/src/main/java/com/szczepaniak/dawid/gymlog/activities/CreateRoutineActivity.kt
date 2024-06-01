@@ -150,10 +150,6 @@ class CreateRoutineActivity : AppCompatActivity() {
                         Routine(titleText.text.toString(), exercises, musclesSet.toList().sorted())
                     lifecycleScope.launch {
                         saveRoutine(routine)
-                        Singleton.setNewRoutine(routine)
-                        val resultIntent = Intent()
-                        setResult(Activity.RESULT_OK, resultIntent)
-                        finish()
                     }
                 }
             }else{
@@ -163,8 +159,7 @@ class CreateRoutineActivity : AppCompatActivity() {
                         titleLayout.error = "This field is required"
                         titleLayout.isErrorEnabled = true
                     }else {
-                        val resultIntent = Intent()
-                        resultIntent.putExtra("mode", "edit")
+
                         editRoutine.name = titleText.text.toString()
                         editRoutine.exercises = exercises
                         var musclesSet: MutableSet<String> = mutableSetOf()
@@ -173,9 +168,6 @@ class CreateRoutineActivity : AppCompatActivity() {
                         }
                         editRoutine.muscles = musclesSet.toList()
                         editRoutine(editRoutine)
-                        Singleton.setEditRoutine(editRoutine)
-                        setResult(Activity.RESULT_OK, resultIntent)
-                        finish()
                     }
 
                 }
@@ -243,13 +235,27 @@ class CreateRoutineActivity : AppCompatActivity() {
 
     private suspend fun saveRoutine(routine: Routine) {
         withContext(Dispatchers.IO) {
-            routineDao.insert(routine)
+            val newRoutineId = routineDao.insert(routine)
+            val savedRoutine = routineDao.getById(newRoutineId)
+            if (savedRoutine != null) {
+                Singleton.setNewRoutine(savedRoutine)
+            }
+            withContext(Dispatchers.Main) {
+                val resultIntent = Intent()
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+            }
         }
     }
 
     private suspend fun editRoutine(routine: Routine) {
         withContext(Dispatchers.IO) {
             routineDao.updateById(routine.id, routine.name, routine.exercises, routine.muscles)
+            val resultIntent = Intent()
+            resultIntent.putExtra("mode", "edit")
+            Singleton.setEditRoutine(editRoutine)
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
         }
     }
 
