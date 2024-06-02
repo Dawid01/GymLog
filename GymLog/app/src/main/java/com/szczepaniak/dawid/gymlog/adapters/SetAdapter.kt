@@ -25,61 +25,47 @@ class SetAdapter(
         return SetViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return sets.size
-    }
+    override fun getItemCount(): Int = sets.size
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SetViewHolder, position: Int) {
         val exerciseSet = sets[position]
-        holder.tvSet.text = "${position + 1}"
-        holder.tvPrevious.text = "-"
+        with(holder) {
+            tvSet.text = "${position + 1}"
+            tvPrevious.text = "-"
 
-        val repsText = if (exerciseSet.rep > 0) exerciseSet.rep.toString() else ""
-        holder.tvReps.setText(repsText)
-        holder.tvReps.setHint("0")
+            val repsText = if (exerciseSet.rep > 0) exerciseSet.rep.toString() else ""
+            tvReps.setText(repsText)
+            tvReps.setHint("0")
 
-        val weightText = if (exerciseSet.volume > 0) exerciseSet.volume.toString() else ""
-        holder.tvWeight.setText(weightText)
-        holder.tvWeight.setHint("0")
+            val weightText = if (exerciseSet.volume > 0) exerciseSet.volume.toString() else ""
+            tvWeight.setText(weightText)
+            tvWeight.setHint("0")
 
-        holder.checkBox.isChecked = exerciseSet.checked
+            checkBox.isChecked = exerciseSet.checked
 
-//        if ((position + 1) % 2 == 0) {
-//            holder.background.setBackgroundColor(com.google.android.material.R.attr.colorSurfaceBright)
-//        }
-
-        holder.checkBox.setOnCheckedChangeListener { _, value ->
-            exerciseSet.checked = value
-            listener?.onValueChange()
-        }
-
-        holder.tvReps.addTextChangedListener { value ->
-            if (!value.isNullOrEmpty()) {
-                exerciseSet.rep = value.toString().toInt()
-            } else {
-                exerciseSet.rep = 0
-            }
-            listener?.onValueChange()
-        }
-
-        if (bodyOnly) {
-            holder.tvWeight.visibility = View.GONE
-        } else {
-            holder.tvWeight.addTextChangedListener { value ->
-                if (!value.isNullOrEmpty()) {
-                    exerciseSet.volume = value.toString().toFloat()
-                } else {
-                    exerciseSet.volume = 0f
-                }
+            checkBox.setOnCheckedChangeListener { _, value ->
+                exerciseSet.checked = value
                 listener?.onValueChange()
             }
-        }
 
-        holder.itemView.setOnLongClickListener {
-            listener?.onValueChange()
-            listener?.onItemLongClick(position, this)
-            true
+            tvReps.addTextChangedListener { value ->
+                exerciseSet.rep = value?.toString()?.toIntOrNull() ?: 0
+                listener?.onValueChange()
+            }
+
+            if (bodyOnly) {
+                tvWeight.visibility = View.GONE
+            } else {
+                tvWeight.addTextChangedListener { value ->
+                    exerciseSet.volume = value?.toString()?.toFloatOrNull() ?: 0f
+                    listener?.onValueChange()
+                }
+            }
+
+            itemView.setOnLongClickListener {
+                listener?.onItemLongClick(adapterPosition, this@SetAdapter)
+                true
+            }
         }
     }
 
@@ -88,7 +74,6 @@ class SetAdapter(
         val tvPrevious: TextView = itemView.findViewById(R.id.previous_value)
         val tvReps: EditText = itemView.findViewById(R.id.reps_value)
         val tvWeight: EditText = itemView.findViewById(R.id.weight_value)
-        val background: View = itemView.findViewById(R.id.item_background)
         val checkBox: CheckBox = itemView.findViewById(R.id.is_checked_value)
     }
 

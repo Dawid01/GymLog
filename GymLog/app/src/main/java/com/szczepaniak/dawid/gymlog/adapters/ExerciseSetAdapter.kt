@@ -22,114 +22,108 @@ import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 
-class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private val context: Context, private val valueChangeListener: ValueChangeListener? = null) : RecyclerView.Adapter<ExerciseSetAdapter.ExerciseSetViewHolder>() {
-
+class ExerciseSetAdapter(
+    private val exercises: MutableList<Exercise>,
+    private val context: Context,
+    private val valueChangeListener: ValueChangeListener? = null
+) : RecyclerView.Adapter<ExerciseSetAdapter.ExerciseSetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseSetViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.exerciseset_item, parent, false)
         return ExerciseSetViewHolder(view)
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ExerciseSetViewHolder, position: Int) {
-        val exercise = exercises[position]
-        holder.icon.setImageDrawable(context.resources.getDrawable(getIconImage(exercise.muscle!!)))
-        holder.tvName.text = exercise.name
-        holder.tvMuscle.text = exercise.muscle.toString().replace("_", " ").capitalize()
-        holder.tvDifficulty.text = exercise.difficulty.toString().uppercase()
-        holder.tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
+        holder.bind(exercises[position])
+    }
 
-        holder.info.setOnClickListener {
-            val intent = Intent(context, ExerciseInfoActivity::class.java)
-            intent.putExtra("name", exercise.name)
-            intent.putExtra("muscle", exercise.muscle)
-            intent.putExtra("type", exercise.type)
-            intent.putExtra("equipment", exercise.equipment)
-            intent.putExtra("difficulty", exercise.difficulty)
-            intent.putExtra("instructions", exercise.instructions)
-            val p1 = androidx.core.util.Pair<View, String>(holder.icon, holder.icon.transitionName)
-            val p2 = androidx.core.util.Pair<View, String>(holder.tvName, holder.tvName.transitionName)
-            val p3 = androidx.core.util.Pair<View, String>(holder.card, holder.card.transitionName)
+    override fun getItemCount(): Int = exercises.size
 
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                context as Activity,
-                p1, p2, p3
-            )
+    inner class ExerciseSetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val icon: ImageView = itemView.findViewById(R.id.icon)
+        private val tvName: TextView = itemView.findViewById(R.id.name_text)
+        private val tvMuscle: TextView = itemView.findViewById(R.id.exercises_list_text)
+        private val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
+        private val info: ImageView = itemView.findViewById(R.id.info_image)
+        private val card: CardView = itemView.findViewById(R.id.card)
+        private val setRecyclerView: RecyclerView = itemView.findViewById(R.id.set_recycler_view)
+        private val addSetButton: Button = itemView.findViewById(R.id.add_set_button)
+        private val wieightColumn: View = itemView.findViewById(R.id.weight_column)
 
-            context.startActivity(intent, options.toBundle())
-        }
-        var sets: MutableList<ExerciseSet> = mutableListOf()
-        sets.add(ExerciseSet(0, false, 0, 0f))
-        val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
-        val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ItemListener{
-            override fun onValueChange() {
-                valueChangeListener?.onValueChange()
+        init {
+            info.setOnClickListener {
+                val exercise = exercises[adapterPosition]
+                val intent = Intent(context, ExerciseInfoActivity::class.java).apply {
+                    putExtra("name", exercise.name)
+                    putExtra("muscle", exercise.muscle)
+                    putExtra("type", exercise.type)
+                    putExtra("equipment", exercise.equipment)
+                    putExtra("difficulty", exercise.difficulty)
+                    putExtra("instructions", exercise.instructions)
+                }
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity)
+                context.startActivity(intent, options.toBundle())
             }
+        }
 
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onItemLongClick(position: Int, adapter: SetAdapter) {
+        fun bind(exercise: Exercise) {
+            icon.setImageResource(getIconImage(exercise.muscle!!))
+            tvName.text = exercise.name
+            tvMuscle.text = exercise.muscle.toString().replace("_", " ").capitalize()
+            tvDifficulty.text = exercise.difficulty.toString().uppercase()
+            tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
 
-                val builder = AlertDialog.Builder(context)
-                builder.setMessage("Delete?")
-                    .setPositiveButton("Yes") { dialog, id ->
-                        if (sets.size > 1 && position >= 0 && position < sets.size) {
-                            sets.removeAt(position)
-                            adapter.notifyItemRemoved(position)
-                            adapter.notifyItemRangeChanged(position, sets.size)
-                            //adapter.notifyDataSetChanged()
-                        }else{
-                            Toast.makeText(context, "You can't delete last set", Toast.LENGTH_SHORT).show()
+            val sets: MutableList<ExerciseSet> = mutableListOf(ExerciseSet(0, 0, false, 0, 0f))
+            val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
+            val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ItemListener {
+                override fun onValueChange() {
+                    valueChangeListener?.onValueChange()
+                }
+
+                override fun onItemLongClick(position: Int, adapter: SetAdapter) {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Delete?")
+                        .setPositiveButton("Yes") { dialog, id ->
+                            if (sets.size > 1 && position in 0 until sets.size) {
+                                sets.removeAt(position)
+                                adapter.notifyItemRemoved(position)
+                                adapter.notifyItemRangeChanged(position, sets.size)
+                            } else {
+                                Toast.makeText(context, "You can't delete the last set", Toast.LENGTH_SHORT).show()
+                            }
+                            dialog.dismiss()
                         }
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton("No") { dialog, id ->
-                        dialog.dismiss()
-                    }
+                        .setNegativeButton("No") { dialog, id ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                        .show()
+                }
+            })
 
-                val alert = builder.create()
-                alert.show()
-
+            setRecyclerView.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = setAdapter
             }
 
-        })
-        holder.setRecyclerView.layoutManager = LinearLayoutManager(context)
-        holder.setRecyclerView.adapter = setAdapter
-        holder.addSetButton.setOnClickListener {
-            if(sets.size < 5) {
-                sets.add(ExerciseSet(sets.size, false,0, 0f))
-                setAdapter.notifyItemInserted(sets.size - 1)
-            }else{
-                Toast.makeText(context, "Max 5 sets", Toast.LENGTH_SHORT).show()
+            addSetButton.setOnClickListener {
+                if (sets.size < 5) {
+                    sets.add(ExerciseSet(sets.size, 0, false, 0, 0f))
+                    setAdapter.notifyItemInserted(sets.size - 1)
+                } else {
+                    Toast.makeText(context, "Maximum 5 sets allowed", Toast.LENGTH_SHORT).show()
+                }
             }
+
+            wieightColumn.visibility = if (bodyOnly) View.GONE else View.VISIBLE
         }
-
-        holder.wieightColumn.visibility = if(bodyOnly) View.GONE else View.VISIBLE
     }
 
-
-    override fun getItemCount(): Int {
-        return exercises.size
-    }
-
-    class ExerciseSetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView = itemView.findViewById(R.id.icon)
-        val tvName: TextView = itemView.findViewById(R.id.name_text)
-        val tvMuscle: TextView = itemView.findViewById(R.id.exercises_list_text)
-        val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
-        val info: ImageView = itemView.findViewById(R.id.info_image)
-        val card: CardView = itemView.findViewById(R.id.card)
-        val selected: ImageView = itemView.findViewById(R.id.selected_image)
-        val setRecyclerView: RecyclerView = itemView.findViewById(R.id.set_recycler_view)
-        val addSetButton: Button = itemView.findViewById(R.id.add_set_button)
-        val wieightColumn: View = itemView.findViewById(R.id.weight_column)
-    }
-
-    @SuppressLint("DiscouragedApi")
-    fun getIconImage(muscle: String): Int {
+    private fun getIconImage(muscle: String): Int {
         return context.resources.getIdentifier(muscle, "drawable", context.packageName)
     }
 
-    fun getDifficultyColor(difficulty: String): Int {
+    private fun getDifficultyColor(difficulty: String): Int {
         return when (difficulty) {
             "beginner" -> Color.GREEN
             "intermediate" -> Color.parseColor("#FFA500")
@@ -137,6 +131,8 @@ class ExerciseSetAdapter(private val exercises: MutableList<Exercise>, private v
             else -> Color.WHITE
         }
     }
+
+
 
     interface ValueChangeListener {
         fun onValueChange()
