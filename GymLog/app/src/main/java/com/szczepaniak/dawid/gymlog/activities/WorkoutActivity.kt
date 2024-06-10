@@ -22,10 +22,12 @@ import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.TimerService
 import com.szczepaniak.dawid.gymlog.adapters.ExerciseSetAdapter
 import com.szczepaniak.dawid.gymlog.models.Exercise
+import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 import com.szczepaniak.dawid.gymlog.models.Routine
+import com.szczepaniak.dawid.gymlog.models.Workout
+import java.util.Date
 
 class WorkoutActivity : AppCompatActivity() {
-
 
     private lateinit var routine: Routine
     private lateinit var tvRoutineTitle: TextView
@@ -38,6 +40,7 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var timeTextView: TextView
     private lateinit var prefs: SharedPreferences
     private val handler = Handler()
+    private lateinit var currentWorkout: Workout
 
     private val updateUITask = object : Runnable {
         override fun run() {
@@ -69,7 +72,7 @@ class WorkoutActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        initWorkout();
         val isSelected = intent.getBooleanExtra("selected", false)
         exerciseSetRecyclerView = findViewById(R.id.exertcise_sets_recycler_view)
         exerciseSetRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -102,6 +105,18 @@ class WorkoutActivity : AppCompatActivity() {
         stopBtn.setOnClickListener {
             val serviceIntent = Intent(this, TimerService::class.java)
             stopService(serviceIntent)
+        }
+    }
+
+    private fun initWorkout(){
+
+        val singletonWorkout: Workout? = Singleton.getCurrentWorkout()
+
+        if(singletonWorkout == null){
+            currentWorkout = Workout(0, prefs.getLong("elapsedTime", 0).toInt(), 0f, Date(), exercises, listOf<ExerciseSet>())
+        }else{
+            currentWorkout = singletonWorkout
+            exercises = currentWorkout.exercises.toMutableList()
         }
     }
 

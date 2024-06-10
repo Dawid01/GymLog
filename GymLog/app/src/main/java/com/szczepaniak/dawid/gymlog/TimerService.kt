@@ -16,13 +16,12 @@ class TimerService : Service() {
         override fun run() {
             if (isRunning) {
                 val elapsedTime = System.currentTimeMillis() - startTime
-                // Aktualizuj czas w SharedPreferences
                 val prefs = getSharedPreferences("TrainingPrefs", MODE_PRIVATE)
                 val editor = prefs.edit()
                 editor.putLong("elapsedTime", elapsedTime)
                 editor.apply()
 
-                handler.postDelayed(this, 1000) // Aktualizuj co sekundę
+                handler.postDelayed(this, 1000)
             }
         }
     }

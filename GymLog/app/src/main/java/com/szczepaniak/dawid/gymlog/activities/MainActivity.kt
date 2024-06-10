@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.RetrofitClient
+import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.adapters.MainViewPageAdapter
 import com.szczepaniak.dawid.gymlog.fragments.HomeFragment
 import com.szczepaniak.dawid.gymlog.fragments.ProfileFragment
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        Singleton.initialize(this)
         RetrofitClient.context = this
         setUserInfo()
 

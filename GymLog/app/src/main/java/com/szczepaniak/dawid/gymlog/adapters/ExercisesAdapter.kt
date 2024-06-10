@@ -108,7 +108,7 @@ class ExercisesAdapter(private val exercises: MutableList<Exercise>, private val
         }
     }
 
-    fun checkIsExerciseSelected(exercise: Exercise) : Boolean{
+    private fun checkIsExerciseSelected(exercise: Exercise) : Boolean{
         for(selected in selectedExercises){
             if(exercise.equals(selected)){
                 return true
