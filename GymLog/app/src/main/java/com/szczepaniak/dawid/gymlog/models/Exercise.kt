@@ -12,7 +12,7 @@ data class Exercise(
     val equipment: String? = null,
     val difficulty: String? = null,
     val instructions: String? = null,
-    val sets: List<ExerciseSet>? = null
+    var sets: List<ExerciseSet>? = null
 ){
     override fun equals(other: Any?): Boolean {
        if (this === other) return true

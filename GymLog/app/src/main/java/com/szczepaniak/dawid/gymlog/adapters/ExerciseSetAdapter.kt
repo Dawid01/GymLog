@@ -109,6 +109,7 @@ class ExerciseSetAdapter(
             addSetButton.setOnClickListener {
                 if (sets.size < 5) {
                     sets.add(ExerciseSet(sets.size, 0, false, 0, 0f))
+                    exercise.sets = sets.toList()
                     setAdapter.notifyItemInserted(sets.size - 1)
                 } else {
                     Toast.makeText(context, "Maximum 5 sets allowed", Toast.LENGTH_SHORT).show()

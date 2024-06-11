@@ -159,7 +159,7 @@ class WorkoutActivity : AppCompatActivity() {
         for (exercise in exercises){
 
             if(exercise.sets?.isNotEmpty() == true) {
-                for (set in exercise.sets) {
+                for (set in exercise.sets!!) {
                     if (set.checked) {
                         sets++
                         volume += set.volume * set.rep
@@ -169,5 +169,6 @@ class WorkoutActivity : AppCompatActivity() {
         }
         tvVolume.text = "$volume kg"
         tvSets.text = "$sets"
+        Singleton.saveCurrentWorkout(currentWorkout)
     }
 }
