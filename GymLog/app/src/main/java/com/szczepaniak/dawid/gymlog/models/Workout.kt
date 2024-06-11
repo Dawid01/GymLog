@@ -10,14 +10,14 @@ import java.util.Date
 data class Workout(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val title: String,
-    val startTime: Long,
-    val endTime: Long,
+    val startTime: Date,
+    val endTime: Date,
     val volume: Float,
     val date: Date,
     @Ignore val exercises: List<Exercise>,
     @Ignore val exerciseSets: List<ExerciseSet>
 ) {
-    constructor(id: Int, title: String, startTime: Long, endTime: Long , volume: Float, date: Date) : this(
+    constructor(id: Int, title: String, startTime: Date, endTime: Date , volume: Float, date: Date) : this(
         id,
         title,
         startTime,
@@ -27,4 +27,8 @@ data class Workout(
         emptyList(),
         emptyList()
     )
+
+    fun getDuration(): Long {
+        return (endTime.time - startTime.time) / 1000
+    }
 }
