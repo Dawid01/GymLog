@@ -34,6 +34,7 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var exerciseSetRecyclerView: RecyclerView
     private lateinit var exerciseSetAdapter: ExerciseSetAdapter
     private var exercises: MutableList<Exercise> = mutableListOf()
+    private lateinit var discardButton: Button
 
     private var timerService: TimerService? = null
     private var isBound = false
@@ -111,6 +112,12 @@ class WorkoutActivity : AppCompatActivity() {
             val serviceIntent = Intent(this, TimerService::class.java)
             stopService(serviceIntent)
         }
+
+        discardButton = findViewById(R.id.discard_button)
+        discardButton.setOnClickListener {
+            Singleton.saveCurrentWorkout(null)
+            finish()
+        }
     }
 
     private fun initWorkout(){
@@ -122,7 +129,8 @@ class WorkoutActivity : AppCompatActivity() {
             currentWorkout = Workout(
                 id = 0,
                 title = routine.name,
-                time = elapsedTime,
+                startTime = elapsedTime.toLong(),
+                endTime = elapsedTime.toLong(),
                 volume = 0f,
                 date = Date(),
                 exercises = routine.exercises,

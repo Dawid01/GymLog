@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
@@ -73,11 +74,15 @@ class RoutinesAdapter(
             }
 
             startRoutineButton.setOnClickListener {
-                Singleton.setSelectedRoutine(routine)
-                val intent = Intent(context, WorkoutActivity::class.java).apply {
-                    putExtra("selected", true)
+                if(Singleton.getCurrentWorkout() == null) {
+                    Singleton.setSelectedRoutine(routine)
+                    val intent = Intent(context, WorkoutActivity::class.java).apply {
+                        putExtra("selected", true)
+                    }
+                    context.startActivity(intent)
+                }else{
+                    Toast.makeText(context, "You have workout in progress", Toast.LENGTH_SHORT).show()
                 }
-                context.startActivity(intent)
             }
         }
     }
