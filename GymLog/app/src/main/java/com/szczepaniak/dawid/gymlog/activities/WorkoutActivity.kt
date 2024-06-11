@@ -26,6 +26,9 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var tvRoutineTitle: TextView
     private lateinit var exerciseSetRecyclerView: RecyclerView
     private lateinit var exerciseSetAdapter: ExerciseSetAdapter
+    private lateinit var tvVolume: TextView
+    private lateinit var tvSets: TextView
+
     private var exercises: MutableList<Exercise> = mutableListOf()
     private lateinit var discardButton: Button
 
@@ -43,7 +46,7 @@ class WorkoutActivity : AppCompatActivity() {
             }
             timeTextView.text = formatTime(elapsedTime)
             handler.postDelayed(this, 1000)
-            elapsedTime += 1 // Dodanie jednej sekundy
+            elapsedTime += 1
         }
     }
 
@@ -62,6 +65,10 @@ class WorkoutActivity : AppCompatActivity() {
         val isSelected = intent.getBooleanExtra("selected", false)
         exerciseSetRecyclerView = findViewById(R.id.exertcise_sets_recycler_view)
         exerciseSetRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        tvSets = findViewById(R.id.sets_total_text)
+        tvVolume = findViewById(R.id.volume_total_text)
+
 
         tvRoutineTitle = findViewById(R.id.routine_title)
         if (isSelected) {
@@ -88,7 +95,7 @@ class WorkoutActivity : AppCompatActivity() {
 
         val stopBtn: Button = findViewById(R.id.finish_button)
         stopBtn.setOnClickListener {
-            // Implement stop functionality here
+
         }
 
         discardButton = findViewById(R.id.discard_button)
@@ -96,6 +103,7 @@ class WorkoutActivity : AppCompatActivity() {
             Singleton.saveCurrentWorkout(null)
             finish()
         }
+        calculateInfoValues()
     }
 
     private fun initWorkout() {
@@ -142,7 +150,24 @@ class WorkoutActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     fun calculateInfoValues() {
-        // Implementation of calculateInfoValues()
+
+        var sets = 0
+        var volume = 0f
+
+        for (exercise in exercises){
+
+            if(exercise.sets?.isNotEmpty() == true) {
+                for (set in exercise.sets) {
+                    if (set.checked) {
+                        sets++
+                        volume += set.volume * set.rep
+                    }
+                }
+            }
+        }
+        tvVolume.text = "$volume kg"
+        tvSets.text = "$sets"
     }
 }

@@ -114,9 +114,10 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/volume_total_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="999 kg"
+                        android:text="0 kg"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -135,9 +136,10 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/sets_total_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5"
+                        android:text="0"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>

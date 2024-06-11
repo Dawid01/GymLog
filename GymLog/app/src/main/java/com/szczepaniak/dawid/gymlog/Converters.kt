@@ -3,6 +3,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.szczepaniak.dawid.gymlog.models.Exercise
+import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 
 class Converters {
     @TypeConverter
@@ -16,6 +17,20 @@ class Converters {
     fun toExerciseList(value: String): List<Exercise> {
         val gson = Gson()
         val type = object : TypeToken<List<Exercise>>() {}.type
+        return gson.fromJson(value, type)
+    }
+
+    @TypeConverter
+    fun fromExerciseSetList(value: List<ExerciseSet>): String {
+        val gson = Gson()
+        val type = object : TypeToken<List<ExerciseSet>>() {}.type
+        return gson.toJson(value, type)
+    }
+
+    @TypeConverter
+    fun toExerciseSetList(value: String): List<ExerciseSet> {
+        val gson = Gson()
+        val type = object : TypeToken<List<ExerciseSet>>() {}.type
         return gson.fromJson(value, type)
     }
 
