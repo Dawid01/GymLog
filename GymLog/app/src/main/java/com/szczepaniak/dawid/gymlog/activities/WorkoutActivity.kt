@@ -121,6 +121,7 @@ class WorkoutActivity : AppCompatActivity() {
                 exercises = exercises,
                 exerciseSets = emptyList()
             )
+            Singleton.saveCurrentWorkout(currentWorkout)
         }else{
             currentWorkout = singletonWorkout
             exercises = currentWorkout.exercises.toMutableList()

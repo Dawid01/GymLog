@@ -2,8 +2,11 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.Button
 import android.widget.DatePicker
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -32,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
     private lateinit var pageAdapter: MainViewPageAdapter
+    private lateinit var wokroutInProgress: View
+    private lateinit var resumeWorkoutButton: Button
+    private lateinit var discardWorkoutButton: Button
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,9 +54,12 @@ class MainActivity : AppCompatActivity() {
         RetrofitClient.context = this
         setUserInfo()
 
-
         viewPager = findViewById(R.id.view_pager)
         tabLayout = findViewById(R.id.tabLayout)
+        wokroutInProgress = findViewById(R.id.workout_in_progress_view)
+        resumeWorkoutButton = findViewById(R.id.resume_button)
+        discardWorkoutButton = findViewById(R.id.discard_button)
+        wokroutInProgress.visibility = if (Singleton.getCurrentWorkout() == null) View.GONE else View.VISIBLE
         pageAdapter = MainViewPageAdapter(this)
 
         pageAdapter.addFragment(HomeFragment(), "Home",
@@ -89,7 +98,18 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        resumeWorkoutButton.setOnClickListener {
+
+        }
+
+        discardWorkoutButton.setOnClickListener {
+
+            Singleton.saveCurrentWorkout(null)
+            wokroutInProgress.visibility = View.GONE
+        }
+
     }
+
 
     @SuppressLint("CutPasteId")
     fun setUserInfo(){
@@ -169,5 +189,16 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        wokroutInProgress.visibility = if (Singleton.getCurrentWorkout() == null) View.GONE else View.VISIBLE
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
     }
 }

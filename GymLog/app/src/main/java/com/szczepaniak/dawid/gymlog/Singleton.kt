@@ -55,7 +55,7 @@ object Singleton {
         selectedRoutine = routine
     }
 
-    fun saveCurrentWorkout(workout: Workout) {
+    fun saveCurrentWorkout(workout: Workout?) {
         val editor = sharedPreferences.edit()
         val json = gson.toJson(workout)
         editor.putString("current_workout", json)
