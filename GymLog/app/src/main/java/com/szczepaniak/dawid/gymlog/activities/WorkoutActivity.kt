@@ -72,7 +72,8 @@ class WorkoutActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        initWorkout();
+        prefs = getSharedPreferences("TrainingPrefs", MODE_PRIVATE)
+        initWorkout()
         val isSelected = intent.getBooleanExtra("selected", false)
         exerciseSetRecyclerView = findViewById(R.id.exertcise_sets_recycler_view)
         exerciseSetRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -96,7 +97,6 @@ class WorkoutActivity : AppCompatActivity() {
         exerciseSetRecyclerView.adapter = exerciseSetAdapter
 
         timeTextView = findViewById(R.id.durration_text)
-        prefs = getSharedPreferences("TrainingPrefs", MODE_PRIVATE)
 
         val intent = Intent(this, TimerService::class.java)
         bindService(intent, connection, Context.BIND_AUTO_CREATE)
@@ -111,9 +111,16 @@ class WorkoutActivity : AppCompatActivity() {
     private fun initWorkout(){
 
         val singletonWorkout: Workout? = Singleton.getCurrentWorkout()
-
+        val elapsedTime = prefs.getLong("elapsedTime", 0).toInt()
         if(singletonWorkout == null){
-            currentWorkout = Workout(0, prefs.getLong("elapsedTime", 0).toInt(), 0f, Date(), exercises, listOf<ExerciseSet>())
+            currentWorkout = Workout(
+                id = 0,
+                time = elapsedTime,
+                volume = 0f,
+                date = Date(),
+                exercises = exercises,
+                exerciseSets = emptyList()
+            )
         }else{
             currentWorkout = singletonWorkout
             exercises = currentWorkout.exercises.toMutableList()
