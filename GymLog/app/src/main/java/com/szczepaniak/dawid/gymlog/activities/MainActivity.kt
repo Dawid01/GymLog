@@ -99,7 +99,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         resumeWorkoutButton.setOnClickListener {
-
+            val intent = Intent(this, WorkoutActivity::class.java)
+            startActivity(intent)
         }
 
         discardWorkoutButton.setOnClickListener {

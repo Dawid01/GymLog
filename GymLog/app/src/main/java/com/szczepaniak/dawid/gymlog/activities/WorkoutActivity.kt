@@ -40,7 +40,7 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var timeTextView: TextView
     private lateinit var prefs: SharedPreferences
     private val handler = Handler()
-    private lateinit var currentWorkout: Workout
+    private var currentWorkout: Workout? = null
 
     private val updateUITask = object : Runnable {
         override fun run() {
@@ -85,7 +85,12 @@ class WorkoutActivity : AppCompatActivity() {
             tvRoutineTitle.text = routine.name
             exercises = routine.exercises.toMutableList()
         }else{
-            tvRoutineTitle.text = "Quick Workout"
+            if(currentWorkout == null) {
+                tvRoutineTitle.text = "Quick Workout"
+            }else{
+                tvRoutineTitle.text = currentWorkout?.title.toString()
+                exercises = currentWorkout?.exercises?.toMutableList() ?: mutableListOf()
+            }
         }
 
         exerciseSetAdapter = ExerciseSetAdapter(exercises, this, object : ExerciseSetAdapter.ValueChangeListener{
@@ -113,18 +118,19 @@ class WorkoutActivity : AppCompatActivity() {
         val singletonWorkout: Workout? = Singleton.getCurrentWorkout()
         val elapsedTime = prefs.getLong("elapsedTime", 0).toInt()
         if(singletonWorkout == null){
+            routine = Singleton.getSelectedRoutine()
             currentWorkout = Workout(
                 id = 0,
+                title = routine.name,
                 time = elapsedTime,
                 volume = 0f,
                 date = Date(),
-                exercises = exercises,
+                exercises = routine.exercises,
                 exerciseSets = emptyList()
             )
             Singleton.saveCurrentWorkout(currentWorkout)
         }else{
             currentWorkout = singletonWorkout
-            exercises = currentWorkout.exercises.toMutableList()
         }
     }
 
