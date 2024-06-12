@@ -104,9 +104,10 @@ class WorkoutFragment : Fragment() {
         loadRoutines()
         startEmptyWorkoutButton = view.findViewById(R.id.quick_start_button)
         startEmptyWorkoutButton.setOnClickListener{
-            startActivity(Intent(context, WorkoutActivity::class.java))
+            val intent = Intent(context, WorkoutActivity::class.java)
+            intent.putExtra("selected", false)
+            startActivity(intent)
         }
-
     }
 
 

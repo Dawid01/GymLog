@@ -12,7 +12,7 @@ object Singleton {
     private var selectedExercises: MutableList<Exercise> = mutableListOf()
     private lateinit var newRoutine: Routine
     private lateinit var editRoutine: Routine
-    private lateinit var selectedRoutine: Routine
+    private var selectedRoutine: Routine? = null
     private lateinit var sharedPreferences: SharedPreferences
     private val gson = Gson()
 
@@ -47,7 +47,7 @@ object Singleton {
         editRoutine = routine
     }
 
-    fun getSelectedRoutine() : Routine {
+    fun getSelectedRoutine() : Routine? {
         return selectedRoutine
     }
 

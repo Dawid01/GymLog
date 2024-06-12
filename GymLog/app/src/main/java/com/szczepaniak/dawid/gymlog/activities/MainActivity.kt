@@ -100,6 +100,7 @@ class MainActivity : AppCompatActivity() {
 
         resumeWorkoutButton.setOnClickListener {
             val intent = Intent(this, WorkoutActivity::class.java)
+            intent.putExtra("selected", false)
             startActivity(intent)
         }
 

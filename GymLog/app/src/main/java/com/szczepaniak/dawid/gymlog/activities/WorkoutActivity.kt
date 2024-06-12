@@ -19,10 +19,12 @@ import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.Routine
 import com.szczepaniak.dawid.gymlog.models.Workout
 import java.util.Date
+import kotlin.properties.Delegates
 
 class WorkoutActivity : AppCompatActivity() {
 
     private lateinit var routine: Routine
+    private var isSelected by Delegates.notNull<Boolean>()
     private lateinit var tvRoutineTitle: TextView
     private lateinit var exerciseSetRecyclerView: RecyclerView
     private lateinit var exerciseSetAdapter: ExerciseSetAdapter
@@ -61,8 +63,8 @@ class WorkoutActivity : AppCompatActivity() {
             insets
         }
         prefs = getSharedPreferences("TrainingPrefs", MODE_PRIVATE)
+        isSelected = intent.getBooleanExtra("selected", false)
         initWorkout()
-        val isSelected = intent.getBooleanExtra("selected", false)
         exerciseSetRecyclerView = findViewById(R.id.exertcise_sets_recycler_view)
         exerciseSetRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -72,7 +74,7 @@ class WorkoutActivity : AppCompatActivity() {
 
         tvRoutineTitle = findViewById(R.id.routine_title)
         if (isSelected) {
-            routine = Singleton.getSelectedRoutine()
+            routine = Singleton.getSelectedRoutine()!!
             tvRoutineTitle.text = routine.name
             exercises = routine.exercises.toMutableList()
         } else {
@@ -109,15 +111,17 @@ class WorkoutActivity : AppCompatActivity() {
     private fun initWorkout() {
         val singletonWorkout: Workout? = Singleton.getCurrentWorkout()
         if (singletonWorkout == null) {
-            routine = Singleton.getSelectedRoutine()
+            if(isSelected) {
+                routine = Singleton.getSelectedRoutine()!!
+            }
             currentWorkout = Workout(
                 id = 0,
-                title = routine.name,
+                title = if(isSelected) routine.name else "Quick Workout",
                 startTime = Date(),
                 endTime = Date(),
                 volume = 0f,
                 date = Date(),
-                exercises = routine.exercises,
+                exercises = if(isSelected) routine.exercises else emptyList(),
                 exerciseSets = emptyList()
             )
             Singleton.saveCurrentWorkout(currentWorkout)
