@@ -73,7 +73,7 @@ class ExerciseSetAdapter(
             tvDifficulty.text = exercise.difficulty.toString().uppercase()
             tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
 
-            val sets: MutableList<ExerciseSet> = mutableListOf(ExerciseSet(0, 0, false, 0, 0f))
+            val sets: MutableList<ExerciseSet> =  exercise.sets?.toMutableList() ?: mutableListOf(ExerciseSet(0, 0, false, 0, 0f))
             val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
             val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ItemListener {
                 override fun onValueChange() {
