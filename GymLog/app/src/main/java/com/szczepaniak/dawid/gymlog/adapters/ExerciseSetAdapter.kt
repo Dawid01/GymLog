@@ -18,6 +18,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.ExerciseSet
@@ -73,7 +74,9 @@ class ExerciseSetAdapter(
             tvDifficulty.text = exercise.difficulty.toString().uppercase()
             tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
 
-            val sets: MutableList<ExerciseSet> =  exercise.sets?.toMutableList() ?: mutableListOf(ExerciseSet(0, 0, false, 0, 0f))
+            val sets: MutableList<ExerciseSet> = exercise.sets?.toMutableList() ?: mutableListOf(ExerciseSet(0, 0, false, 0, 0f))
+            exercise.sets = sets
+            valueChangeListener?.onValueChange()
             val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
             val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ItemListener {
                 override fun onValueChange() {
@@ -88,6 +91,8 @@ class ExerciseSetAdapter(
                                 sets.removeAt(position)
                                 adapter.notifyItemRemoved(position)
                                 adapter.notifyItemRangeChanged(position, sets.size)
+                                exercise.sets = sets
+                                valueChangeListener?.onValueChange()
                             } else {
                                 Toast.makeText(context, "You can't delete the last set", Toast.LENGTH_SHORT).show()
                             }
@@ -111,6 +116,7 @@ class ExerciseSetAdapter(
                     sets.add(ExerciseSet(sets.size, 0, false, 0, 0f))
                     exercise.sets = sets.toList()
                     setAdapter.notifyItemInserted(sets.size - 1)
+                    valueChangeListener?.onValueChange()
                 } else {
                     Toast.makeText(context, "Maximum 5 sets allowed", Toast.LENGTH_SHORT).show()
                 }

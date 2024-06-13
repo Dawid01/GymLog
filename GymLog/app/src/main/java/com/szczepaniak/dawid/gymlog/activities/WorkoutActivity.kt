@@ -145,12 +145,10 @@ class WorkoutActivity : AppCompatActivity() {
         val m = (seconds / 60) % 60
         val h = (seconds / 3600)
 
-        return if (h > 0) {
-            String.format("%d h %02d min %02d s", h, m, s)
-        } else if (m > 0) {
-            String.format("%d min %02d s", m, s)
-        } else {
-            String.format("%d s", s)
+        return when {
+            h > 0 -> String.format("%d h %d min %d s", h, m, s).replace(" 0 min", "").replace(" 0 s", "")
+            m > 0 -> String.format("%d min %d s", m, s).replace(" 0 s", "")
+            else -> String.format("%d s", s)
         }
     }
 
