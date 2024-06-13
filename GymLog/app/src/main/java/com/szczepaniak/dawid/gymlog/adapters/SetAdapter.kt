@@ -37,7 +37,11 @@ class SetAdapter(
             tvReps.setText(repsText)
             tvReps.setHint("0")
 
-            val weightText = if (exerciseSet.volume > 0) exerciseSet.volume.toString() else ""
+            val weightText = if (exerciseSet.volume > 0) {
+                if (exerciseSet.volume % 1 == 0f) exerciseSet.volume.toInt().toString() else exerciseSet.volume.toString()
+            } else {
+                ""
+            }
             tvWeight.setText(weightText)
             tvWeight.setHint("0")
 

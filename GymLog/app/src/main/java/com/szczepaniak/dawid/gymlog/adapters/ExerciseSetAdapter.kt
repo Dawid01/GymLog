@@ -113,7 +113,8 @@ class ExerciseSetAdapter(
 
             addSetButton.setOnClickListener {
                 if (sets.size < 5) {
-                    sets.add(ExerciseSet(sets.size, 0, false, 0, 0f))
+                    val previousSet = sets[sets.size - 1]
+                    sets.add(ExerciseSet(sets.size, 0, false, previousSet.rep, previousSet.volume))
                     exercise.sets = sets.toList()
                     setAdapter.notifyItemInserted(sets.size - 1)
                     valueChangeListener?.onValueChange()

@@ -32,6 +32,7 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var tvSets: TextView
 
     private var exercises: MutableList<Exercise> = mutableListOf()
+    private lateinit var finishButton: Button
     private lateinit var discardButton: Button
 
     private lateinit var timeTextView: TextView
@@ -100,6 +101,11 @@ class WorkoutActivity : AppCompatActivity() {
 
         }
 
+        finishButton = findViewById(R.id.finish_button)
+        finishButton.setOnClickListener {
+            saveWorkout()
+        }
+
         discardButton = findViewById(R.id.discard_button)
         discardButton.setOnClickListener {
             Singleton.saveCurrentWorkout(null)
@@ -140,6 +146,12 @@ class WorkoutActivity : AppCompatActivity() {
         handler.removeCallbacks(updateUITask)
     }
 
+    private fun saveWorkout(){
+
+
+    }
+
+
     private fun formatTime(seconds: Long): String {
         val s = seconds % 60
         val m = (seconds / 60) % 60
@@ -169,7 +181,12 @@ class WorkoutActivity : AppCompatActivity() {
                 }
             }
         }
-        tvVolume.text = "$volume kg"
+        val volumeText = if (volume > 0) {
+            if (volume % 1 == 0f) volume.toInt().toString() else volume.toString()
+        } else {
+            ""
+        }
+        tvVolume.text = "$volumeText kg"
         tvSets.text = "$sets"
         Singleton.saveCurrentWorkout(currentWorkout)
     }
