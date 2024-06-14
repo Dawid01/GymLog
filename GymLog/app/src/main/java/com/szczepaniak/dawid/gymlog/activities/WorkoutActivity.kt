@@ -2,9 +2,11 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import android.media.Image
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +32,7 @@ class WorkoutActivity : AppCompatActivity() {
     private lateinit var exerciseSetAdapter: ExerciseSetAdapter
     private lateinit var tvVolume: TextView
     private lateinit var tvSets: TextView
+    private lateinit var backIcon: ImageView
 
     private var exercises: MutableList<Exercise> = mutableListOf()
     private lateinit var finishButton: Button
@@ -111,6 +114,12 @@ class WorkoutActivity : AppCompatActivity() {
             Singleton.saveCurrentWorkout(null)
             finish()
         }
+
+        backIcon = findViewById(R.id.back_icon)
+        backIcon.setOnClickListener {
+            finish()
+        }
+
         calculateInfoValues()
     }
 
