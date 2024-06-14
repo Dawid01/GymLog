@@ -11,8 +11,8 @@ data class Workout(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val title: String,
     val startTime: Date,
-    val endTime: Date,
-    val volume: Float,
+    var endTime: Date,
+    var volume: Float,
     var rating: Int,
     @Ignore var exercises: List<Exercise>,
     @Ignore var exerciseSets: List<ExerciseSet>

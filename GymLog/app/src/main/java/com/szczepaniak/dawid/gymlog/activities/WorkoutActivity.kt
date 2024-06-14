@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.provider.ContactsContract.Data
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
@@ -185,6 +186,7 @@ class WorkoutActivity : AppCompatActivity() {
                             currentWorkout!!.rating = ratingBar.rating.toInt()
                             currentWorkout!!.exerciseSets = mutableExerciseSets
                             currentWorkout!!.exercises = mutableExercises
+                            currentWorkout!!.endTime = Date()
 
                             workoutDao.insert(currentWorkout!!)
                             withContext(Dispatchers.Main) { Singleton.saveCurrentWorkout(null)
@@ -238,6 +240,7 @@ class WorkoutActivity : AppCompatActivity() {
         } else {
             "0"
         }
+        currentWorkout?.volume  = volume
         tvVolume.text = "$volumeText kg"
         tvSets.text = "$sets"
         Singleton.saveCurrentWorkout(currentWorkout)
