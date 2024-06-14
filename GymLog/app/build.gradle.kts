@@ -67,8 +67,8 @@ dependencies {
     implementation("androidx.room:room-guava:$room_version")
     testImplementation("androidx.room:room-testing:$room_version")
     implementation("androidx.room:room-paging:$room_version")
+    implementation("androidx.paging:paging-runtime-ktx:3.1.0")
 
-//    ksp("androidx.room:room-compiler:$room_version")
 
 
     // Navigation Component

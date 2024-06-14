@@ -178,9 +178,13 @@ class WorkoutActivity : AppCompatActivity() {
                             val db = AppDatabase.getInstance(applicationContext)
                             val workoutDao = db.workoutDao()
                             val mutableExerciseSets = currentWorkout!!.exerciseSets.toMutableList()
+                            val mutableExercises = currentWorkout!!.exercises.toMutableList()
                             mutableExerciseSets.removeAll { !it.checked }
+                            mutableExercises.removeAll { it.sets.isNullOrEmpty() }
+
                             currentWorkout!!.rating = ratingBar.rating.toInt()
                             currentWorkout!!.exerciseSets = mutableExerciseSets
+                            currentWorkout!!.exercises = mutableExercises
 
                             workoutDao.insert(currentWorkout!!)
                             withContext(Dispatchers.Main) { Singleton.saveCurrentWorkout(null)

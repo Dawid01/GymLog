@@ -1,5 +1,6 @@
 package com.szczepaniak.dawid.gymlog.doa
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -18,6 +19,9 @@ interface WorkoutDao {
 
     @Delete
     suspend fun delete(workout: Workout)
+
+    @Query("SELECT * FROM workout_table ORDER BY startTime DESC")
+    fun getWorkoutsByStartDate(): PagingSource<Int, Workout>
 
     @Query("SELECT * FROM workout_table WHERE id = :id")
     suspend fun getWorkout(id: Int): Workout?

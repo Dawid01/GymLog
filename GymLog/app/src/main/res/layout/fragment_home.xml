@@ -44,7 +44,7 @@
                 app:mcv_weekDayTextAppearance="?android:textColorSecondary" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/empyt_routines_view"
+                android:id="@+id/empyt_history_view"
                 android:layout_width="match_parent"
                 android:layout_height="250dp">
 
@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
