@@ -13,17 +13,17 @@ data class Workout(
     val startTime: Date,
     val endTime: Date,
     val volume: Float,
-    val date: Date,
+    var rating: Int,
     @Ignore val exercises: List<Exercise>,
-    @Ignore val exerciseSets: List<ExerciseSet>
+    @Ignore var exerciseSets: List<ExerciseSet>
 ) {
-    constructor(id: Int, title: String, startTime: Date, endTime: Date , volume: Float, date: Date) : this(
+    constructor(id: Int, title: String, startTime: Date, endTime: Date , volume: Float, rating: Int) : this(
         id,
         title,
         startTime,
         endTime,
         volume,
-        date,
+        rating,
         emptyList(),
         emptyList()
     )

@@ -6,15 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.szczepaniak.dawid.gymlog.doa.RoutineDao
+import com.szczepaniak.dawid.gymlog.doa.WorkoutDao
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.Routine
+import com.szczepaniak.dawid.gymlog.models.Workout
 
-@Database(entities = [Routine::class, Exercise::class], version = 1)
+@Database(entities = [Routine::class, Exercise::class, Workout::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun routineDao(): RoutineDao
-
+    abstract fun workoutDao(): WorkoutDao
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null

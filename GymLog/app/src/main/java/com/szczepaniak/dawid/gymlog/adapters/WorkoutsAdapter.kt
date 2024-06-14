@@ -19,7 +19,7 @@ class WorkoutAdapter(private val workouts: List<Workout>) : RecyclerView.Adapter
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: WorkoutViewHolder, position: Int) {
         val workout = workouts[position]
-        holder.tvDate.text = workout.date.toString()
+        holder.tvDate.text = workout.startTime.toString()
         holder.tvTime.text = "Time: ${workout.endTime.time - workout.startTime.time} mins"
         holder.tvVolume.text = "Volume: ${workout.volume} kg"
     }

@@ -2,24 +2,31 @@ package com.szczepaniak.dawid.gymlog.activities
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
-import android.media.Image
 import android.os.Bundle
 import android.os.Handler
+import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.szczepaniak.dawid.gymlog.AppDatabase
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.adapters.ExerciseSetAdapter
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.Routine
 import com.szczepaniak.dawid.gymlog.models.Workout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 import kotlin.properties.Delegates
 
@@ -135,7 +142,7 @@ class WorkoutActivity : AppCompatActivity() {
                 startTime = Date(),
                 endTime = Date(),
                 volume = 0f,
-                date = Date(),
+                rating = 0,
                 exercises = if(isSelected) routine.exercises else emptyList(),
                 exerciseSets = emptyList()
             )
@@ -157,7 +164,39 @@ class WorkoutActivity : AppCompatActivity() {
 
     private fun saveWorkout(){
 
+        if(currentWorkout != null) {
+            val dialogView = LayoutInflater.from(this).inflate(R.layout.workout_save_dialog, null)
+            val ratingBar: RatingBar = dialogView.findViewById(R.id.rating_bar)
+            val dialog = AlertDialog.Builder(this)
+                .setTitle("Save ${currentWorkout?.title}")
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("Save") { _, _ ->
 
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        this.let {
+                            val db = AppDatabase.getInstance(applicationContext)
+                            val workoutDao = db.workoutDao()
+                            val mutableExerciseSets = currentWorkout!!.exerciseSets.toMutableList()
+                            mutableExerciseSets.removeAll { !it.checked }
+                            currentWorkout!!.rating = ratingBar.rating.toInt()
+                            currentWorkout!!.exerciseSets = mutableExerciseSets
+
+                            workoutDao.insert(currentWorkout!!)
+                            withContext(Dispatchers.Main) { Singleton.saveCurrentWorkout(null)
+                                finish()
+                            }
+                        }
+                    }
+
+
+                }.setNegativeButton("Cancel"){dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+                .create()
+
+            dialog.show()
+        }
     }
 
 
@@ -193,7 +232,7 @@ class WorkoutActivity : AppCompatActivity() {
         val volumeText = if (volume > 0) {
             if (volume % 1 == 0f) volume.toInt().toString() else volume.toString()
         } else {
-            ""
+            "0"
         }
         tvVolume.text = "$volumeText kg"
         tvSets.text = "$sets"
