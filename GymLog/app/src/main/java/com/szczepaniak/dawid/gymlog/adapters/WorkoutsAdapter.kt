@@ -39,17 +39,17 @@ class WorkoutAdapter : PagingDataAdapter<Workout, WorkoutAdapter.WorkoutViewHold
             tvTitle.text = workout.title
 
             val dateFormat = SimpleDateFormat("EEEE dd.MM.yyyy", Locale.getDefault())
-            val formattedDate = dateFormat.format(workout.startTime)
+            val formattedDate = dateFormat.format(workout.startTime).capitalize(Locale.ROOT)
             tvDate.text = formattedDate
 
-            tvTime.text = "Time: " + formatTime(workout.getDuration())
+            tvTime.text = formatTime(workout.getDuration())
             ratingBar.rating = workout.rating.toFloat()
             val volumeText = if (workout.volume > 0) {
                 if (workout.volume % 1 == 0f) workout.volume.toInt().toString() else workout.volume.toString()
             } else {
                 "0"
             }
-            tvVolume.text = "Volume: " + volumeText + "kg"
+            tvVolume.text = "$volumeText kg"
         }
 
         private fun formatTime(seconds: Long): String {

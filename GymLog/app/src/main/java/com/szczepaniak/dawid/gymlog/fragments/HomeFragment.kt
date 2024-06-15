@@ -9,8 +9,10 @@ import androidx.core.view.isEmpty
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +24,7 @@ import com.szczepaniak.dawid.gymlog.adapters.WorkoutAdapter
 import com.szczepaniak.dawid.gymlog.models.Workout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -33,8 +36,6 @@ private const val ARG_PARAM2 = "param2"
 class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
-
-    private var workoutList: MutableList<Workout> = mutableListOf()
 
     private lateinit var workoutRecyclerView: RecyclerView
     private lateinit var adapter: WorkoutAdapter
@@ -121,16 +122,21 @@ class HomeFragment : Fragment() {
                 pagingSourceFactory = { dao.getWorkoutsByStartDate() }
             )
 
-            val pagingDataFlow = pager.flow
+            val pagingDataFlow = pager.flow.cachedIn(lifecycleScope)
 
             lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
                     adapter.submitData(pagingData)
-                    emptyHistoryView.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
+
+                    adapter.addLoadStateListener { loadStates ->
+                        val isEmpty = adapter.itemCount == 0 && loadStates.refresh is LoadState.NotLoading
+                        emptyHistoryView.visibility = if (isEmpty) View.VISIBLE else View.GONE
+                    }
                 }
             }
         }
-    }
+   }
+
 
 
 
