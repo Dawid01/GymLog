@@ -319,7 +319,7 @@
             android:autoSizeStepGranularity="2sp"
             android:autoSizeTextType="uniform"
             android:gravity="center_vertical"
-            android:text="999"
+            android:text="0"
             android:textAlignment="center"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="36sp"

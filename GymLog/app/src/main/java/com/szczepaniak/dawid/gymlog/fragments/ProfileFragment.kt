@@ -117,7 +117,7 @@ class ProfileFragment : Fragment() {
             val totalVolume = workoutDao?.totalVolume()
             val countWorkouts = workoutDao?.countWorkouts()
             withContext(Dispatchers.Main) {
-                tvVolumeTotal.text = "$totalVolume kg"
+                tvVolumeTotal.text = "$totalVolume"
                 tvWorkoutsCount.text = "$countWorkouts"
             }
         }
