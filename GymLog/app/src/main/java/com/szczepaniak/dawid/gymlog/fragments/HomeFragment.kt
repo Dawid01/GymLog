@@ -5,28 +5,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isEmpty
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import androidx.paging.insertSeparators
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener
 import com.szczepaniak.dawid.gymlog.AppDatabase
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.adapters.WorkoutAdapter
-import com.szczepaniak.dawid.gymlog.models.Workout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 
 private const val ARG_PARAM1 = "param1"
@@ -70,43 +68,56 @@ class HomeFragment : Fragment() {
         loadWorkouts()
         emptyHistoryView.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
 
-
         calendarView = view.findViewById(R.id.calendar)
 
-        val specialDates = setOf(
-            Triple(2024, 4, 1),
-            Triple(2024, 4, 5),
-            Triple(2024, 4, 10),
-            Triple(2024, 4, 15),
-            Triple(2024, 4, 20),
-            Triple(2024, 4, 25),
-            Triple(2024, 4, 30),
-            Triple(2024, 5, 1),
-            Triple(2024, 5, 5),
-            Triple(2024, 5, 10),
-            Triple(2024, 5, 15),
-            Triple(2024, 5, 20),
-        )
+        calendarView.setOnMonthChangedListener(object : OnMonthChangedListener {
+            override fun onMonthChanged(widget: MaterialCalendarView, date: CalendarDay) {
+                loadCalendarWorkouts(date)
+            }
+        })
+    }
 
-        for (t in specialDates) {
-            val date = CalendarDay.from(t.first, t.second, t.third)
-            calendarView.setDateSelected(date, true)
+    fun loadCalendarWorkouts(date: CalendarDay){
+        val db = context?.let { AppDatabase.getInstance(it) }
+        val workoutDao = db?.workoutDao()
+        val calendar = Calendar.getInstance()
+
+
+        lifecycleScope.launch {
+            val year = date.year.toString()
+            val month = String.format("%02d", date.month)
+            val workouts = withContext(Dispatchers.IO) {
+                workoutDao?.getWorkoutsByMonth(year, month)
+            }
+            withContext(Dispatchers.Main) {
+                calendarView.clearSelection()
+                if (workouts != null) {
+                    for (workout in workouts) {
+                        calendar.time = workout.startTime
+                        val year = calendar.get(Calendar.YEAR)
+                        val month = calendar.get(Calendar.MONTH) + 1
+                        val day = calendar.get(Calendar.DAY_OF_MONTH)
+                        calendarView.setDateSelected(
+                            CalendarDay.from(
+                                year,
+                                month,
+                                day
+                            ), true
+                        )
+                    }
+                }
+            }
         }
 
-//        calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-//            // Sprawdź, czy data jest stała i wymagana do podkreślenia
-//            val isSpecialDate = checkIfSpecialDate(year, month, dayOfMonth)
-//            if (isSpecialDate) {
-//                view.setBackgroundResource(R.drawable.streaj_weeks)
-//            }
-//        }
-
     }
+
+
 
 
     override fun onResume() {
         super.onResume()
         loadWorkouts()
+        loadCalendarWorkouts(calendarView.currentDate)
     }
 
     private fun loadWorkouts() {

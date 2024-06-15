@@ -25,4 +25,8 @@ interface WorkoutDao {
 
     @Query("SELECT * FROM workout_table WHERE id = :id")
     suspend fun getWorkout(id: Int): Workout?
+
+    @Query("SELECT * FROM workout_table WHERE strftime('%Y', startTime / 1000, 'unixepoch') = :year AND strftime('%m', startTime / 1000, 'unixepoch') = :month ORDER BY startTime DESC")
+    suspend fun getWorkoutsByMonth(year: String, month: String): List<Workout>
+
 }
