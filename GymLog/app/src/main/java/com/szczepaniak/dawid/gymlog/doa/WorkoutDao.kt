@@ -20,6 +20,12 @@ interface WorkoutDao {
     @Delete
     suspend fun delete(workout: Workout)
 
+    @Query("SELECT COUNT(*) FROM workout_table")
+    suspend fun countWorkouts(): Int
+
+    @Query("SELECT SUM(volume) FROM workout_table")
+    suspend fun totalVolume(): Long
+
     @Query("SELECT * FROM workout_table ORDER BY startTime DESC")
     fun getWorkoutsByStartDate(): PagingSource<Int, Workout>
 

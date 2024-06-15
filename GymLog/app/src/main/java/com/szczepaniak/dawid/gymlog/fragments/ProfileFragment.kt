@@ -10,9 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.szczepaniak.dawid.gymlog.AppDatabase
 import com.szczepaniak.dawid.gymlog.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
-import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Locale
@@ -31,6 +35,9 @@ class ProfileFragment : Fragment() {
 
     private lateinit var tvUserName: TextView
 
+    private lateinit var tvWorkoutsCount: TextView
+    private lateinit var tvVolumeTotal: TextView
+
     private lateinit var tvAge: TextView
     private lateinit var tvGender: TextView
     private lateinit var tvWeight: TextView
@@ -43,8 +50,6 @@ class ProfileFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -55,13 +60,16 @@ class ProfileFragment : Fragment() {
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
         tvUserName.text = "(${sharedPref.getString("user_name", "")})"
 
+        tvWorkoutsCount = view.findViewById(R.id.workouts_count_text)
+        tvVolumeTotal = view.findViewById(R.id.total_volume_text)
+
         tvAge = view.findViewById(R.id.value_age)
         tvGender = view.findViewById(R.id.value_gender)
         tvWeight = view.findViewById(R.id.value_weight)
         tvHeight = view.findViewById(R.id.value_height)
         tvBMI = view.findViewById(R.id.value_bmi)
         initializeUserInfo()
-
+        updateUserStats()
     }
 
     override fun onCreateView(
@@ -69,6 +77,12 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        updateUserStats()
     }
 
     @SuppressLint("SetTextI18n")
@@ -81,8 +95,8 @@ class ProfileFragment : Fragment() {
         val gender = sharedPref.getInt("gender", 0)
 
         tvAge.text = "${date?.let { calculateAge(it) }}"
-        tvWeight.text = "${weight} kg"
-        tvHeight.text = "${height} cm"
+        tvWeight.text = "$weight kg"
+        tvHeight.text = "$height cm"
         tvBMI.text = String.format("%.2f", bmi)
         tvGender.text = if(gender == 1) "Male ♂\uFE0F" else "Female ♀\uFE0F "
         val color = when {
@@ -94,7 +108,23 @@ class ProfileFragment : Fragment() {
         tvBMI.setTextColor(color)
     }
 
-    fun calculateAge(birthDate: String): Int {
+    @SuppressLint("SetTextI18n")
+    private fun updateUserStats(){
+        val db = context?.let { AppDatabase.getInstance(it) }
+        val workoutDao = db?.workoutDao()
+
+        lifecycleScope.launch {
+            val totalVolume = workoutDao?.totalVolume()
+            val countWorkouts = workoutDao?.countWorkouts()
+            withContext(Dispatchers.Main) {
+                tvVolumeTotal.text = "$totalVolume kg"
+                tvWorkoutsCount.text = "$countWorkouts"
+            }
+        }
+
+    }
+
+    private fun calculateAge(birthDate: String): Int {
         val formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
         val parsedBirthDate = LocalDate.parse(birthDate, formatter)
         val currentDate = LocalDate.now()

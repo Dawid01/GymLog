@@ -67,17 +67,11 @@ class HomeFragment : Fragment() {
         workoutRecyclerView.adapter = adapter
         loadWorkouts()
         emptyHistoryView.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
-
         calendarView = view.findViewById(R.id.calendar)
-
-        calendarView.setOnMonthChangedListener(object : OnMonthChangedListener {
-            override fun onMonthChanged(widget: MaterialCalendarView, date: CalendarDay) {
-                loadCalendarWorkouts(date)
-            }
-        })
+        calendarView.setOnMonthChangedListener { _, date -> loadCalendarWorkouts(date) }
     }
 
-    fun loadCalendarWorkouts(date: CalendarDay){
+    private fun loadCalendarWorkouts(date: CalendarDay){
         val db = context?.let { AppDatabase.getInstance(it) }
         val workoutDao = db?.workoutDao()
         val calendar = Calendar.getInstance()
@@ -94,23 +88,18 @@ class HomeFragment : Fragment() {
                 if (workouts != null) {
                     for (workout in workouts) {
                         calendar.time = workout.startTime
-                        val year = calendar.get(Calendar.YEAR)
-                        val month = calendar.get(Calendar.MONTH) + 1
-                        val day = calendar.get(Calendar.DAY_OF_MONTH)
                         calendarView.setDateSelected(
                             CalendarDay.from(
-                                year,
-                                month,
-                                day
+                                calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH) + 1,
+                                calendar.get(Calendar.DAY_OF_MONTH)
                             ), true
                         )
                     }
                 }
             }
         }
-
     }
-
 
 
 
@@ -148,12 +137,6 @@ class HomeFragment : Fragment() {
         }
    }
 
-
-
-
-
-
-
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -165,13 +148,4 @@ class HomeFragment : Fragment() {
             }
     }
 
-    private fun checkIfSpecialDate(year: Int, month: Int, dayOfMonth: Int): Boolean {
-        val specialDates = setOf(
-            Triple(2024, 4, 15), // 15 kwietnia 2024
-            Triple(2024, 4, 20), // 20 kwietnia 2024
-            Triple(2024, 5, 1)   // 1 maja 2024
-        )
-
-        return specialDates.contains(Triple(year, month + 1, dayOfMonth))
-    }
 }
