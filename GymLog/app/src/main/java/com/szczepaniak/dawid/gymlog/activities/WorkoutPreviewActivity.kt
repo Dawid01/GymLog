@@ -80,16 +80,25 @@ class WorkoutPreviewActivity : AppCompatActivity() {
 
         exercisesRecyclerView = findViewById(R.id.preview_recycler_view)
         exercisesRecyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = ExerciseSetAdapter(exercises, this, false)
-        exercisesRecyclerView.adapter = adapter
 
         lifecycleScope.launch(Dispatchers.IO) {
-            exercises = workoutDao.getWorkoutWithExercises(workout.id).exercises.toMutableList()
+            try {
+                exercises = workoutDao.getWorkoutWithExercises(workout.id).exercises.toMutableList()
 
-            withContext(Dispatchers.Main) {
-                adapter.notifyDataSetChanged()
+                for (exercise in exercises) {
+                    val exerciseWithSets = workoutDao.getExerciseWithSets(exercise.id)
+                    exercise.sets = exerciseWithSets.sets.toMutableList()
+                }
+
+                withContext(Dispatchers.Main) {
+                    adapter = ExerciseSetAdapter(exercises, applicationContext, false)
+                    exercisesRecyclerView.adapter = adapter
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
+
 
     }
 }

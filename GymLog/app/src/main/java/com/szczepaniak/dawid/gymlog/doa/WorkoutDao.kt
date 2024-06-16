@@ -36,26 +36,30 @@ interface WorkoutDao {
 
     @Transaction
     suspend fun insertWorkoutWithExercisesAndSets(workout: Workout) {
-        val workoutId = insert(workout).toInt() // Wstawianie treningu i pobieranie jego ID
+        val workoutId = insert(workout).toInt()
         workout.exercises.forEach { exercise ->
-            exercise.workoutId = workoutId // Ustawianie workoutId dla każdego ćwiczenia
-            val exerciseId = insertExercise(exercise) // Wstawianie ćwiczenia i pobieranie jego ID
+            exercise.workoutId = workoutId
+            val exerciseId = insertExercise(exercise)
             exercise.sets?.forEach { set ->
                 set.exerciseId =
-                    exerciseId.toInt() // Ustawianie exerciseId dla każdego zestawu w ćwiczeniu
+                    exerciseId.toInt()
             }
-            insertExerciseSets(exercise.sets ?: emptyList()) // Wstawianie zestawów ćwiczeń
+            insertExerciseSets(exercise.sets ?: emptyList())
         }
     }
 
     @Transaction
     suspend fun insertExerciseWithSets(exercise: Exercise, sets: List<ExerciseSet>) {
-        val exerciseId = insertExercise(exercise) // Wstawianie ćwiczenia i pobieranie jego ID
+        val exerciseId = insertExercise(exercise)
         sets.forEach { set ->
-            set.exerciseId = exerciseId.toInt() // Ustawianie exerciseId dla każdego zestawu
+            set.exerciseId = exerciseId.toInt()
         }
-        insertExerciseSets(sets) // Wstawianie zestawów ćwiczeń
+        insertExerciseSets(sets)
     }
+
+    @Transaction
+    @Query("SELECT * FROM exercise WHERE id = :exerciseId")
+    suspend fun getExerciseWithSets(exerciseId: Int): ExerciseWithSets
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExerciseSet(exerciseSet: ExerciseSet)
