@@ -1,10 +1,14 @@
 package com.szczepaniak.dawid.gymlog.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -19,6 +23,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener
 import com.szczepaniak.dawid.gymlog.AppDatabase
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.activities.WorkoutPreviewActivity
 import com.szczepaniak.dawid.gymlog.adapters.WorkoutAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -63,7 +68,7 @@ class HomeFragment : Fragment() {
         workoutRecyclerView = view.findViewById(R.id.history_recyclerview)
         emptyHistoryView = view.findViewById(R.id.empyt_history_view)
         workoutRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = WorkoutAdapter()
+        adapter = WorkoutAdapter(requireContext())
         workoutRecyclerView.adapter = adapter
         loadWorkouts()
         emptyHistoryView.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
