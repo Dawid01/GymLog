@@ -51,6 +51,8 @@ class ExerciseSetAdapter(
         private val setRecyclerView: RecyclerView = itemView.findViewById(R.id.set_recycler_view)
         private val addSetButton: Button = itemView.findViewById(R.id.add_set_button)
         private val wieightColumn: View = itemView.findViewById(R.id.weight_column)
+        private val previousColumn: View = itemView.findViewById(R.id.previous_column)
+        private val checkedColumn: View = itemView.findViewById(R.id.checked_column)
 
         init {
             info.setOnClickListener {
@@ -65,6 +67,12 @@ class ExerciseSetAdapter(
                 }
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity)
                 context.startActivity(intent, options.toBundle())
+            }
+            if(!editable){
+                previousColumn.visibility = View.GONE
+                checkedColumn.visibility = View.GONE
+                addSetButton.visibility = View.GONE
+                info.visibility = View.GONE
             }
         }
 

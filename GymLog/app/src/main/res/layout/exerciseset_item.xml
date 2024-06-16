@@ -151,6 +151,7 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView5">
 
             <TextView
+                android:id="@+id/previous_column"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -184,6 +185,7 @@
                 android:textColor="?android:attr/textColorHint" />
 
             <TextView
+                android:id="@+id/checked_column"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
