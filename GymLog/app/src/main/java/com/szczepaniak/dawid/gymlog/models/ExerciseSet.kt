@@ -19,4 +19,4 @@ data class ExerciseSet(
     var checked: Boolean,
     var rep: Int,
     var volume: Float
-) : Serializable
+)

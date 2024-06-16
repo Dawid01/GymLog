@@ -25,12 +25,8 @@ interface WorkoutDao {
     @Delete
     suspend fun delete(workout: Workout)
 
-    @Insert
-    suspend fun insertWorkout(workout: Workout)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertExercise(exercise: Exercise)
-
+    suspend fun insertExercise(exercise: Exercise): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExercises(exercises: List<Exercise>)
@@ -40,16 +36,27 @@ interface WorkoutDao {
 
     @Transaction
     suspend fun insertWorkoutWithExercisesAndSets(workout: Workout) {
-        val workoutId = insert(workout)
+        val workoutId = insert(workout).toInt() // Wstawianie treningu i pobieranie jego ID
         workout.exercises.forEach { exercise ->
-            exercise.workoutId = workoutId.toInt()
-            insertExercises(listOf(exercise))
+            exercise.workoutId = workoutId // Ustawianie workoutId dla każdego ćwiczenia
+            val exerciseId = insertExercise(exercise) // Wstawianie ćwiczenia i pobieranie jego ID
             exercise.sets?.forEach { set ->
-                set.exerciseId = exercise.id
-                insertExerciseSets(listOf(set))
+                set.exerciseId =
+                    exerciseId.toInt() // Ustawianie exerciseId dla każdego zestawu w ćwiczeniu
             }
+            insertExerciseSets(exercise.sets ?: emptyList()) // Wstawianie zestawów ćwiczeń
         }
     }
+
+    @Transaction
+    suspend fun insertExerciseWithSets(exercise: Exercise, sets: List<ExerciseSet>) {
+        val exerciseId = insertExercise(exercise) // Wstawianie ćwiczenia i pobieranie jego ID
+        sets.forEach { set ->
+            set.exerciseId = exerciseId.toInt() // Ustawianie exerciseId dla każdego zestawu
+        }
+        insertExerciseSets(sets) // Wstawianie zestawów ćwiczeń
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExerciseSet(exerciseSet: ExerciseSet)
 
@@ -75,5 +82,4 @@ interface WorkoutDao {
     @Transaction
     @Query("SELECT * FROM exercise WHERE workoutId = :workoutId")
     suspend fun getExercisesWithSets(workoutId: Int): List<ExerciseWithSets>
-
 }

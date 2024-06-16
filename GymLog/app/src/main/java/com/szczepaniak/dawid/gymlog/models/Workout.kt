@@ -15,7 +15,7 @@ data class Workout(
     var volume: Float,
     var rating: Int,
     @Ignore var exercises: List<Exercise> = emptyList()
-) : Serializable {
+) {
     constructor(id: Int, title: String, startTime: Date, endTime: Date, volume: Float, rating: Int) : this(
         id,
         title,

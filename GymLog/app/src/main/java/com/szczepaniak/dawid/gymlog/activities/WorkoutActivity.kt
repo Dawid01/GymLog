@@ -161,30 +161,31 @@ class WorkoutActivity : AppCompatActivity() {
     }
 
     private fun saveWorkout() {
-        if (currentWorkout != null) {
-            val dialogView = LayoutInflater.from(this).inflate(R.layout.workout_save_dialog, null)
-            val ratingBar: RatingBar = dialogView.findViewById(R.id.rating_bar)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.workout_save_dialog, null)
+        val ratingBar: RatingBar = dialogView.findViewById(R.id.rating_bar)
 
+        currentWorkout?.let { workout ->
             AlertDialog.Builder(this)
-                .setTitle("Save ${currentWorkout?.title}")
+                .setTitle("Save ${workout.title}")
                 .setView(dialogView)
                 .setCancelable(false)
                 .setPositiveButton("Save") { _, _ ->
                     lifecycleScope.launch(Dispatchers.IO) {
                         val db = AppDatabase.getInstance(applicationContext)
                         val workoutDao = db.workoutDao()
-                        currentWorkout!!.rating = ratingBar.rating.toInt()
-                        currentWorkout!!.endTime = Date()
 
-                        currentWorkout!!.exercises.forEach { exercise ->
+                        workout.endTime = Date()
+                        workout.rating = ratingBar.rating.toInt()
+                        val workoutId = workoutDao.insert(workout).toInt()
+
+                        workout.exercises.forEach { exercise ->
+                            exercise.workoutId = workoutId
+                            val exerciseId = workoutDao.insertExercise(exercise).toInt()
                             exercise.sets?.forEach { set ->
-                                set.exerciseId = exercise.id
+                                set.exerciseId = exerciseId
                             }
+                            workoutDao.insertExerciseSets(exercise.sets ?: emptyList())
                         }
-                        currentWorkout!!.exercises = listOf()
-
-                        workoutDao.insertWorkoutWithExercisesAndSets(currentWorkout!!)
-
                         withContext(Dispatchers.Main) {
                             Singleton.saveCurrentWorkout(null)
                             finish()
@@ -198,7 +199,6 @@ class WorkoutActivity : AppCompatActivity() {
                 .show()
         }
     }
-
 
 
 

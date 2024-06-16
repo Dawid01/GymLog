@@ -24,18 +24,11 @@ data class Exercise(
     val difficulty: String? = null,
     val instructions: String? = null
 ) : Serializable {
-    @Ignore var sets: List<ExerciseSet>? = null
 
-    constructor(id: Int, workoutId: Int, name: String?, type: String?, muscle: String?, equipment: String?, difficulty: String?, instructions: String?, sets: List<ExerciseSet>?) : this(
-        id,
-        workoutId,
-        name,
-        type,
-        muscle,
-        equipment,
-        difficulty,
-        instructions
-    ) {
+    @Ignore
+    var sets: List<ExerciseSet>? = null
+
+    fun setExerciseSets(sets: List<ExerciseSet>?) {
         this.sets = sets
     }
 }

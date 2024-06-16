@@ -10,13 +10,20 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.szczepaniak.dawid.gymlog.AppDatabase
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.adapters.ExerciseSetAdapter
+import com.szczepaniak.dawid.gymlog.doa.WorkoutDao
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.Workout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,8 +38,10 @@ class WorkoutPreviewActivity : AppCompatActivity() {
 
     private lateinit var exercisesRecyclerView: RecyclerView
     private lateinit var adapter: ExerciseSetAdapter
+    private var exercises: MutableList<Exercise> = mutableListOf()
 
-    @SuppressLint("SetTextI18n")
+
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,12 +75,21 @@ class WorkoutPreviewActivity : AppCompatActivity() {
         }
         tvVolume.text = "$volumeText kg"
 
+        val workoutDao: WorkoutDao = AppDatabase.getInstance(application).workoutDao()
+
 
         exercisesRecyclerView = findViewById(R.id.preview_recycler_view)
         exercisesRecyclerView.layoutManager = LinearLayoutManager(this)
-        val exercises: MutableList<Exercise>  = workout.exercises.toMutableList()
         adapter = ExerciseSetAdapter(exercises, this, false)
         exercisesRecyclerView.adapter = adapter
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            exercises = workoutDao.getWorkoutWithExercises(workout.id).exercises.toMutableList()
+
+            withContext(Dispatchers.Main) {
+                adapter.notifyDataSetChanged()
+            }
+        }
 
     }
 }
