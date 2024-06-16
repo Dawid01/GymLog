@@ -9,11 +9,12 @@ import androidx.room.TypeConverters
 import com.szczepaniak.dawid.gymlog.doa.RoutineDao
 import com.szczepaniak.dawid.gymlog.doa.WorkoutDao
 import com.szczepaniak.dawid.gymlog.models.Exercise
+import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 import com.szczepaniak.dawid.gymlog.models.Routine
 import com.szczepaniak.dawid.gymlog.models.Workout
 import java.util.concurrent.Flow
 
-@Database(entities = [Routine::class, Exercise::class, Workout::class], version = 1)
+@Database(entities = [Routine::class, Exercise::class, Workout::class, ExerciseSet::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 

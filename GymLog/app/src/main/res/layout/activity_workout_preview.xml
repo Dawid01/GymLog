@@ -41,7 +41,7 @@
                 android:layout_gravity="right"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:rating="3"
+                android:rating="0"
                 android:scaleX="0.7"
                 android:scaleY="0.7"
                 android:stepSize="1"
@@ -152,6 +152,7 @@
             android:transitionName="line" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/preview_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

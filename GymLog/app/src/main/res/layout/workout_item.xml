@@ -32,7 +32,7 @@
             android:layout_gravity="right"
             android:isIndicator="true"
             android:numStars="5"
-            android:rating="3"
+            android:rating="0"
             android:scaleX="0.7"
             android:scaleY="0.7"
             android:stepSize="1"

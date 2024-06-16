@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.provider.ContactsContract.Data
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
@@ -64,7 +63,7 @@ class WorkoutActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -98,7 +97,7 @@ class WorkoutActivity : AppCompatActivity() {
             }
         }
 
-        exerciseSetAdapter = ExerciseSetAdapter(exercises, this, object : ExerciseSetAdapter.ValueChangeListener {
+        exerciseSetAdapter = ExerciseSetAdapter(exercises, this, true, object : ExerciseSetAdapter.ValueChangeListener {
             override fun onValueChange() {
                 calculateInfoValues()
             }
@@ -144,9 +143,7 @@ class WorkoutActivity : AppCompatActivity() {
                 endTime = Date(),
                 volume = 0f,
                 rating = 0,
-                exercises = if(isSelected) routine.exercises else emptyList(),
-                exerciseSets = emptyList()
-            )
+                exercises = if(isSelected) routine.exercises else emptyList(),)
             Singleton.saveCurrentWorkout(currentWorkout)
         } else {
             currentWorkout = singletonWorkout
@@ -163,47 +160,47 @@ class WorkoutActivity : AppCompatActivity() {
         handler.removeCallbacks(updateUITask)
     }
 
-    private fun saveWorkout(){
-
-        if(currentWorkout != null) {
+    private fun saveWorkout() {
+        if (currentWorkout != null) {
             val dialogView = LayoutInflater.from(this).inflate(R.layout.workout_save_dialog, null)
             val ratingBar: RatingBar = dialogView.findViewById(R.id.rating_bar)
-            val dialog = AlertDialog.Builder(this)
+
+            AlertDialog.Builder(this)
                 .setTitle("Save ${currentWorkout?.title}")
                 .setView(dialogView)
                 .setCancelable(false)
                 .setPositiveButton("Save") { _, _ ->
-
                     lifecycleScope.launch(Dispatchers.IO) {
-                        this.let {
-                            val db = AppDatabase.getInstance(applicationContext)
-                            val workoutDao = db.workoutDao()
-                            val mutableExerciseSets = currentWorkout!!.exerciseSets.toMutableList()
-                            val mutableExercises = currentWorkout!!.exercises.toMutableList()
-                            mutableExerciseSets.removeAll { !it.checked }
-                            mutableExercises.removeAll { it.sets.isNullOrEmpty() }
+                        val db = AppDatabase.getInstance(applicationContext)
+                        val workoutDao = db.workoutDao()
+                        currentWorkout!!.rating = ratingBar.rating.toInt()
+                        currentWorkout!!.endTime = Date()
 
-                            currentWorkout!!.rating = ratingBar.rating.toInt()
-                            currentWorkout!!.exerciseSets = mutableExerciseSets
-                            currentWorkout!!.exercises = mutableExercises
-                            currentWorkout!!.endTime = Date()
-
-                            workoutDao.insert(currentWorkout!!)
-                            withContext(Dispatchers.Main) { Singleton.saveCurrentWorkout(null)
-                                finish()
+                        currentWorkout!!.exercises.forEach { exercise ->
+                            exercise.sets?.forEach { set ->
+                                set.exerciseId = exercise.id
                             }
                         }
+                        currentWorkout!!.exercises = listOf()
+
+                        workoutDao.insertWorkoutWithExercisesAndSets(currentWorkout!!)
+
+                        withContext(Dispatchers.Main) {
+                            Singleton.saveCurrentWorkout(null)
+                            finish()
+                        }
                     }
-
-
-                }.setNegativeButton("Cancel"){dialogInterface, _ ->
+                }
+                .setNegativeButton("Cancel") { dialogInterface, _ ->
                     dialogInterface.dismiss()
                 }
                 .create()
-
-            dialog.show()
+                .show()
         }
     }
+
+
+
 
 
     @SuppressLint("SetTextI18n")

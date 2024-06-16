@@ -10,6 +10,7 @@ import com.szczepaniak.dawid.gymlog.models.Workout
 
 object Singleton {
     private var selectedExercises: MutableList<Exercise> = mutableListOf()
+    private var selectedWorkout: Workout? = null
     private lateinit var newRoutine: Routine
     private lateinit var editRoutine: Routine
     private var selectedRoutine: Routine? = null
@@ -29,6 +30,14 @@ object Singleton {
     }
     fun clearSelectedExercises() {
         selectedExercises.clear()
+    }
+
+    fun setSelectedWorkout(workout: Workout) {
+        selectedWorkout = workout
+    }
+
+    fun getSelectedWorkout(): Workout? {
+        return selectedWorkout
     }
 
     fun getNewRoutine() : Routine{

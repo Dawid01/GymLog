@@ -22,10 +22,12 @@ import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.activities.ExerciseInfoActivity
 import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.ExerciseSet
+import java.util.Locale
 
 class ExerciseSetAdapter(
     private val exercises: MutableList<Exercise>,
     private val context: Context,
+    private val editable: Boolean = true,
     private val valueChangeListener: ValueChangeListener? = null
 ) : RecyclerView.Adapter<ExerciseSetAdapter.ExerciseSetViewHolder>() {
 
@@ -46,7 +48,6 @@ class ExerciseSetAdapter(
         private val tvMuscle: TextView = itemView.findViewById(R.id.exercises_list_text)
         private val tvDifficulty: TextView = itemView.findViewById(R.id.difficulty_text)
         private val info: ImageView = itemView.findViewById(R.id.info_image)
-        private val card: CardView = itemView.findViewById(R.id.card)
         private val setRecyclerView: RecyclerView = itemView.findViewById(R.id.set_recycler_view)
         private val addSetButton: Button = itemView.findViewById(R.id.add_set_button)
         private val wieightColumn: View = itemView.findViewById(R.id.weight_column)
@@ -70,7 +71,7 @@ class ExerciseSetAdapter(
         fun bind(exercise: Exercise) {
             icon.setImageResource(getIconImage(exercise.muscle!!))
             tvName.text = exercise.name
-            tvMuscle.text = exercise.muscle.toString().replace("_", " ").capitalize()
+            tvMuscle.text = exercise.muscle.toString().replace("_", " ").capitalize(Locale.ROOT)
             tvDifficulty.text = exercise.difficulty.toString().uppercase()
             tvDifficulty.setTextColor(getDifficultyColor(exercise.difficulty!!))
 
@@ -78,31 +79,37 @@ class ExerciseSetAdapter(
             exercise.sets = sets
             valueChangeListener?.onValueChange()
             val bodyOnly: Boolean = exercise.equipment?.equals("body_only") == true
-            val setAdapter = SetAdapter(sets, bodyOnly, context, object : SetAdapter.ItemListener {
+            val setAdapter = SetAdapter(sets, bodyOnly, editable, context, object : SetAdapter.ItemListener {
                 override fun onValueChange() {
                     valueChangeListener?.onValueChange()
                 }
 
                 override fun onItemLongClick(position: Int, adapter: SetAdapter) {
-                    val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Delete?")
-                        .setPositiveButton("Yes") { dialog, id ->
-                            if (sets.size > 1 && position in 0 until sets.size) {
-                                sets.removeAt(position)
-                                adapter.notifyItemRemoved(position)
-                                adapter.notifyItemRangeChanged(position, sets.size)
-                                exercise.sets = sets
-                                valueChangeListener?.onValueChange()
-                            } else {
-                                Toast.makeText(context, "You can't delete the last set", Toast.LENGTH_SHORT).show()
+                    if(editable) {
+                        val builder = AlertDialog.Builder(context)
+                        builder.setMessage("Delete?")
+                            .setPositiveButton("Yes") { dialog, id ->
+                                if (sets.size > 1 && position in 0 until sets.size) {
+                                    sets.removeAt(position)
+                                    adapter.notifyItemRemoved(position)
+                                    adapter.notifyItemRangeChanged(position, sets.size)
+                                    exercise.sets = sets
+                                    valueChangeListener?.onValueChange()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "You can't delete the last set",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                dialog.dismiss()
                             }
-                            dialog.dismiss()
-                        }
-                        .setNegativeButton("No") { dialog, id ->
-                            dialog.dismiss()
-                        }
-                        .create()
-                        .show()
+                            .setNegativeButton("No") { dialog, id ->
+                                dialog.dismiss()
+                            }
+                            .create()
+                            .show()
+                    }
                 }
             })
 
@@ -127,6 +134,7 @@ class ExerciseSetAdapter(
         }
     }
 
+    @SuppressLint("DiscouragedApi")
     private fun getIconImage(muscle: String): Int {
         return context.resources.getIdentifier(muscle, "drawable", context.packageName)
     }

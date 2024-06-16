@@ -114,7 +114,10 @@ class ProfileFragment : Fragment() {
         val workoutDao = db?.workoutDao()
 
         lifecycleScope.launch {
-            val totalVolume = workoutDao?.totalVolume()
+            var totalVolume = workoutDao?.totalVolume()
+            if(totalVolume == null){
+                totalVolume = 0
+            }
             val countWorkouts = workoutDao?.countWorkouts()
             withContext(Dispatchers.Main) {
                 tvVolumeTotal.text = "$totalVolume"

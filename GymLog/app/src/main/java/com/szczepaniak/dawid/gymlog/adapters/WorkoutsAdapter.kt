@@ -73,7 +73,8 @@ class WorkoutAdapter(private val context: Context) : PagingDataAdapter<Workout, 
                     p1, p2, p3, p4
                 )
                 val intent = Intent(context, WorkoutPreviewActivity::class.java)
-                intent.putExtra("selected_workout", workout)
+               // intent.putExtra("selected_workout", workout)
+                Singleton.setSelectedWorkout(workout)
                 context.startActivity(intent, options.toBundle())
             }
         }

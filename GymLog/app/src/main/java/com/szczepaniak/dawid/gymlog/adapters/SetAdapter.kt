@@ -16,6 +16,7 @@ import com.szczepaniak.dawid.gymlog.models.ExerciseSet
 class SetAdapter(
     private val sets: MutableList<ExerciseSet>,
     private val bodyOnly: Boolean,
+    private val editable: Boolean = true,
     private val context: Context,
     private val listener: ItemListener? = null
 ) : RecyclerView.Adapter<SetAdapter.SetViewHolder>() {
@@ -27,11 +28,27 @@ class SetAdapter(
 
     override fun getItemCount(): Int = sets.size
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SetViewHolder, position: Int) {
         val exerciseSet = sets[position]
         with(holder) {
             tvSet.text = "${position + 1}"
             tvPrevious.text = "-"
+            tvPrevious.visibility = if(editable) View.VISIBLE else View.GONE
+            checkBox.visibility = if(editable) View.VISIBLE else View.GONE
+            if(!editable){
+                tvSet.isFocusableInTouchMode = false
+                tvSet.isCursorVisible = false
+                tvSet.isClickable = false
+
+                tvReps.isFocusableInTouchMode = false
+                tvReps.isCursorVisible = false
+                tvReps.isClickable = false
+
+                tvWeight.isFocusableInTouchMode = false
+                tvWeight.isCursorVisible = false
+                tvWeight.isClickable = false
+            }
 
             val repsText = if (exerciseSet.rep > 0) exerciseSet.rep.toString() else ""
             tvReps.setText(repsText)

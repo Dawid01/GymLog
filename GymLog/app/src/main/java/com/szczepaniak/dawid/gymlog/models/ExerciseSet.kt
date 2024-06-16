@@ -3,6 +3,7 @@ package com.szczepaniak.dawid.gymlog.models
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -13,9 +14,9 @@ import androidx.room.PrimaryKey
     )]
 )
 data class ExerciseSet(
-    @PrimaryKey val id: Int,
-    val exerciseId: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    var exerciseId: Int,
     var checked: Boolean,
     var rep: Int,
     var volume: Float
-)
+) : Serializable

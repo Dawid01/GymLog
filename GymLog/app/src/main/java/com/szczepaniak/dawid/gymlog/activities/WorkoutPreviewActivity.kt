@@ -10,8 +10,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
 import com.szczepaniak.dawid.gymlog.Singleton
+import com.szczepaniak.dawid.gymlog.adapters.ExerciseSetAdapter
+import com.szczepaniak.dawid.gymlog.models.Exercise
 import com.szczepaniak.dawid.gymlog.models.Workout
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -24,6 +28,10 @@ class WorkoutPreviewActivity : AppCompatActivity() {
     private lateinit var tvTime: TextView
     private lateinit var tvVolume: TextView
     private lateinit var ratingBar: RatingBar
+
+    private lateinit var exercisesRecyclerView: RecyclerView
+    private lateinit var adapter: ExerciseSetAdapter
+
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +50,7 @@ class WorkoutPreviewActivity : AppCompatActivity() {
         tvVolume = findViewById(R.id.volume_text)
         ratingBar = findViewById(R.id.rating_bar)
 
-        workout = (intent.getSerializableExtra("selected_workout")  as? Workout)!!
+        workout = Singleton.getSelectedWorkout()!!
 
         tvTitle.text = workout.title
         val dateFormat = SimpleDateFormat("EEEE dd.MM.yyyy", Locale.getDefault())
@@ -57,5 +65,13 @@ class WorkoutPreviewActivity : AppCompatActivity() {
             "0"
         }
         tvVolume.text = "$volumeText kg"
+
+
+        exercisesRecyclerView = findViewById(R.id.preview_recycler_view)
+        exercisesRecyclerView.layoutManager = LinearLayoutManager(this)
+        val exercises: MutableList<Exercise>  = workout.exercises.toMutableList()
+        adapter = ExerciseSetAdapter(exercises, this, false)
+        exercisesRecyclerView.adapter = adapter
+
     }
 }

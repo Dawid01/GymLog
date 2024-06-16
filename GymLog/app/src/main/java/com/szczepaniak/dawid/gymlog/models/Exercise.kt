@@ -1,42 +1,41 @@
 package com.szczepaniak.dawid.gymlog.models
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
-@Entity
+@Entity(
+    foreignKeys = [ForeignKey(
+        entity = Workout::class,
+        parentColumns = ["id"],
+        childColumns = ["workoutId"],
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 data class Exercise(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    var workoutId: Int,
     val name: String? = null,
     val type: String? = null,
     val muscle: String? = null,
     val equipment: String? = null,
     val difficulty: String? = null,
-    val instructions: String? = null,
-    var sets: List<ExerciseSet>? = null
-){
-    override fun equals(other: Any?): Boolean {
-       if (this === other) return true
-       if (other !is Exercise) return false
+    val instructions: String? = null
+) : Serializable {
+    @Ignore var sets: List<ExerciseSet>? = null
 
-       if (id != other.id) return false
-       if (name != other.name) return false
-       if (type != other.type) return false
-       if (muscle != other.muscle) return false
-       if (equipment != other.equipment) return false
-       if (difficulty != other.difficulty) return false
-       if (instructions != other.instructions) return false
-
-       return true
+    constructor(id: Int, workoutId: Int, name: String?, type: String?, muscle: String?, equipment: String?, difficulty: String?, instructions: String?, sets: List<ExerciseSet>?) : this(
+        id,
+        workoutId,
+        name,
+        type,
+        muscle,
+        equipment,
+        difficulty,
+        instructions
+    ) {
+        this.sets = sets
     }
-
-   override fun hashCode(): Int {
-      var result = id
-      result = 31 * result + (name?.hashCode() ?: 0)
-      result = 31 * result + (type?.hashCode() ?: 0)
-      result = 31 * result + (muscle?.hashCode() ?: 0)
-      result = 31 * result + (equipment?.hashCode() ?: 0)
-      result = 31 * result + (difficulty?.hashCode() ?: 0)
-      result = 31 * result + (instructions?.hashCode() ?: 0)
-      return result
-   }
 }
