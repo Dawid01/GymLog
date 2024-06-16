@@ -14,6 +14,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.szczepaniak.dawid.gymlog.R
+import com.szczepaniak.dawid.gymlog.Singleton
 import com.szczepaniak.dawid.gymlog.activities.WorkoutPreviewActivity
 import com.szczepaniak.dawid.gymlog.models.Workout
 import java.text.SimpleDateFormat
@@ -41,6 +42,26 @@ class WorkoutAdapter(private val context: Context) : PagingDataAdapter<Workout, 
         private val infoLayout: View = itemView.findViewById(R.id.info_layout)
 
         init {
+
+        }
+
+        @SuppressLint("SetTextI18n")
+        fun bind(workout: Workout) {
+            tvTitle.text = workout.title
+
+            val dateFormat = SimpleDateFormat("EEEE dd.MM.yyyy", Locale.getDefault())
+            val formattedDate = dateFormat.format(workout.startTime).capitalize(Locale.ROOT)
+            tvDate.text = formattedDate
+
+            tvTime.text = Singleton.formatTime(workout.getDuration())
+            ratingBar.rating = workout.rating.toFloat()
+            val volumeText = if (workout.volume > 0) {
+                if (workout.volume % 1 == 0f) workout.volume.toInt().toString() else workout.volume.toString()
+            } else {
+                "0"
+            }
+            tvVolume.text = "$volumeText kg"
+
             itemView.setOnClickListener {
                 val p1 = androidx.core.util.Pair<View, String>(tvTitle, tvTitle.transitionName)
                 val p2 = androidx.core.util.Pair<View, String>(infoLayout, infoLayout.transitionName)
@@ -52,39 +73,12 @@ class WorkoutAdapter(private val context: Context) : PagingDataAdapter<Workout, 
                     p1, p2, p3, p4
                 )
                 val intent = Intent(context, WorkoutPreviewActivity::class.java)
+                intent.putExtra("selected_workout", workout)
                 context.startActivity(intent, options.toBundle())
             }
         }
 
-        @SuppressLint("SetTextI18n")
-        fun bind(workout: Workout) {
-            tvTitle.text = workout.title
 
-            val dateFormat = SimpleDateFormat("EEEE dd.MM.yyyy", Locale.getDefault())
-            val formattedDate = dateFormat.format(workout.startTime).capitalize(Locale.ROOT)
-            tvDate.text = formattedDate
-
-            tvTime.text = formatTime(workout.getDuration())
-            ratingBar.rating = workout.rating.toFloat()
-            val volumeText = if (workout.volume > 0) {
-                if (workout.volume % 1 == 0f) workout.volume.toInt().toString() else workout.volume.toString()
-            } else {
-                "0"
-            }
-            tvVolume.text = "$volumeText kg"
-        }
-
-        private fun formatTime(seconds: Long): String {
-            val s = seconds % 60
-            val m = (seconds / 60) % 60
-            val h = (seconds / 3600)
-
-            return when {
-                h > 0 -> String.format("%d h %d min %d s", h, m, s).replace(" 0 min", "").replace(" 0 s", "")
-                m > 0 -> String.format("%d min %d s", m, s).replace(" 0 s", "")
-                else -> String.format("%d s", s)
-            }
-        }
     }
 
     class WorkoutDiffCallback : DiffUtil.ItemCallback<Workout>() {

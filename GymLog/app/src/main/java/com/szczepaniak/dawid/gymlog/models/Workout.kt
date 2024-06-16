@@ -3,6 +3,7 @@ package com.szczepaniak.dawid.gymlog.models
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.Date
 
 
@@ -16,7 +17,7 @@ data class Workout(
     var rating: Int,
     @Ignore var exercises: List<Exercise>,
     @Ignore var exerciseSets: List<ExerciseSet>
-) {
+) : Serializable{
     constructor(id: Int, title: String, startTime: Date, endTime: Date , volume: Float, rating: Int) : this(
         id,
         title,
@@ -27,6 +28,7 @@ data class Workout(
         emptyList(),
         emptyList()
     )
+
 
     fun getDuration(): Long {
         return (endTime.time - startTime.time) / 1000

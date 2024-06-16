@@ -73,4 +73,15 @@ object Singleton {
     }
 
 
+    fun formatTime(seconds: Long): String {
+        val s = seconds % 60
+        val m = (seconds / 60) % 60
+        val h = (seconds / 3600)
+
+        return when {
+            h > 0 -> String.format("%d h %d min %d s", h, m, s).replace(" 0 min", "").replace(" 0 s", "")
+            m > 0 -> String.format("%d min %d s", m, s).replace(" 0 s", "")
+            else -> String.format("%d s", s)
+        }
+    }
 }
