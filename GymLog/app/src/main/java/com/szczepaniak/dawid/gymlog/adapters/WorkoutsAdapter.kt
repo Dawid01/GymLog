@@ -37,13 +37,11 @@ class WorkoutAdapter(private val context: Context) : PagingDataAdapter<Workout, 
         private val tvDate: TextView = itemView.findViewById(R.id.date_text)
         private val tvTime: TextView = itemView.findViewById(R.id.time_text)
         private val tvVolume: TextView = itemView.findViewById(R.id.volume_text)
+        private val tvSets: TextView = itemView.findViewById(R.id.sets_text)
+
         private val ratingBar: RatingBar = itemView.findViewById(R.id.rating_bar)
         private val line: View = itemView.findViewById(R.id.line)
         private val infoLayout: View = itemView.findViewById(R.id.info_layout)
-
-        init {
-
-        }
 
         @SuppressLint("SetTextI18n")
         fun bind(workout: Workout) {
@@ -55,6 +53,7 @@ class WorkoutAdapter(private val context: Context) : PagingDataAdapter<Workout, 
 
             tvTime.text = Singleton.formatTime(workout.getDuration())
             ratingBar.rating = workout.rating.toFloat()
+            tvSets.text = "${workout.sets}"
             val volumeText = if (workout.volume > 0) {
                 if (workout.volume % 1 == 0f) workout.volume.toInt().toString() else workout.volume.toString()
             } else {

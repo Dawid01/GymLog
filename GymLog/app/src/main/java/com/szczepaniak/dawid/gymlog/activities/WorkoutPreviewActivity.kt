@@ -34,6 +34,8 @@ class WorkoutPreviewActivity : AppCompatActivity() {
     private lateinit var tvDate: TextView
     private lateinit var tvTime: TextView
     private lateinit var tvVolume: TextView
+    private lateinit var tvSets: TextView
+
     private lateinit var ratingBar: RatingBar
 
     private lateinit var exercisesRecyclerView: RecyclerView
@@ -58,6 +60,7 @@ class WorkoutPreviewActivity : AppCompatActivity() {
         tvTime = findViewById(R.id.time_text)
         tvVolume = findViewById(R.id.volume_text)
         ratingBar = findViewById(R.id.rating_bar)
+        tvSets = findViewById(R.id.sets_text)
 
         workout = Singleton.getSelectedWorkout()!!
 
@@ -68,6 +71,7 @@ class WorkoutPreviewActivity : AppCompatActivity() {
 
         tvTime.text = Singleton.formatTime(workout.getDuration())
         ratingBar.rating = workout.rating.toFloat()
+        tvSets.text = "${workout.sets}"
         val volumeText = if (workout.volume > 0) {
             if (workout.volume % 1 == 0f) workout.volume.toInt().toString() else workout.volume.toString()
         } else {
