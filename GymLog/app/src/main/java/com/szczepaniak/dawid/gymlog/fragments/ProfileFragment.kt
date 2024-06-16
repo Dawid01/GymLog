@@ -19,6 +19,8 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import kotlin.math.pow
 
@@ -42,6 +44,7 @@ class ProfileFragment : Fragment() {
     private lateinit var tvGender: TextView
     private lateinit var tvWeight: TextView
     private lateinit var tvHeight: TextView
+    private lateinit var tvStreak: TextView
     private lateinit var tvBMI: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +70,7 @@ class ProfileFragment : Fragment() {
         tvGender = view.findViewById(R.id.value_gender)
         tvWeight = view.findViewById(R.id.value_weight)
         tvHeight = view.findViewById(R.id.value_height)
+        tvStreak = view.findViewById(R.id.streak_weeks_text)
         tvBMI = view.findViewById(R.id.value_bmi)
         initializeUserInfo()
         updateUserStats()
@@ -119,9 +123,12 @@ class ProfileFragment : Fragment() {
                 totalVolume = 0
             }
             val countWorkouts = workoutDao?.countWorkouts()
+            val streak = countConsecutiveTrainingDays()
             withContext(Dispatchers.Main) {
                 tvVolumeTotal.text = "$totalVolume"
                 tvWorkoutsCount.text = "$countWorkouts"
+                tvStreak.text = "$streak"
+
             }
         }
 
@@ -143,5 +150,37 @@ class ProfileFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    suspend fun countConsecutiveTrainingDays(): Int {
+        val workoutDao = AppDatabase.getInstance(requireContext()).workoutDao()
+        val workouts = workoutDao.getAllWorkoutsSortedByDate()
+
+        var consecutiveDays = 0
+        var currentDay: Date? = null
+
+        for (workout in workouts) {
+            val workoutDate = workout.startTime
+
+            if (currentDay == null || isNextDay(currentDay, workoutDate)) {
+                consecutiveDays++
+            } else {
+                break
+            }
+
+            currentDay = workoutDate
+        }
+
+        return consecutiveDays
+    }
+
+    private fun isNextDay(day1: Date, day2: Date): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.time = day1
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+
+        val nextDay = calendar.time
+
+        return nextDay == day2
     }
 }

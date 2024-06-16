@@ -83,7 +83,7 @@ interface WorkoutDao {
     @Query("SELECT * FROM workout_table WHERE id = :workoutId")
     suspend fun getWorkoutWithExercises(workoutId: Int): WorkoutWithExercises
 
-    @Transaction
-    @Query("SELECT * FROM exercise WHERE workoutId = :workoutId")
-    suspend fun getExercisesWithSets(workoutId: Int): List<ExerciseWithSets>
+    @Query("SELECT * FROM workout_table ORDER BY startTime DESC")
+    suspend fun getAllWorkoutsSortedByDate(): List<Workout>
+
 }
