@@ -27,8 +27,4 @@ data class Exercise(
 
     @Ignore
     var sets: List<ExerciseSet>? = null
-
-    fun setExerciseSets(sets: List<ExerciseSet>?) {
-        this.sets = sets
-    }
 }

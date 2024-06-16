@@ -54,11 +54,6 @@ class MusclesSheetFragment() : BottomSheetDialogFragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         val adapter = MusclesAdapter(musclesList, requireContext(), object : MusclesAdapter.OnItemClickListener {
             override fun onItemClick(muscle: String) {
-//                var m = muscle
-//                if(m == ""){
-//                    m = "All Muscles"
-//                }
-//               Toast.makeText(context, "Selected: ${m.replace("_", " ").capitalize(Locale.ROOT)}", Toast.LENGTH_SHORT).show()
                onDataReturned?.invoke(muscle)
                dismiss()
             }

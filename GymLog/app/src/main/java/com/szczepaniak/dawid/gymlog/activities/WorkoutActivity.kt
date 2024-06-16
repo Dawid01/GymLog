@@ -207,9 +207,6 @@ class WorkoutActivity : AppCompatActivity() {
     }
 
 
-
-
-
     @SuppressLint("SetTextI18n")
     fun calculateInfoValues() {
 

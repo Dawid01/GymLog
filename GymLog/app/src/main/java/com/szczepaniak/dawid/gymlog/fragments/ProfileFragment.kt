@@ -34,12 +34,9 @@ class ProfileFragment : Fragment() {
 
 
     private lateinit var sharedPref: SharedPreferences
-
     private lateinit var tvUserName: TextView
-
     private lateinit var tvWorkoutsCount: TextView
     private lateinit var tvVolumeTotal: TextView
-
     private lateinit var tvAge: TextView
     private lateinit var tvGender: TextView
     private lateinit var tvWeight: TextView

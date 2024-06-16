@@ -20,7 +20,6 @@ interface RoutineDao {
     @Query("SELECT * FROM routine WHERE id IN (:routineIds)")
     fun loadAllByIds(routineIds: IntArray): List<Routine>
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(routine: Routine): Long
     @Insert
