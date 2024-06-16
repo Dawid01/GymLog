@@ -14,15 +14,17 @@ data class Workout(
     var endTime: Date,
     var volume: Float,
     var rating: Int,
+    var sets: Int,
     @Ignore var exercises: List<Exercise> = emptyList()
 ) {
-    constructor(id: Int, title: String, startTime: Date, endTime: Date, volume: Float, rating: Int) : this(
+    constructor(id: Int, title: String, startTime: Date, endTime: Date, volume: Float, sets: Int, rating: Int) : this(
         id,
         title,
         startTime,
         endTime,
         volume,
         rating,
+        sets,
         emptyList()
     )
 

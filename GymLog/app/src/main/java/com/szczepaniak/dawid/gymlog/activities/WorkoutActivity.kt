@@ -143,6 +143,7 @@ class WorkoutActivity : AppCompatActivity() {
                 endTime = Date(),
                 volume = 0f,
                 rating = 0,
+                sets = 0,
                 exercises = if(isSelected) routine.exercises else emptyList(),)
             Singleton.saveCurrentWorkout(currentWorkout)
         } else {
@@ -180,11 +181,16 @@ class WorkoutActivity : AppCompatActivity() {
 
                         workout.exercises.forEach { exercise ->
                             exercise.workoutId = workoutId
-                            val exerciseId = workoutDao.insertExercise(exercise).toInt()
-                            exercise.sets?.forEach { set ->
-                                set.exerciseId = exerciseId
+                            val checkedSets = exercise.sets?.filter { it.checked } ?: emptyList()
+                            exercise.sets = checkedSets.toMutableList()
+
+                            if (checkedSets.isNotEmpty()) {
+                                val exerciseId = workoutDao.insertExercise(exercise).toInt()
+                                checkedSets.forEach { set ->
+                                    set.exerciseId = exerciseId
+                                }
+                                workoutDao.insertExerciseSets(checkedSets)
                             }
-                            workoutDao.insertExerciseSets(exercise.sets ?: emptyList())
                         }
                         withContext(Dispatchers.Main) {
                             Singleton.saveCurrentWorkout(null)
@@ -199,6 +205,7 @@ class WorkoutActivity : AppCompatActivity() {
                 .show()
         }
     }
+
 
 
 
@@ -226,6 +233,7 @@ class WorkoutActivity : AppCompatActivity() {
             "0"
         }
         currentWorkout?.volume  = volume
+        currentWorkout?.sets = sets
         tvVolume.text = "$volumeText kg"
         tvSets.text = "$sets"
         Singleton.saveCurrentWorkout(currentWorkout)
