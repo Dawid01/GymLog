@@ -46,8 +46,8 @@ During the project, several challenges were encountered:
 
 GymLog offers a clear and intuitive user interface. Below are some screenshots showcasing the key views of the application:
 
-<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/1.png" alt="Create Local Profile" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/2.png" alt="Routine Page" width="200"/>
-<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/3.png" alt="Search Exercises by Name" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/4.png" alt="Exercise Information" width="200"/>
-<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/5.png" alt="Sort Exercises by Body Part" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/6.png" alt="Select Exercises for Routine" width="200"/>
-<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/7.png" alt="Create Routine Page" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/8.png" alt="Log Workout" width="200"/>
-<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/9.png" alt="Home Page" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/10.png" alt="User Profile" width="200"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/1.png" alt="Create Local Profile" width="200"  marigin="5"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/2.png" alt="Routine Page" width="200"  marigin="5"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/3.png" alt="Search Exercises by Name" width="200"  marigin="5"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/4.png" alt="Exercise Information" width="200"  marigin="5"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/5.png" alt="Sort Exercises by Body Part" width="200"  marigin="5"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/6.png" alt="Select Exercises for Routine" width="200"  marigin="5"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/7.png" alt="Create Routine Page" width="200"  marigin="5"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/8.png" alt="Log Workout" width="200"  marigin="5"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/9.png" alt="Home Page" width="200"  marigin="5"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/10.png" alt="User Profile" width="200"  marigin="5"/>
