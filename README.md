@@ -1,6 +1,7 @@
 # GymLog
 
-GymLog is a university project designed to assist users in tracking their strength training workouts, monitoring progress, and managing workout plans. This report outlines the project goals, implemented features, technologies used, challenges encountered, and the individual contributions to the project.
+GymLog is a university project designed to assist users in tracking their strength training workouts, monitoring progress, and managing workout plans. This report outlines the project goals, implemented features, technologies used, challenges encountered. This application is inspired by an existing app called [Hevy](https://www.hevyapp.com).
+
 
 ## Project Overview
 
@@ -38,10 +39,8 @@ The development of GymLog involved the following technologies and libraries:
 ## Challenges and Solutions
 
 During the project, several challenges were encountered:
-- **User Interface in Landscape Mode**: Initially, the UI did not look good in landscape mode. Separate XML files for layouts were required, leading to the decision to lock the screen orientation to portrait to simplify development and avoid compatibility issues.
 - **Exercise API Issues**: The API did not return unique identifiers for exercises, and other fields could repeat (e.g., exercises with the same name but different descriptions). This necessitated storing all exercise details instead of just the identifier, increasing the database size and potentially impacting performance.
 - **Calendar Integration**: To allow users to mark multiple training days, the Material Calendar View library was added.
-- **Database Relationships**: Creating relationships between classes such as workouts and exercises using the Room library was challenging. Implementation involved extensive research and trial and error, resulting in some minor bugs when saving workouts.
 
 ## Screenshots
 
