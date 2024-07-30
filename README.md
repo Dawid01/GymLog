@@ -43,19 +43,12 @@ During the project, several challenges were encountered:
 - **Calendar Integration**: To allow users to mark multiple training days, the Material Calendar View library was added.
 - **Database Relationships**: Creating relationships between classes such as workouts and exercises using the Room library was challenging. Implementation involved extensive research and trial and error, resulting in some minor bugs when saving workouts.
 
-## Contribution Breakdown
-
-The project was mainly developed individually, though many functionalities were facilitated by using ready-made libraries:
-- **Database Implementation**: 60% (using the Room library to simplify SQLite operations)
-- **API Integration**: 80% (using Retrofit for HTTP requests)
-- **Creating Workout Plans and Notes**: 90%
-
 ## Screenshots
 
 GymLog offers a clear and intuitive user interface. Below are some screenshots showcasing the key views of the application:
 
-![Create Local Profile](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/1.png) ![Routine Page](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/2.png)
-![Search Exercises by Name](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/3.png) ![Exercise Information](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/4.png)
-![Sort Exercises by Body Part](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/5.png) ![Select Exercises for Routine](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/6.png)
-![Create Routine Page](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/7.png) ![Log Workout](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/8.png)
-![Home Page](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/9.png) ![User Profile](https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/10.png)
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/1.png" alt="Create Local Profile" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/2.png" alt="Routine Page" width="200"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/3.png" alt="Search Exercises by Name" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/4.png" alt="Exercise Information" width="200"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/5.png" alt="Sort Exercises by Body Part" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/6.png" alt="Select Exercises for Routine" width="200"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/7.png" alt="Create Routine Page" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/8.png" alt="Log Workout" width="200"/>
+<img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/9.png" alt="Home Page" width="200"/> <img src="https://github.com/Dawid01/WorkoutMobileApp/blob/main/Screens/10.png" alt="User Profile" width="200"/>
