@@ -1,6 +1,6 @@
 # GymLog
 
-GymLog is a university project designed to assist users in tracking their strength training workouts, monitoring progress, and managing workout plans. This report outlines the project goals, implemented features, technologies used, challenges encountered. This application is inspired by an existing app called [Hevy](https://www.hevyapp.com).
+GymLog is a student project designed to assist users in tracking their strength training workouts, monitoring progress, and managing workout plans. This report outlines the project goals, implemented features, technologies used, challenges encountered. This application is inspired by an existing app called [Hevy](https://www.hevyapp.com).
 
 
 ## Project Overview
